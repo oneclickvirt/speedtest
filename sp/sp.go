@@ -87,6 +87,27 @@ func getData(endpoint string) string {
 	return ""
 }
 
+// func parseData(data string) speedtest.Servers {
+// 	var targets speedtest.Servers
+// 	reader := csv.NewReader(strings.NewReader(data))
+// 	reader.Comma = ','
+// 	records, err := reader.ReadAll()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	speedtestClient := speedtest.New()
+// 	for _, record := range records {
+// 		customURL := record[5] + ":" + record[6]
+// 		target, errFetch := speedtestClient.CustomServer(customURL)
+// 		if errFetch != nil {
+// 			continue
+// 		}
+// 		target.Name = record[3]
+// 		targets = append(targets, target)
+// 	}
+// 	return targets
+// }
+
 func parseData(data string) speedtest.Servers {
 	var targets speedtest.Servers
 	reader := csv.NewReader(strings.NewReader(data))
@@ -97,13 +118,13 @@ func parseData(data string) speedtest.Servers {
 	}
 	speedtestClient := speedtest.New()
 	for _, record := range records {
-		customURL := record[5] + ":" + record[6]
-		target, errFetch := speedtestClient.CustomServer(customURL)
+		id := record[0]
+		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
 		if errFetch != nil {
 			continue
 		}
-		target.Name = record[3]
-		targets = append(targets, target)
+		serverPtr.Name = record[3]
+		targets = append(targets, serverPtr)
 	}
 	return targets
 }
