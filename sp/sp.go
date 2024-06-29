@@ -54,12 +54,12 @@ func parseDataFromURL(data string) speedtest.Servers {
 	}
 	speedtestClient := speedtest.New()
 	for _, record := range records {
-		customURL := record[5] + ":" + record[6]
+		customURL := record[5]
 		target, errFetch := speedtestClient.CustomServer(customURL)
 		if errFetch != nil {
 			continue
 		}
-		target.Name = record[3]
+		target.Name = record[10] + record[7] + record[8]
 		targets = append(targets, target)
 	}
 	return targets
