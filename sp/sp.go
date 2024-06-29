@@ -16,6 +16,13 @@ import (
 	"github.com/showwin/speedtest-go/speedtest/transport"
 )
 
+var speedtestClient = speedtest.New(speedtest.WithUserConfig(
+	&speedtest.UserConfig{
+		UserAgent:      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36",
+		PingMode:       speedtest.TCP,
+		MaxConnections: 1,
+	}))
+
 func checkError(err error) {
 	if err != nil {
 		log.Fatal(err)
@@ -53,7 +60,6 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 	if err != nil {
 		log.Fatal(err)
 	}
-	speedtestClient := speedtest.New()
 	for _, record := range records {
 		customURL := record[5]
 		target, errFetch := speedtestClient.CustomServer(customURL)
@@ -74,7 +80,6 @@ func parseDataFromID(data, url string) speedtest.Servers {
 	if err != nil {
 		log.Fatal(err)
 	}
-	speedtestClient := speedtest.New()
 	for _, record := range records {
 		id := record[0]
 		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
@@ -137,7 +142,6 @@ func ShowHead(language string) {
 }
 
 func NearbySpeedTest() {
-	var speedtestClient = speedtest.New()
 	serverList, _ := speedtestClient.FetchServers()
 	targets, _ := serverList.FindServer([]int{})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
