@@ -47,11 +47,12 @@ Usage of spt:
   -nearby
         Test only nearby servers
   -num int
-        Number of test servers (default -1)
+        Number of test servers, default -1 not to limit (default -1)
   -opt string
-        Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)
+        Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global) (default "global")
   -pf string
         Platform parameter (options: net, cn) (default "net")
+  -s    Show head (default true)
   -v    Show version information
 ```
 
