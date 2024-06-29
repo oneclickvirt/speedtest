@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"github.com/imroc/req/v3"
 	"github.com/oneclickvirt/speedtest/model"
@@ -94,13 +95,44 @@ func parseDataFromID(data, url string) speedtest.Servers {
 	return targets
 }
 
+// 计算字符串的显示宽度（考虑中文字符）
+func displayWidth(s string) int {
+	width := 0
+	for _, r := range s {
+		if utf8.RuneLen(r) == 3 {
+			// 假设每个中文字符宽度为2
+			width += 2
+		} else {
+			width += 1
+		}
+	}
+	return width
+}
+
+// 格式化字符串以确保左对齐
+func formatString(s string, width int) string {
+	displayW := displayWidth(s)
+	if displayW < width {
+		// 计算需要填充的空格数
+		padding := width - displayW
+		return s + fmt.Sprintf("%*s", padding, "")
+	}
+	return s
+}
+
 func ShowHead(language string) {
+	headers1 := []string{"位置", "上传速度", "下载速度", "延迟", "丢包率"}
+	headers2 := []string{"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss"}
 	if language == "zh" {
-		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
-			"位置", "上传速度", "下载速度", "延迟", "丢包率")
+		for _, header := range headers1 {
+			fmt.Print(formatString(header, 16))
+		}
+		fmt.Println()
 	} else if language == "en" {
-		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
-			"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss")
+		for _, header := range headers2 {
+			fmt.Print(formatString(header, 16))
+		}
+		fmt.Println()
 	}
 }
 
@@ -129,13 +161,12 @@ func NearbySpeedTest() {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		checkError(err)
-		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
-			//NearbyServer.Name,
-			"Speedtest.net",
-			fmt.Sprintf("%-10.2f Mbps", NearbyServer.ULSpeed.Mbps()),
-			fmt.Sprintf("%-10.2f Mbps", NearbyServer.DLSpeed.Mbps()),
-			NearbyServer.Latency,
-			PacketLoss)
+		fmt.Print(formatString("Speedtest.net", 16))
+		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", NearbyServer.ULSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", NearbyServer.DLSpeed.Mbps()), 16))
+		fmt.Print(formatString(string(NearbyServer.Latency), 16))
+		fmt.Print(formatString(PacketLoss, 16))
+		fmt.Println()
 		NearbyServer.Context.Reset()
 	}
 }
@@ -181,12 +212,12 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		if err != nil {
 			PacketLoss = "N/A"
 		}
-		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
-			server.Name,
-			fmt.Sprintf("%-10.2f Mbps", server.ULSpeed.Mbps()),
-			fmt.Sprintf("%-10.2f Mbps", server.DLSpeed.Mbps()),
-			server.Latency,
-			PacketLoss)
+		fmt.Print(formatString(server.Name, 16))
+		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", server.ULSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", server.DLSpeed.Mbps()), 16))
+		fmt.Print(formatString(string(server.Latency), 16))
+		fmt.Print(formatString(PacketLoss, 16))
+		fmt.Println()
 		server.Context.Reset()
 	}
 }
