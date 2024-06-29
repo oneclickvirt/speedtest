@@ -86,7 +86,7 @@ func parseDataFromID(data string) speedtest.Servers {
 	return targets
 }
 
-func NearbySpeedTest(language string) {
+func ShowHead(language string) {
 	if language == "zh" {
 		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
 			"位置", "上传速度", "下载速度", "延迟", "丢包率")
@@ -94,6 +94,9 @@ func NearbySpeedTest(language string) {
 		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
 			"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss")
 	}
+}
+
+func NearbySpeedTest() {
 	var speedtestClient = speedtest.New()
 	serverList, _ := speedtestClient.FetchServers()
 	targets, _ := serverList.FindServer([]int{})
@@ -156,6 +159,9 @@ func CustomSpeedTest(url, byWhat string, num int) {
 	var PacketLoss string
 	if num == -1 && num >= len(pingList) {
 		num = len(pingList)
+	} else if len(pingList) == 0 {
+		fmt.Println("No match servers")
+		return
 	}
 	for i := 0; i < num && i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
