@@ -23,7 +23,7 @@ func main() {
 	flag.StringVar(&language, "l", "zh", "Language parameter (options: en, zh)")
 	flag.StringVar(&platform, "pf", "net", "Platform parameter (options: net, cn)")
 	flag.StringVar(&operator, "opt", "", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
-	flag.IntVar(&num, "num", -1, "Number of test servers")
+	flag.IntVar(&num, "num", -1, "Number of test servers, default -1 not to limit")
 	flag.Parse()
 	if showVersion {
 		fmt.Println(model.SpeedTestVersion)
@@ -33,7 +33,7 @@ func main() {
 		sp.NearbySpeedTest(language)
 		return
 	}
-	var url string
+	var url, parseType string
 	if strings.ToLower(platform) == "net" {
 		if strings.ToLower(operator) == "cmcc" {
 			url = model.CnCMCC
@@ -50,6 +50,7 @@ func main() {
 		} else if strings.ToLower(operator) == "sg" {
 			url = model.CnSG
 		}
+		parseType = "id"
 	} else if strings.ToLower(platform) == "cn" {
 		if strings.ToLower(operator) == "cmcc" {
 			url = model.NetCMCC
@@ -66,9 +67,10 @@ func main() {
 		} else if strings.ToLower(operator) == "sg" {
 			url = model.NetSG
 		}
+		parseType = "url"
 	}
 	if url != "" {
-		sp.CustomSpeedTest(url, "id", num)
+		sp.CustomSpeedTest(url, parseType, num)
 	} else {
 		fmt.Println("Wrong operator.")
 	}
