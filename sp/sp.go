@@ -157,7 +157,7 @@ func CustomSpeedTest(url, byWhat string, num int) {
 	})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
 	var PacketLoss string
-	if num == -1 && num >= len(pingList) {
+	if num == -1 || num >= len(pingList) {
 		num = len(pingList)
 	} else if len(pingList) == 0 {
 		fmt.Println("No match servers")

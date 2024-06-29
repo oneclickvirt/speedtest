@@ -23,7 +23,7 @@ func main() {
 	flag.BoolVar(&showHead, "s", true, "Show head")
 	flag.StringVar(&language, "l", "zh", "Language parameter (options: en, zh)")
 	flag.StringVar(&platform, "pf", "net", "Platform parameter (options: net, cn)")
-	flag.StringVar(&operator, "opt", "", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
+	flag.StringVar(&operator, "opt", "global", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
 	flag.IntVar(&num, "num", -1, "Number of test servers, default -1 not to limit")
 	flag.Parse()
 	if showVersion {
@@ -38,7 +38,7 @@ func main() {
 		return
 	}
 	var url, parseType string
-	if strings.ToLower(platform) == "net" {
+	if strings.ToLower(platform) == "cn" {
 		if strings.ToLower(operator) == "cmcc" {
 			url = model.CnCMCC
 		} else if strings.ToLower(operator) == "cu" {
@@ -54,8 +54,8 @@ func main() {
 		} else if strings.ToLower(operator) == "sg" {
 			url = model.CnSG
 		}
-		parseType = "id"
-	} else if strings.ToLower(platform) == "cn" {
+		parseType = "url"
+	} else if strings.ToLower(platform) == "net" {
 		if strings.ToLower(operator) == "cmcc" {
 			url = model.NetCMCC
 		} else if strings.ToLower(operator) == "cu" {
@@ -70,8 +70,10 @@ func main() {
 			url = model.NetJP
 		} else if strings.ToLower(operator) == "sg" {
 			url = model.NetSG
+		} else if strings.ToLower(operator) == "global" {
+			url = model.NetGlobal
 		}
-		parseType = "url"
+		parseType = "id"
 	}
 	if url != "" {
 		sp.CustomSpeedTest(url, parseType, num)
