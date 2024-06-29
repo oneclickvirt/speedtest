@@ -44,7 +44,7 @@ func getData(endpoint string) string {
 	return ""
 }
 
-func parseDataFromURL(data string) speedtest.Servers {
+func parseDataFromURL(data, url string) speedtest.Servers {
 	var targets speedtest.Servers
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
@@ -65,7 +65,7 @@ func parseDataFromURL(data string) speedtest.Servers {
 	return targets
 }
 
-func parseDataFromID(data string) speedtest.Servers {
+func parseDataFromID(data, url string) speedtest.Servers {
 	var targets speedtest.Servers
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
@@ -80,7 +80,15 @@ func parseDataFromID(data string) speedtest.Servers {
 		if errFetch != nil {
 			continue
 		}
-		serverPtr.Name = record[3]
+		if strings.Contains(url, "Mobile") {
+			serverPtr.Name = "移动"+record[3]
+		} else if strings.Contains(url, "Telecom") {
+			serverPtr.Name = "电信"+record[3]
+		} else if strings.Contains(url, "Unicom") {
+			serverPtr.Name = "联通"+record[3]
+		} else {
+			serverPtr.Name = record[3]
+		}
 		targets = append(targets, serverPtr)
 	}
 	return targets
@@ -88,10 +96,10 @@ func parseDataFromID(data string) speedtest.Servers {
 
 func ShowHead(language string) {
 	if language == "zh" {
-		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
+		fmt.Printf("%-12s\t %-16s\t %-16s\t %-16s\t %-12s\n",
 			"位置", "上传速度", "下载速度", "延迟", "丢包率")
 	} else if language == "en" {
-		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
+		fmt.Printf("%-12s\t %-16s\t %-16s\t %-16s\t %-12s\n",
 			"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss")
 	}
 }
@@ -121,7 +129,7 @@ func NearbySpeedTest() {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		checkError(err)
-		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
+		fmt.Printf("%-12s\t %-16s\t %-16s\t %-16s\t %-12s\n",
 			//NearbyServer.Name,
 			"Speedtest.net",
 			fmt.Sprintf("%.2f Mbps", NearbyServer.ULSpeed.Mbps()),
@@ -136,9 +144,9 @@ func CustomSpeedTest(url, byWhat string, num int) {
 	data := getData(url)
 	var targets speedtest.Servers
 	if byWhat == "id" {
-		targets = parseDataFromID(data)
+		targets = parseDataFromID(data, url)
 	} else if byWhat == "url" {
-		targets = parseDataFromURL(data)
+		targets = parseDataFromURL(data, url)
 	}
 	var pingList []time.Duration
 	var err error
@@ -173,7 +181,7 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		if err != nil {
 			PacketLoss = "N/A"
 		}
-		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
+		fmt.Printf("%-12s\t %-16s\t %-16s\t %-16s\t %-12s\n",
 			server.Name,
 			fmt.Sprintf("%.2f Mbps", server.ULSpeed.Mbps()),
 			fmt.Sprintf("%.2f Mbps", server.DLSpeed.Mbps()),
