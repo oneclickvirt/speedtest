@@ -67,5 +67,9 @@ func main() {
 			url = model.NetSG
 		}
 	}
-	sp.CustomSpeedTest(url, "id", num)
+	if url != "" {
+		sp.CustomSpeedTest(url, "id", num)
+	} else {
+		fmt.Println("Wrong operator.")
+	}
 }
