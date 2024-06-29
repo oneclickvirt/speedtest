@@ -162,8 +162,8 @@ func NearbySpeedTest() {
 		})
 		checkError(err)
 		fmt.Print(formatString("Speedtest.net", 16))
-		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", NearbyServer.ULSpeed.Mbps()), 16))
-		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", NearbyServer.DLSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-8.2f Mbps", NearbyServer.ULSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-8.2f Mbps", NearbyServer.DLSpeed.Mbps()), 16))
 		fmt.Print(formatString(fmt.Sprintf("%s", NearbyServer.Latency), 16))
 		fmt.Print(formatString(PacketLoss, 16))
 		fmt.Println()
@@ -213,8 +213,8 @@ func CustomSpeedTest(url, byWhat string, num int) {
 			PacketLoss = "N/A"
 		}
 		fmt.Print(formatString(server.Name, 16))
-		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", server.ULSpeed.Mbps()), 16))
-		fmt.Print(formatString(fmt.Sprintf("%-10.2f Mbps", server.DLSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-8.2f Mbps", server.ULSpeed.Mbps()), 16))
+		fmt.Print(formatString(fmt.Sprintf("%-8.2f Mbps", server.DLSpeed.Mbps()), 16))
 		fmt.Print(formatString(fmt.Sprintf("%s", server.Latency), 16))
 		fmt.Print(formatString(PacketLoss, 16))
 		fmt.Println()
