@@ -96,10 +96,10 @@ func parseDataFromID(data, url string) speedtest.Servers {
 
 func ShowHead(language string) {
 	if language == "zh" {
-		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
+		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
 			"位置", "上传速度", "下载速度", "延迟", "丢包率")
 	} else if language == "en" {
-		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
+		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
 			"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss")
 	}
 }
@@ -129,11 +129,11 @@ func NearbySpeedTest() {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		checkError(err)
-		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
+		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
 			//NearbyServer.Name,
 			"Speedtest.net",
-			fmt.Sprintf("%.2f Mbps", NearbyServer.ULSpeed.Mbps()),
-			fmt.Sprintf("%.2f Mbps", NearbyServer.DLSpeed.Mbps()),
+			fmt.Sprintf("%-10.2f Mbps", NearbyServer.ULSpeed.Mbps()),
+			fmt.Sprintf("%-10.2f Mbps", NearbyServer.DLSpeed.Mbps()),
 			NearbyServer.Latency,
 			PacketLoss)
 		NearbyServer.Context.Reset()
@@ -181,10 +181,10 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		if err != nil {
 			PacketLoss = "N/A"
 		}
-		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
+		fmt.Printf("%-16s  %-16s  %-16s  %-16s  %-16s\n",
 			server.Name,
-			fmt.Sprintf("%.2f Mbps", server.ULSpeed.Mbps()),
-			fmt.Sprintf("%.2f Mbps", server.DLSpeed.Mbps()),
+			fmt.Sprintf("%-10.2f Mbps", server.ULSpeed.Mbps()),
+			fmt.Sprintf("%-10.2f Mbps", server.DLSpeed.Mbps()),
 			server.Latency,
 			PacketLoss)
 		server.Context.Reset()
