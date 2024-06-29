@@ -1,6 +1,6 @@
 package model
 
-const SpeedTestVersion = "v0.0.2"
+const SpeedTestVersion = "v0.0.3"
 
 var (
 	NetCMCC   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/CN_Mobile.csv"
