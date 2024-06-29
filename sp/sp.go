@@ -21,6 +21,71 @@ func checkError(err error) {
 	}
 }
 
+func getData(endpoint string) string {
+	client := req.C()
+	client.SetTimeout(10 * time.Second)
+	client.R().
+		SetRetryCount(2).
+		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
+		SetRetryFixedInterval(2 * time.Second)
+	for _, baseUrl := range model.CdnList {
+		url := baseUrl + endpoint
+		resp, err := client.R().Get(url)
+		if err == nil {
+			defer resp.Body.Close()
+			b, err := io.ReadAll(resp.Body)
+			if err == nil {
+				return string(b)
+			}
+		} else {
+			log.Println("Error accessing URL:", url, err)
+		}
+	}
+	return ""
+}
+
+func parseDataFromURL(data string) speedtest.Servers {
+	var targets speedtest.Servers
+	reader := csv.NewReader(strings.NewReader(data))
+	reader.Comma = ','
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+	speedtestClient := speedtest.New()
+	for _, record := range records {
+		customURL := record[5] + ":" + record[6]
+		target, errFetch := speedtestClient.CustomServer(customURL)
+		if errFetch != nil {
+			continue
+		}
+		target.Name = record[3]
+		targets = append(targets, target)
+	}
+	return targets
+}
+
+func parseDataFromID(data string) speedtest.Servers {
+	var targets speedtest.Servers
+	reader := csv.NewReader(strings.NewReader(data))
+	reader.Comma = ','
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+	speedtestClient := speedtest.New()
+	for _, record := range records {
+		id := record[0]
+		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
+		if errFetch != nil {
+			continue
+		}
+		serverPtr.Name = record[3]
+		targets = append(targets, serverPtr)
+	}
+	return targets
+}
+
 func NearbySpeedTest(language string) {
 	if language == "zh" {
 		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
@@ -64,80 +129,22 @@ func NearbySpeedTest(language string) {
 	}
 }
 
-func getData(endpoint string) string {
-	client := req.C()
-	client.SetTimeout(10 * time.Second)
-	client.R().
-		SetRetryCount(2).
-		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
-		SetRetryFixedInterval(2 * time.Second)
-	for _, baseUrl := range model.CdnList {
-		url := baseUrl + endpoint
-		resp, err := client.R().Get(url)
-		if err == nil {
-			defer resp.Body.Close()
-			b, err := io.ReadAll(resp.Body)
-			if err == nil {
-				return string(b)
-			}
-		} else {
-			log.Println("Error accessing URL:", url, err)
-		}
-	}
-	return ""
-}
-
-// func parseData(data string) speedtest.Servers {
-// 	var targets speedtest.Servers
-// 	reader := csv.NewReader(strings.NewReader(data))
-// 	reader.Comma = ','
-// 	records, err := reader.ReadAll()
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-// 	speedtestClient := speedtest.New()
-// 	for _, record := range records {
-// 		customURL := record[5] + ":" + record[6]
-// 		target, errFetch := speedtestClient.CustomServer(customURL)
-// 		if errFetch != nil {
-// 			continue
-// 		}
-// 		target.Name = record[3]
-// 		targets = append(targets, target)
-// 	}
-// 	return targets
-// }
-
-func parseData(data string) speedtest.Servers {
-	var targets speedtest.Servers
-	reader := csv.NewReader(strings.NewReader(data))
-	reader.Comma = ','
-	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-	speedtestClient := speedtest.New()
-	for _, record := range records {
-		id := record[0]
-		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
-		if errFetch != nil {
-			continue
-		}
-		serverPtr.Name = record[3]
-		targets = append(targets, serverPtr)
-	}
-	return targets
-}
-
-func CustomSpeedTest(url string, num int) {
+func CustomSpeedTest(url, byWhat string, num int) {
 	data := getData(url)
-	targets := parseData(data)
+	var targets speedtest.Servers
+	if byWhat == "id" {
+		targets = parseDataFromID(data)
+	} else if byWhat == "url" {
+		targets = parseDataFromURL(data)
+	}
 	var pingList []time.Duration
 	var err error
 	serverMap := make(map[time.Duration]*speedtest.Server)
 	for _, server := range targets {
 		err = server.PingTest(nil)
-		checkError(err)
+		if err != nil {
+			server.Latency = 1000 * time.Millisecond
+		}
 		pingList = append(pingList, server.Latency)
 		serverMap[server.Latency] = server
 		server.Context.Reset()
@@ -147,6 +154,9 @@ func CustomSpeedTest(url string, num int) {
 	})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
 	var PacketLoss string
+	if num == -1 && num >= len(pingList) {
+		num = len(pingList)
+	}
 	for i := 0; i < num && i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
 		server.DownloadTest()
@@ -154,7 +164,9 @@ func CustomSpeedTest(url string, num int) {
 		err = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
-		checkError(err)
+		if err != nil {
+			PacketLoss = "N/A"
+		}
 		fmt.Printf("%-12s\t %-11s\t %-11s\t %-11s\t %-12s\n",
 			server.Name,
 			fmt.Sprintf("%.2f Mbps", server.ULSpeed.Mbps()),

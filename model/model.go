@@ -1,5 +1,7 @@
 package model
 
+const SpeedTestVersion = "v0.0.2"
+
 var (
 	NetCMCC   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/CN_Mobile.csv"
 	NetCT     = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/CN_Telecom.csv"
@@ -11,7 +13,7 @@ var (
 	NetGlobal = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/ls_sg_hk_jp.csv"
 
 	CnCMCC = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/mobile.csv"
-	CntCT  = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/telecom.csv"
+	CnCT   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/telecom.csv"
 	CnCU   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/unicom.csv"
 	CnHK   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/HK.csv"
 	CnJP   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/JP.csv"
