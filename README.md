@@ -41,7 +41,18 @@ spt
 无环境依赖，理论上适配所有系统和主流架构，更多架构请查看 https://github.com/oneclickvirt/speedtest/releases/tag/output
 
 ```
-
+Usage of spt:
+  -l string
+        Language parameter (options: en, zh) (default "zh")
+  -nearby
+        Test only nearby servers
+  -num int
+        Number of test servers (default -1)
+  -opt string
+        Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)
+  -pf string
+        Platform parameter (options: net, cn) (default "net")
+  -v    Show version information
 ```
 
 ## 卸载
