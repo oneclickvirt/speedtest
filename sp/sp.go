@@ -81,11 +81,11 @@ func parseDataFromID(data, url string) speedtest.Servers {
 			continue
 		}
 		if strings.Contains(url, "Mobile") {
-			serverPtr.Name = "移动"+record[3]
+			serverPtr.Name = "移动" + record[3]
 		} else if strings.Contains(url, "Telecom") {
-			serverPtr.Name = "电信"+record[3]
+			serverPtr.Name = "电信" + record[3]
 		} else if strings.Contains(url, "Unicom") {
-			serverPtr.Name = "联通"+record[3]
+			serverPtr.Name = "联通" + record[3]
 		} else {
 			serverPtr.Name = record[3]
 		}
@@ -96,10 +96,10 @@ func parseDataFromID(data, url string) speedtest.Servers {
 
 func ShowHead(language string) {
 	if language == "zh" {
-		fmt.Printf("%-16s\t%-12s\t%-12s\t%-12s\t%-12s\n",
+		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
 			"位置", "上传速度", "下载速度", "延迟", "丢包率")
 	} else if language == "en" {
-		fmt.Printf("%-16s\t%-12s\t%-12s\t%-12s\t%-12s\n",
+		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
 			"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss")
 	}
 }
@@ -129,7 +129,7 @@ func NearbySpeedTest() {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		checkError(err)
-		fmt.Printf("%-16s\t%-12s\t%-12s\t%-12s\t%-12s\n",
+		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
 			//NearbyServer.Name,
 			"Speedtest.net",
 			fmt.Sprintf("%.2f Mbps", NearbyServer.ULSpeed.Mbps()),
@@ -181,7 +181,7 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		if err != nil {
 			PacketLoss = "N/A"
 		}
-		fmt.Printf("%-16s\t%-12s\t%-12s\t%-12s\t%-12s\n",
+		fmt.Printf("%-16s  %-12s  %-12s  %-12s  %-12s\n",
 			server.Name,
 			fmt.Sprintf("%.2f Mbps", server.ULSpeed.Mbps()),
 			fmt.Sprintf("%.2f Mbps", server.DLSpeed.Mbps()),
