@@ -45,8 +45,6 @@ func getData(endpoint string) string {
 			if err == nil {
 				return string(b)
 			}
-		} else {
-			log.Println("Error accessing URL:", url, err)
 		}
 	}
 	return ""
@@ -57,17 +55,19 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
 	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, record := range records {
-		customURL := record[5]
-		target, errFetch := speedtestClient.CustomServer(customURL)
-		if errFetch != nil {
-			continue
+	if err == nil {
+		if len(records) > 0 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+			records = records[1:]
 		}
-		target.Name = record[10] + record[7] + record[8]
-		targets = append(targets, target)
+		for _, record := range records {
+			customURL := record[5]
+			target, errFetch := speedtestClient.CustomServer(customURL)
+			if errFetch != nil {
+				continue
+			}
+			target.Name = record[10] + record[7] + record[8]
+			targets = append(targets, target)
+		}
 	}
 	return targets
 }
@@ -77,25 +77,27 @@ func parseDataFromID(data, url string) speedtest.Servers {
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
 	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-	for _, record := range records {
-		id := record[0]
-		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
-		if errFetch != nil {
-			continue
+	if err == nil {
+		if len(records) > 0 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+			records = records[1:]
 		}
-		if strings.Contains(url, "Mobile") {
-			serverPtr.Name = "移动" + record[3]
-		} else if strings.Contains(url, "Telecom") {
-			serverPtr.Name = "电信" + record[3]
-		} else if strings.Contains(url, "Unicom") {
-			serverPtr.Name = "联通" + record[3]
-		} else {
-			serverPtr.Name = record[3]
+		for _, record := range records {
+			id := record[0]
+			serverPtr, errFetch := speedtestClient.FetchServerByID(id)
+			if errFetch != nil {
+				continue
+			}
+			if strings.Contains(url, "Mobile") {
+				serverPtr.Name = "移动" + record[3]
+			} else if strings.Contains(url, "Telecom") {
+				serverPtr.Name = "电信" + record[3]
+			} else if strings.Contains(url, "Unicom") {
+				serverPtr.Name = "联通" + record[3]
+			} else {
+				serverPtr.Name = record[3]
+			}
+			targets = append(targets, serverPtr)
 		}
-		targets = append(targets, serverPtr)
 	}
 	return targets
 }
@@ -193,7 +195,6 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		}
 		pingList = append(pingList, server.Latency)
 		serverMap[server.Latency] = server
-		server.Context.Reset()
 	}
 	sort.Slice(pingList, func(i, j int) bool {
 		return pingList[i] < pingList[j]
@@ -206,22 +207,24 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		fmt.Println("No match servers")
 		return
 	}
-	for i := 0; i < num && i < len(pingList); i++ {
+	for i := 0; i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
-		server.DownloadTest()
-		server.UploadTest()
-		err = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
-			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
-		})
-		if err != nil {
-			PacketLoss = "N/A"
+		if i < num {
+			server.DownloadTest()
+			server.UploadTest()
+			err = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
+				PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
+			})
+			if err != nil {
+				PacketLoss = "N/A"
+			}
+			fmt.Print(formatString(server.Name, 16))
+			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.ULSpeed.Mbps())+" Mbps"), 16))
+			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.DLSpeed.Mbps())+" Mbps"), 16))
+			fmt.Print(formatString(fmt.Sprintf("%s", server.Latency), 16))
+			fmt.Print(formatString(PacketLoss, 16))
+			fmt.Println()
 		}
-		fmt.Print(formatString(server.Name, 16))
-		fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.ULSpeed.Mbps())+" Mbps"), 16))
-		fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.DLSpeed.Mbps())+" Mbps"), 16))
-		fmt.Print(formatString(fmt.Sprintf("%s", server.Latency), 16))
-		fmt.Print(formatString(PacketLoss, 16))
-		fmt.Println()
 		server.Context.Reset()
 	}
 }
