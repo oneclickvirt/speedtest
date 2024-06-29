@@ -75,7 +75,7 @@ func main() {
 		}
 		parseType = "id"
 	}
-	if url != "" {
+	if url != "" && parseType != "" {
 		sp.CustomSpeedTest(url, parseType, num)
 	} else {
 		fmt.Println("Wrong operator.")
