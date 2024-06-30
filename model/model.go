@@ -1,7 +1,8 @@
 package model
 
-const SpeedTestVersion = "v0.0.4"
+const SpeedTestVersion = "v0.0.5"
 
+var EnableLoger = false
 var (
 	NetCMCC   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/CN_Mobile.csv"
 	NetCT     = "https://raw.githubusercontent.com/spiritLHLS/speedtest.net-CN-ID/main/CN_Telecom.csv"

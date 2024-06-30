@@ -4,13 +4,13 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
-	"log"
 	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
 	"github.com/imroc/req/v3"
+	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/showwin/speedtest-go/speedtest"
 	"github.com/showwin/speedtest-go/speedtest/transport"
@@ -23,12 +23,6 @@ var speedtestClient = speedtest.New(speedtest.WithUserConfig(
 		MaxConnections: 8,
 	}))
 
-func checkError(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func getData(endpoint string) string {
 	client := req.C()
 	client.SetTimeout(10 * time.Second)
@@ -36,6 +30,10 @@ func getData(endpoint string) string {
 		SetRetryCount(2).
 		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
 		SetRetryFixedInterval(2 * time.Second)
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
 	for _, baseUrl := range model.CdnList {
 		url := baseUrl + endpoint
 		resp, err := client.R().Get(url)
@@ -46,11 +44,18 @@ func getData(endpoint string) string {
 				return string(b)
 			}
 		}
+		if model.EnableLoger {
+			Logger.Info(err.Error())
+		}
 	}
 	return ""
 }
 
 func parseDataFromURL(data, url string) speedtest.Servers {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
 	var targets speedtest.Servers
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
@@ -63,6 +68,9 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 			customURL := record[5]
 			target, errFetch := speedtestClient.CustomServer(customURL)
 			if errFetch != nil {
+				if model.EnableLoger {
+					Logger.Info(err.Error())
+				}
 				continue
 			}
 			target.Name = record[10] + record[7] + record[8]
@@ -73,6 +81,10 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 }
 
 func parseDataFromID(data, url string) speedtest.Servers {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
 	var targets speedtest.Servers
 	reader := csv.NewReader(strings.NewReader(data))
 	reader.Comma = ','
@@ -85,6 +97,9 @@ func parseDataFromID(data, url string) speedtest.Servers {
 			id := record[0]
 			serverPtr, errFetch := speedtestClient.FetchServerByID(id)
 			if errFetch != nil {
+				if model.EnableLoger {
+					Logger.Info(err.Error())
+				}
 				continue
 			}
 			if strings.Contains(url, "Mobile") {
@@ -144,6 +159,10 @@ func ShowHead(language string) {
 }
 
 func NearbySpeedTest() {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
 	serverList, _ := speedtestClient.FetchServers()
 	targets, _ := serverList.FindServer([]int{})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
@@ -166,18 +185,25 @@ func NearbySpeedTest() {
 		err := analyzer.Run(NearbyServer.Host, func(packetLoss *transport.PLoss) {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
-		checkError(err)
-		fmt.Print(formatString("Speedtest.net", 16))
-		fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.ULSpeed.Mbps())+" Mbps"), 16))
-		fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.DLSpeed.Mbps())+" Mbps"), 16))
-		fmt.Print(formatString(fmt.Sprintf("%s", NearbyServer.Latency), 16))
-		fmt.Print(formatString(PacketLoss, 16))
-		fmt.Println()
-		NearbyServer.Context.Reset()
+		if err == nil {
+			fmt.Print(formatString("Speedtest.net", 16))
+			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.ULSpeed.Mbps())+" Mbps"), 16))
+			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.DLSpeed.Mbps())+" Mbps"), 16))
+			fmt.Print(formatString(fmt.Sprintf("%s", NearbyServer.Latency), 16))
+			fmt.Print(formatString(PacketLoss, 16))
+			fmt.Println()
+			NearbyServer.Context.Reset()
+		} else if model.EnableLoger {
+			Logger.Info(err.Error())
+		}
 	}
 }
 
 func CustomSpeedTest(url, byWhat string, num int) {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
 	data := getData(url)
 	var targets speedtest.Servers
 	if byWhat == "id" {
@@ -186,12 +212,15 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		targets = parseDataFromURL(data, url)
 	}
 	var pingList []time.Duration
-	var err error
+	var err, err1, err2, err3 error
 	serverMap := make(map[time.Duration]*speedtest.Server)
 	for _, server := range targets {
 		err = server.PingTest(nil)
 		if err != nil {
 			server.Latency = 1000 * time.Millisecond
+			if model.EnableLoger {
+				Logger.Info(err.Error())
+			}
 		}
 		pingList = append(pingList, server.Latency)
 		serverMap[server.Latency] = server
@@ -205,18 +234,41 @@ func CustomSpeedTest(url, byWhat string, num int) {
 		num = len(pingList)
 	} else if len(pingList) == 0 {
 		fmt.Println("No match servers")
+		if model.EnableLoger {
+			Logger.Info("No match servers")
+		}
 		return
 	}
 	for i := 0; i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
 		if i < num {
-			server.DownloadTest()
-			server.UploadTest()
-			err = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
+			err1 = server.DownloadTest()
+			err2 = server.UploadTest()
+			err3 = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
 				PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 			})
-			if err != nil {
+			if err3 != nil {
+				if model.EnableLoger {
+					Logger.Info(server.ID)
+					Logger.Info(err3.Error())
+				}
 				PacketLoss = "N/A"
+			}
+			if err1 != nil {
+				if model.EnableLoger {
+					Logger.Info(server.ID)
+					Logger.Info(err1.Error())
+				}
+				server.Context.Reset()
+				continue
+			}
+			if err2 != nil {
+				if model.EnableLoger {
+					Logger.Info(server.ID)
+					Logger.Info(err2.Error())
+				}
+				server.Context.Reset()
+				continue
 			}
 			fmt.Print(formatString(server.Name, 16))
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.ULSpeed.Mbps())+" Mbps"), 16))

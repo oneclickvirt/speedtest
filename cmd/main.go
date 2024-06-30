@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/oneclickvirt/speedtest/sp"
 )
@@ -14,13 +15,14 @@ func main() {
 	go func() {
 		http.Get("https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Foneclickvirt%2Fspeedtest&count_bg=%2323E01C&title_bg=%23555555&icon=sonarcloud.svg&icon_color=%23E7E7E7&title=hits&edge_flat=false")
 	}()
-	fmt.Println("项目地址:", "https://github.com/oneclickvirt/speedtest")
+	fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 	var showVersion, nearByServer, showHead bool
 	var language, operator, platform string
 	var num int
 	flag.BoolVar(&showVersion, "v", false, "Show version information")
 	flag.BoolVar(&nearByServer, "nearby", false, "Test only nearby servers")
 	flag.BoolVar(&showHead, "s", true, "Show head")
+	flag.BoolVar(&model.EnableLoger, "e", false, "Enable logging")
 	flag.StringVar(&language, "l", "zh", "Language parameter (options: en, zh)")
 	flag.StringVar(&platform, "pf", "net", "Platform parameter (options: net, cn)")
 	flag.StringVar(&operator, "opt", "global", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
