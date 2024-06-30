@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"os/exec"
 	"sort"
 	"strings"
 	"time"
@@ -155,6 +156,134 @@ func ShowHead(language string) {
 			fmt.Print(formatString(header, 16))
 		}
 		fmt.Println()
+	}
+}
+
+func OfficialAvailableTest() error {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
+	spvCheck := exec.Command("speedtest", "--version")
+	output, err := spvCheck.CombinedOutput()
+	if err != nil {
+		return err
+	} else {
+		version := strings.Split(string(output), "\n")[0]
+		if strings.Contains(version, "Speedtest by Ookla") && !strings.Contains(version, "err") {
+			// 此时确认可使用speedtest命令进行测速
+			return nil
+		}
+	}
+	return fmt.Errorf("No match speedtest command")
+}
+
+func OfficialNearbySpeedTest() {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
+	var serverName, UPStr, DLStr, Latency, PacketLoss string // serverID,
+	// speedtest --progress=no --accept-license --accept-gdpr
+	sptCheck := exec.Command("speedtest", "--progress=no", "--accept-license", "--accept-gdpr")
+	temp, err := sptCheck.CombinedOutput()
+	if err == nil {
+		serverName = "Speedtest.net"
+		tempList := strings.Split(string(temp), "\n")
+		for _, line := range tempList {
+			if strings.Contains(line, "Idle Latency") {
+				Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Download") {
+				DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Upload") {
+				UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Packet Loss") {
+				PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
+			}
+		}
+		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
+			fmt.Print(formatString(serverName, 16))
+			fmt.Print(formatString(UPStr, 16))
+			fmt.Print(formatString(DLStr, 16))
+			fmt.Print(formatString(Latency, 16))
+			fmt.Print(formatString(PacketLoss, 16))
+			fmt.Println()
+		}
+	}
+}
+
+func OfficialCustomSpeedTest(url, byWhat string, num int) {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
+	if !strings.Contains(url, ".net") {
+		return
+	}
+	data := getData(url)
+	var targets speedtest.Servers
+	if byWhat == "id" {
+		targets = parseDataFromID(data, url)
+	} else if byWhat == "url" {
+		targets = parseDataFromURL(data, url)
+	}
+	var pingList []time.Duration
+	var err error
+	serverMap := make(map[time.Duration]*speedtest.Server)
+	for _, server := range targets {
+		err = server.PingTest(nil)
+		if err != nil {
+			server.Latency = 1000 * time.Millisecond
+			if model.EnableLoger {
+				Logger.Info(err.Error())
+			}
+		}
+		pingList = append(pingList, server.Latency)
+		serverMap[server.Latency] = server
+	}
+	sort.Slice(pingList, func(i, j int) bool {
+		return pingList[i] < pingList[j]
+	})
+	if num == -1 || num >= len(pingList) {
+		num = len(pingList)
+	} else if len(pingList) == 0 {
+		fmt.Println("No match servers")
+		if model.EnableLoger {
+			Logger.Info("No match servers")
+		}
+		return
+	}
+	var serverName, UPStr, DLStr, Latency, PacketLoss string
+	for i := 0; i < len(pingList); i++ {
+		server := serverMap[pingList[i]]
+		if i < num {
+			// speedtest --progress=no --accept-license --accept-gdpr
+			sptCheck := exec.Command("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
+			temp, err := sptCheck.CombinedOutput()
+			if err == nil {
+				serverName = server.Name
+				tempList := strings.Split(string(temp), "\n")
+				for _, line := range tempList {
+					if strings.Contains(line, "Idle Latency") {
+						Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+					} else if strings.Contains(line, "Download") {
+						DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+					} else if strings.Contains(line, "Upload") {
+						UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+					} else if strings.Contains(line, "Packet Loss") {
+						PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
+					}
+				}
+				if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
+					fmt.Print(formatString(serverName, 16))
+					fmt.Print(formatString(UPStr, 16))
+					fmt.Print(formatString(DLStr, 16))
+					fmt.Print(formatString(Latency, 16))
+					fmt.Print(formatString(PacketLoss, 16))
+					fmt.Println()
+				}
+			}
+		}
 	}
 }
 

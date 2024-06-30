@@ -17,7 +17,7 @@ func main() {
 	}()
 	fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 	var showVersion, nearByServer, showHead bool
-	var language, operator, platform string
+	var language, operator, platform, testMethod string
 	var num int
 	flag.BoolVar(&showVersion, "v", false, "Show version information")
 	flag.BoolVar(&nearByServer, "nearby", false, "Test only nearby servers")
@@ -26,6 +26,7 @@ func main() {
 	flag.StringVar(&language, "l", "zh", "Language parameter (options: en, zh)")
 	flag.StringVar(&platform, "pf", "net", "Platform parameter (options: net, cn)")
 	flag.StringVar(&operator, "opt", "global", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
+	flag.StringVar(&testMethod, "m", "speedtest", "Test Method parameter (options: origin, speedtest, speedtest-go)")
 	flag.IntVar(&num, "num", -1, "Number of test servers, default -1 not to limit")
 	flag.Parse()
 	if showVersion {
@@ -36,7 +37,11 @@ func main() {
 		sp.ShowHead(language)
 	}
 	if nearByServer {
-		sp.NearbySpeedTest()
+		if strings.ToLower(testMethod) == "origin" {
+			sp.NearbySpeedTest()
+		} else if strings.ToLower(testMethod) == "speedtest" {
+			sp.OfficialNearbySpeedTest()
+		}
 		return
 	}
 	var url, parseType string
@@ -77,9 +82,30 @@ func main() {
 		}
 		parseType = "id"
 	}
-	if url != "" && parseType != "" {
-		sp.CustomSpeedTest(url, parseType, num)
+	if strings.ToLower(testMethod) == "origin" {
+		if url != "" && parseType != "" {
+			sp.CustomSpeedTest(url, parseType, num)
+		} else {
+			fmt.Println("-opt/-pf with wrong operator.")
+		}
+	} else if strings.ToLower(testMethod) == "speedtest" {
+		err := sp.OfficialAvailableTest()
+		if err == nil {
+			if url != "" && parseType != "" {
+				sp.OfficialCustomSpeedTest(url, parseType, num)
+			} else {
+				fmt.Println("-opt/-pf with wrong operator.")
+			}
+		} else {
+			fmt.Println("Can not match speedtest command, switch to use origin test")
+			if url != "" && parseType != "" {
+				sp.CustomSpeedTest(url, parseType, num)
+			} else {
+				fmt.Println("-opt/-pf with wrong operator.")
+			}
+		}
 	} else {
-		fmt.Println("Wrong operator.")
+		fmt.Println("-m with wrong operator.")
 	}
+
 }
