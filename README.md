@@ -18,6 +18,8 @@
 
 ## 下载speedtest或speedtest-go
 
+目前默认安装官方的speedtest包
+
 ```
 curl https://raw.githubusercontent.com/oneclickvirt/speedtest/main/dspt.sh -sSf | bash
 ```
