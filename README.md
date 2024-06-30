@@ -7,12 +7,12 @@
 ## 说明
 
 - [x] 基于[speedtest.net-爬虫](https://github.com/spiritLHLS/speedtest.net-CN-ID)、[speedtest.cn-爬虫](https://github.com/spiritLHLS/speedtest.cn-CN-ID)的数据
-- [x] 基于[speedtest-go](https://github.com/showwin/speedtest-go)二次开发，go原生实现就近测速
+- [x] 基于[speedtest-go](https://github.com/showwin/speedtest-go)二次开发，go原生实现就近测速无需使用shell命令
 - [x] 主体逻辑借鉴了[ecsspeed](https://github.com/spiritLHLS/ecsspeed)
+- [x] 使用shell命令使用```speedtest```进行测速
 
 ## TODO
 
-- [ ] 使用shell命令使用```speedtest```进行测速
 - [ ] 使用shell命令使用```speedtest-go```进行测速
 
 ## 下载speedtest或speedtest-go
@@ -59,8 +59,11 @@ spt
 
 ```
 Usage of spt:
+  -e    Enable logging
   -l string
         Language parameter (options: en, zh) (default "zh")
+  -m string
+        Test Method parameter (options: origin, speedtest, speedtest-go) (default "speedtest")
   -nearby
         Test only nearby servers
   -num int
