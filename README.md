@@ -7,8 +7,25 @@
 ## 说明
 
 - [x] 基于[speedtest.net-爬虫](https://github.com/spiritLHLS/speedtest.net-CN-ID)、[speedtest.cn-爬虫](https://github.com/spiritLHLS/speedtest.cn-CN-ID)的数据
-- [x] 基于[speedtest-go](https://github.com/showwin/speedtest-go)二次开发
+- [x] 基于[speedtest-go](https://github.com/showwin/speedtest-go)二次开发，go原生实现就近测速
 - [x] 主体逻辑借鉴了[ecsspeed](https://github.com/spiritLHLS/ecsspeed)
+
+## TODO
+
+- [ ] 使用shell命令使用```speedtest```进行测速
+- [ ] 使用shell命令使用```speedtest-go```进行测速
+
+## 下载speedtest或speedtest-go
+
+```
+curl https://raw.githubusercontent.com/oneclickvirt/speedtest/main/dspt.sh -sSf | bash
+```
+
+或
+
+```
+curl https://cdn.spiritlhl.net/https://raw.githubusercontent.com/oneclickvirt/speedtest/main/dspt.sh -sSf | bash
+```
 
 ## 使用
 
