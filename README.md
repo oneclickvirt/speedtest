@@ -13,6 +13,7 @@
 
 ## TODO
 
+- [ ] 国内服务器安装```speedtest-go```而不是```speedtest```进行测速
 - [ ] 使用shell命令使用```speedtest-go```进行测速
 
 ## 下载speedtest或speedtest-go
