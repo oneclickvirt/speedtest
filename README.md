@@ -61,8 +61,9 @@ spt
 无环境依赖，理论上适配所有系统和主流架构，更多架构请查看 https://github.com/oneclickvirt/speedtest/releases/tag/output
 
 ```
-Usage of spt:
+Usage: spt [options]
   -e    Enable logging
+  -h    Show help information
   -l string
         Language parameter (options: en, zh) (default "zh")
   -m string
