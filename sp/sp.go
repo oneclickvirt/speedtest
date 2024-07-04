@@ -65,7 +65,7 @@ func OfficialNearbySpeedTest() {
 	}
 }
 
-func OfficialCustomSpeedTest(url, byWhat string, num int) {
+func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -129,7 +129,17 @@ func OfficialCustomSpeedTest(url, byWhat string, num int) {
 					}
 				}
 				if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
-					fmt.Print(formatString(serverName, 16))
+					if language == "zh" {
+						fmt.Print(formatString(serverName, 16))
+					} else if language == "en" {
+						name := serverName
+						name = strings.ReplaceAll(name, "中国香港", "HongKong")
+						name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
+						name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
+						name = strings.ReplaceAll(name, "新加坡", "Singapore")
+						name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
+						fmt.Print(formatString(name, 16))
+					}
 					fmt.Print(formatString(UPStr, 16))
 					fmt.Print(formatString(DLStr, 16))
 					fmt.Print(formatString(Latency, 16))
@@ -182,7 +192,7 @@ func NearbySpeedTest() {
 	}
 }
 
-func CustomSpeedTest(url, byWhat string, num int) {
+func CustomSpeedTest(url, byWhat string, num int, language string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -253,7 +263,17 @@ func CustomSpeedTest(url, byWhat string, num int) {
 				server.Context.Reset()
 				continue
 			}
-			fmt.Print(formatString(server.Name, 16))
+			if language == "zh" {
+				fmt.Print(formatString(server.Name, 16))
+			} else if language == "en" {
+				name := server.Name
+				name = strings.ReplaceAll(name, "中国香港", "HongKong")
+				name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
+				name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
+				name = strings.ReplaceAll(name, "新加坡", "Singapore")
+				name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
+				fmt.Print(formatString(name, 16))
+			}
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.ULSpeed.Mbps())+" Mbps"), 16))
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.DLSpeed.Mbps())+" Mbps"), 16))
 			fmt.Print(formatString(fmt.Sprintf("%s", server.Latency), 16))

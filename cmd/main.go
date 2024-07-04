@@ -92,7 +92,7 @@ func main() {
 	}
 	if strings.ToLower(testMethod) == "origin" {
 		if url != "" && parseType != "" {
-			sp.CustomSpeedTest(url, parseType, num)
+			sp.CustomSpeedTest(url, parseType, num, language)
 		} else {
 			fmt.Println("-opt/-pf with wrong operator.")
 		}
@@ -100,14 +100,14 @@ func main() {
 		err := sp.OfficialAvailableTest()
 		if err == nil {
 			if url != "" && parseType != "" {
-				sp.OfficialCustomSpeedTest(url, parseType, num)
+				sp.OfficialCustomSpeedTest(url, parseType, num, language)
 			} else {
 				fmt.Println("-opt/-pf with wrong operator.")
 			}
 		} else {
 			fmt.Println("Can not match speedtest command, switch to use origin test")
 			if url != "" && parseType != "" {
-				sp.CustomSpeedTest(url, parseType, num)
+				sp.CustomSpeedTest(url, parseType, num, language)
 			} else {
 				fmt.Println("-opt/-pf with wrong operator.")
 			}
