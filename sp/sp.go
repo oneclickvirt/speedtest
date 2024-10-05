@@ -18,6 +18,15 @@ func OfficialAvailableTest() error {
 		InitLogger()
 		defer Logger.Sync()
 	}
+	// 首先检查 speedtest 命令是否存在
+	_, err := exec.LookPath("speedtest")
+	if err != nil {
+		if model.EnableLoger {
+			Logger.Info("Speedtest command not found: " + err.Error())
+		}
+		return fmt.Errorf("Speedtest command not found")
+	}
+	// 再进行版本检测
 	spvCheck := exec.Command("speedtest", "--version")
 	output, err := spvCheck.CombinedOutput()
 	if err != nil {
