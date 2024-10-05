@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # from https://github.com/oneclickvirt/speedtest
+# 2024.10.05
 
 speedtest_ver="1.2.0"
 speedtest_go_version="1.7.7"
@@ -22,7 +23,6 @@ for ((int = 0; int < ${#REGEX[@]}; int++)); do
         [[ -n $SYSTEM ]] && break
     fi
 done
-
 
 if ! command -v curl >/dev/null 2>&1; then
     _green "Installing curl"
@@ -114,5 +114,57 @@ download_speedtest_file() {
     fi
 }
 
+install_speedtest_alternative() {
+    case $SYSTEM in
+    Debian | Ubuntu)
+        _green "Installing speedtest using alternative method for Debian/Ubuntu"
+        sudo rm /etc/apt/sources.list.d/speedtest.list >/dev/null 2>&1
+        sudo apt-get update
+        sudo apt-get remove speedtest >/dev/null 2>&1
+        sudo apt-get remove speedtest-cli >/dev/null 2>&1
+        sudo apt-get install curl -y
+        curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+        sudo apt-get install speedtest -y
+        ;;
+    CentOS | Fedora)
+        _green "Installing speedtest using alternative method for CentOS/Fedora/RHEL"
+        sudo rm /etc/yum.repos.d/bintray-ookla-rhel.repo >/dev/null 2>&1
+        sudo yum remove speedtest >/dev/null 2>&1
+        rpm -qa | grep speedtest | xargs -I {} sudo yum -y remove {} >/dev/null 2>&1
+        curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.rpm.sh | sudo bash
+        sudo yum install speedtest -y
+        ;;
+    FreeBSD)
+        _green "Installing speedtest using alternative method for FreeBSD"
+        sudo pkg update && sudo pkg install -g libidn2 ca_root_nss
+        sudo pkg remove speedtest >/dev/null 2>&1
+        if [ "$(uname -r | cut -d'-' -f1)" = "12" ]; then
+            sudo pkg add "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-freebsd12-x86_64.pkg"
+        elif [ "$(uname -r | cut -d'-' -f1)" = "13" ]; then
+            sudo pkg add "https://install.speedtest.net/app/cli/ookla-speedtest-1.2.0-freebsd13-x86_64.pkg"
+        else
+            _red "Unsupported FreeBSD version"
+            exit 1
+        fi
+        ;;
+    *)
+        _red "Unsupported system for alternative installation method"
+        exit 1
+        ;;
+    esac
+}
+
 install_speedtest
+if ! speedtest --version >/dev/null 2>&1 || speedtest --version | grep -q "not valid"; then
+    _yellow "Standard installation failed or produced invalid output. Trying alternative method..."
+    install_speedtest_alternative
+fi
+
 speedtest --version
+
+if ! speedtest --version >/dev/null 2>&1; then
+    _red "Failed to install speedtest. Please check your system and try again."
+    exit 1
+fi
+
+_green "Speedtest installation completed successfully."

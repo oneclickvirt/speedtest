@@ -24,9 +24,14 @@ func OfficialAvailableTest() error {
 		return err
 	} else {
 		version := strings.Split(string(output), "\n")[0]
-		if strings.Contains(version, "Speedtest by Ookla") && !strings.Contains(version, "err") {
+		if strings.Contains(version, "Speedtest by Ookla") &&
+			!strings.Contains(string(output), "not valid") &&
+			!strings.Contains(string(output), "err") {
 			// 此时确认可使用speedtest命令进行测速
 			return nil
+		}
+		if model.EnableLoger {
+			Logger.Info(string(output))
 		}
 	}
 	return fmt.Errorf("No match speedtest command")
