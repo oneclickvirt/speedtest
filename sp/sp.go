@@ -21,12 +21,16 @@ func OfficialAvailableTest() error {
 	spvCheck := exec.Command("speedtest", "--version")
 	output, err := spvCheck.CombinedOutput()
 	if err != nil {
+		if model.EnableLoger {
+			Logger.Info(err.Error())
+		}
 		return err
 	} else {
 		version := strings.Split(string(output), "\n")[0]
 		if strings.Contains(version, "Speedtest by Ookla") &&
 			!strings.Contains(string(output), "not valid") &&
-			!strings.Contains(string(output), "err") {
+			!strings.Contains(string(output), "err") &&
+			!strings.Contains(string(output), "Kommando nicht gefunden") {
 			// 此时确认可使用speedtest命令进行测速
 			return nil
 		}
