@@ -28,6 +28,10 @@ if ! command -v curl >/dev/null 2>&1; then
     _green "Installing curl"
     $PACKAGE_INSTALL curl
 fi
+if ! command -v sudo >/dev/null 2>&1; then
+    _green "Installing sudo"
+    $PACKAGE_INSTALL sudo
+fi
 if ! command -v tar >/dev/null 2>&1; then
     _green "Installing tar"
     $PACKAGE_INSTALL tar

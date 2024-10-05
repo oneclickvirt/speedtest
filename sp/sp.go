@@ -13,6 +13,21 @@ import (
 	"github.com/showwin/speedtest-go/speedtest/transport"
 )
 
+// 检查sudo是否可用
+func isSudoAvailable() bool {
+	cmd := exec.Command("sudo", "-n", "true")
+	err := cmd.Run()
+	return err == nil
+}
+
+// 如果sudo可用，则使用sudo执行命令
+func execCommand(name string, arg ...string) *exec.Cmd {
+	if isSudoAvailable() {
+		return exec.Command("sudo", append([]string{name}, arg...)...)
+	}
+	return exec.Command(name, arg...)
+}
+
 func OfficialAvailableTest() error {
 	if model.EnableLoger {
 		InitLogger()
@@ -27,7 +42,7 @@ func OfficialAvailableTest() error {
 		return fmt.Errorf("Speedtest command not found")
 	}
 	// 再进行版本检测
-	spvCheck := exec.Command("speedtest", "--version")
+	spvCheck := execCommand("speedtest", "--version")
 	output, err := spvCheck.CombinedOutput()
 	if err != nil {
 		if model.EnableLoger {
@@ -57,7 +72,7 @@ func OfficialNearbySpeedTest() {
 	}
 	var UPStr, DLStr, Latency, PacketLoss string // serverID,
 	// speedtest --progress=no --accept-license --accept-gdpr
-	sptCheck := exec.Command("speedtest", "--progress=no", "--accept-license", "--accept-gdpr")
+	sptCheck := execCommand("speedtest", "--progress=no", "--accept-license", "--accept-gdpr")
 	temp, err := sptCheck.CombinedOutput()
 	if err == nil {
 		tempList := strings.Split(string(temp), "\n")
@@ -130,7 +145,7 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 		server := serverMap[pingList[i]]
 		if i < num {
 			// speedtest --progress=no --accept-license --accept-gdpr
-			sptCheck := exec.Command("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
+			sptCheck := execCommand("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
 			temp, err := sptCheck.CombinedOutput()
 			if err == nil {
 				serverName = server.Name
