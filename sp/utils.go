@@ -59,23 +59,29 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 	reader.Comma = ','
 	records, err := reader.ReadAll()
 	if err == nil {
-		if len(records) > 0 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
-			records = records[1:]
-		}
-		for _, record := range records {
-			customURL := record[5]
-			target, errFetch := speedtestClient.CustomServer(customURL)
-			if errFetch != nil {
-				if model.EnableLoger {
-					Logger.Info(err.Error())
-				}
-				continue
-			}
-			target.Name = record[10] + record[7] + record[8]
-			targets = append(targets, target)
-		}
-	}
-	return targets
+        if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+            records = records[1:]
+        }
+        for _, record := range records {
+            if len(record) < 11 {
+                if model.EnableLoger {
+                    Logger.Info("Invalid record length")
+                }
+                continue
+            }
+            customURL := record[5]
+            target, errFetch := speedtestClient.CustomServer(customURL)
+            if errFetch != nil {
+                if model.EnableLoger {
+                    Logger.Info(errFetch.Error())
+                }
+                continue
+            }
+            target.Name = record[10] + record[7] + record[8]
+            targets = append(targets, target)
+        }
+    }
+    return targets
 }
 
 func parseDataFromID(data, url string) speedtest.Servers {
@@ -88,19 +94,25 @@ func parseDataFromID(data, url string) speedtest.Servers {
 	reader.Comma = ','
 	records, err := reader.ReadAll()
 	if err == nil {
-		if len(records) > 0 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
-			records = records[1:]
-		}
-		for _, record := range records {
-			id := record[0]
-			serverPtr, errFetch := speedtestClient.FetchServerByID(id)
-			if errFetch != nil {
-				if model.EnableLoger {
-					Logger.Info(err.Error())
-				}
-				continue
-			}
-			if strings.Contains(url, "Mobile") {
+        if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+            records = records[1:]
+        }
+        for _, record := range records {
+            if len(record) < 4 {
+                if model.EnableLoger {
+                    Logger.Info("Invalid record length")
+                }
+                continue
+            }
+            id := record[0]
+            serverPtr, errFetch := speedtestClient.FetchServerByID(id)
+            if errFetch != nil {
+                if model.EnableLoger {
+                    Logger.Info(errFetch.Error())
+                }
+                continue
+            }
+            if strings.Contains(url, "Mobile") {
 				serverPtr.Name = "移动" + record[3]
 			} else if strings.Contains(url, "Telecom") {
 				serverPtr.Name = "电信" + record[3]
