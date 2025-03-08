@@ -1,6 +1,6 @@
 package model
 
-const SpeedTestVersion = "v0.0.8"
+const SpeedTestVersion = "v0.0.9"
 
 var EnableLoger = false
 var (
@@ -22,10 +22,9 @@ var (
 	CnSG   = "https://raw.githubusercontent.com/spiritLHLS/speedtest.cn-CN-ID/main/SG.csv"
 
 	CdnList = []string{
-		"http://cdn0.spiritlhl.top/",
-		"http://cdn1.spiritlhl.top/",
 		"http://cdn1.spiritlhl.net/",
+		"http://cdn2.spiritlhl.net/", 
 		"http://cdn3.spiritlhl.net/",
-		"http://cdn2.spiritlhl.net/",
+		"http://cdn4.spiritlhl.net/",
 	}
 )

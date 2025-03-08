@@ -1,6 +1,7 @@
 package sp
 
 import (
+	"bufio"
 	"encoding/csv"
 	"fmt"
 	"io"
@@ -38,15 +39,35 @@ func getData(endpoint string) string {
 		if err == nil {
 			defer resp.Body.Close()
 			b, err := io.ReadAll(resp.Body)
+			if strings.Contains(string(b), "error") {
+				continue
+			}
 			if err == nil {
+				if model.EnableLoger {
+					Logger.Info(fmt.Sprintf("Received data length: %d", len(b)))
+				}
 				return string(b)
 			}
 		}
 		if model.EnableLoger {
-			Logger.Info(err.Error())
+			Logger.Info(fmt.Sprintf("HTTP request failed: %v", err))
 		}
 	}
 	return ""
+}
+
+// 自动检测 CSV 分隔符
+func detectSeparator(data string) rune {
+	scanner := bufio.NewScanner(strings.NewReader(data))
+	if scanner.Scan() {
+		firstLine := scanner.Text()
+		if strings.Contains(firstLine, ";") {
+			return ';'
+		} else if strings.Contains(firstLine, "\t") {
+			return '\t'
+		}
+	}
+	return ','
 }
 
 func parseDataFromURL(data, url string) speedtest.Servers {
@@ -54,34 +75,55 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 		InitLogger()
 		defer Logger.Sync()
 	}
+
 	var targets speedtest.Servers
+	if data == "" {
+		if model.EnableLoger {
+			Logger.Info("No data received for parsing")
+		}
+		return targets
+	}
+
+	separator := detectSeparator(data)
 	reader := csv.NewReader(strings.NewReader(data))
-	reader.Comma = ','
+	reader.Comma = separator
+
 	records, err := reader.ReadAll()
-	if err == nil {
-        if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
-            records = records[1:]
-        }
-        for _, record := range records {
-            if len(record) < 11 {
-                if model.EnableLoger {
-                    Logger.Info("Invalid record length")
-                }
-                continue
-            }
-            customURL := record[5]
-            target, errFetch := speedtestClient.CustomServer(customURL)
-            if errFetch != nil {
-                if model.EnableLoger {
-                    Logger.Info(errFetch.Error())
-                }
-                continue
-            }
-            target.Name = record[10] + record[7] + record[8]
-            targets = append(targets, target)
-        }
-    }
-    return targets
+	if err != nil {
+		if model.EnableLoger {
+			Logger.Info(fmt.Sprintf("CSV parsing error: %v", err))
+		}
+		return targets
+	}
+
+	// 过滤掉标题行
+	if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+		records = records[1:]
+	}
+
+	for _, record := range records {
+		if len(record) == 0 {
+			continue // 跳过空行
+		}
+		if len(record) < 11 {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("Skipping record with insufficient columns: %v", record))
+			}
+			continue
+		}
+
+		customURL := record[5]
+		target, errFetch := speedtestClient.CustomServer(customURL)
+		if errFetch != nil {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("Error fetching server from URL %s: %v", customURL, errFetch))
+			}
+			continue
+		}
+		target.Name = record[10] + record[7] + record[8]
+		targets = append(targets, target)
+	}
+	return targets
 }
 
 func parseDataFromID(data, url string) speedtest.Servers {
@@ -89,40 +131,62 @@ func parseDataFromID(data, url string) speedtest.Servers {
 		InitLogger()
 		defer Logger.Sync()
 	}
+
 	var targets speedtest.Servers
-	reader := csv.NewReader(strings.NewReader(data))
-	reader.Comma = ','
-	records, err := reader.ReadAll()
-	if err == nil {
-        if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
-            records = records[1:]
-        }
-        for _, record := range records {
-            if len(record) < 4 {
-                if model.EnableLoger {
-                    Logger.Info("Invalid record length")
-                }
-                continue
-            }
-            id := record[0]
-            serverPtr, errFetch := speedtestClient.FetchServerByID(id)
-            if errFetch != nil {
-                if model.EnableLoger {
-                    Logger.Info(errFetch.Error())
-                }
-                continue
-            }
-            if strings.Contains(url, "Mobile") {
-				serverPtr.Name = "移动" + record[3]
-			} else if strings.Contains(url, "Telecom") {
-				serverPtr.Name = "电信" + record[3]
-			} else if strings.Contains(url, "Unicom") {
-				serverPtr.Name = "联通" + record[3]
-			} else {
-				serverPtr.Name = record[3]
-			}
-			targets = append(targets, serverPtr)
+	if data == "" {
+		if model.EnableLoger {
+			Logger.Info("No data received for parsing")
 		}
+		return targets
+	}
+
+	separator := detectSeparator(data)
+	reader := csv.NewReader(strings.NewReader(data))
+	reader.Comma = separator
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		if model.EnableLoger {
+			Logger.Info(fmt.Sprintf("CSV parsing error: %v", err))
+		}
+		return targets
+	}
+
+	// 过滤掉标题行
+	if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+		records = records[1:]
+	}
+
+	for _, record := range records {
+		if len(record) == 0 {
+			continue // 跳过空行
+		}
+		if len(record) < 4 {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("Skipping record with insufficient columns: %v", record))
+			}
+			continue
+		}
+
+		id := record[0]
+		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
+		if errFetch != nil {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("Error fetching server by ID %s: %v", id, errFetch))
+			}
+			continue
+		}
+
+		if strings.Contains(url, "Mobile") {
+			serverPtr.Name = "移动" + record[3]
+		} else if strings.Contains(url, "Telecom") {
+			serverPtr.Name = "电信" + record[3]
+		} else if strings.Contains(url, "Unicom") {
+			serverPtr.Name = "联通" + record[3]
+		} else {
+			serverPtr.Name = record[3]
+		}
+		targets = append(targets, serverPtr)
 	}
 	return targets
 }
@@ -132,7 +196,6 @@ func displayWidth(s string) int {
 	width := 0
 	for _, r := range s {
 		if utf8.RuneLen(r) == 3 {
-			// 假设每个中文字符宽度为2
 			width += 2
 		} else {
 			width += 1
@@ -145,7 +208,6 @@ func displayWidth(s string) int {
 func formatString(s string, width int) string {
 	displayW := displayWidth(s)
 	if displayW < width {
-		// 计算需要填充的空格数
 		padding := width - displayW
 		return s + fmt.Sprintf("%*s", padding, "")
 	}
