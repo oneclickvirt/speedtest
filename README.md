@@ -13,6 +13,10 @@
 - [x] 主体逻辑借鉴了[ecsspeed](https://github.com/spiritLHLS/ecsspeed)
 - [x] 使用shell命令使用```speedtest```进行测速
 
+## TODO
+
+- [ ] 添加对泰尔测速的支持
+
 ## 下载speedtest或speedtest-go
 
 目前默认安装官方的speedtest包
