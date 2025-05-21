@@ -215,7 +215,7 @@ func NearbySpeedTest() {
 			fmt.Print(formatString("Speedtest.net", 16))
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.ULSpeed.Mbps())+" Mbps"), 16))
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", NearbyServer.DLSpeed.Mbps())+" Mbps"), 16))
-			fmt.Print(formatString(fmt.Sprintf("%s", NearbyServer.Latency), 16))
+			fmt.Print(formatString(NearbyServer.Latency.String(), 16))
 			fmt.Print(formatString(PacketLoss, 16))
 			fmt.Println()
 			NearbyServer.Context.Reset()
@@ -309,7 +309,7 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 			}
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.ULSpeed.Mbps())+" Mbps"), 16))
 			fmt.Print(formatString(fmt.Sprintf("%-8s", fmt.Sprintf("%.2f", server.DLSpeed.Mbps())+" Mbps"), 16))
-			fmt.Print(formatString(fmt.Sprintf("%s", server.Latency), 16))
+			fmt.Print(formatString(server.Latency.String(), 16))
 			fmt.Print(formatString(PacketLoss, 16))
 			fmt.Println()
 		}
