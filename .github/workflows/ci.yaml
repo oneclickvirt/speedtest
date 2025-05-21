@@ -27,5 +27,22 @@ jobs:
           TAG="v0.0.9-$(date +'%Y%m%d%H%M%S')"
           git tag $TAG
           git push origin $TAG
+          echo "TAG=$TAG" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update README.md
+        if: success() # 仅在测试成功后运行
+        run: |
+          sed -i "s|go get github.com/oneclickvirt/speedtest@.*|go get github.com/oneclickvirt/speedtest@${TAG}|" README.md
+        env:
+          TAG: ${{ env.TAG }}
+
+      - name: Commit and Push README.md
+        if: success() # 仅在测试成功后运行
+        run: |
+          git add README.md
+          git commit -m "Update README.md with new tag ${TAG}"
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
