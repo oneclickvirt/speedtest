@@ -22,8 +22,10 @@ func isSudoAvailable() bool {
 
 // 如果sudo可用，则使用sudo执行命令
 func execCommand(name string, arg ...string) *exec.Cmd {
-	if hasRootPermission() && isSudoAvailable() {
-		return exec.Command("sudo", append([]string{name}, arg...)...)
+	if hasRootPermission() {
+		if isSudoAvailable() {
+			return exec.Command("sudo", append([]string{name}, arg...)...)
+		}
 	}
 	return exec.Command(name, arg...)
 }
