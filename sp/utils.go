@@ -22,6 +22,26 @@ var speedtestClient = speedtest.New(speedtest.WithUserConfig(
 		MaxConnections: 8,
 	}))
 
+// checkCDN checks if a CDN is available by testing with a known test file
+func checkCDN(baseUrl string) bool {
+	testUrl := baseUrl + "https://raw.githubusercontent.com/spiritLHLS/ecs/main/back/test"
+	client := req.C()
+	client.SetTimeout(6 * time.Second)
+
+	resp, err := client.R().Get(testUrl)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return false
+	}
+
+	return strings.Contains(string(b), "success")
+}
+
 func getData(endpoint string) string {
 	client := req.C()
 	client.SetTimeout(10 * time.Second)
@@ -33,25 +53,58 @@ func getData(endpoint string) string {
 		InitLogger()
 		defer Logger.Sync()
 	}
+
+	// First, find an available CDN
+	var availableCdn string
 	for _, baseUrl := range model.CdnList {
-		url := baseUrl + endpoint
-		resp, err := client.R().Get(url)
+		if checkCDN(baseUrl) {
+			availableCdn = baseUrl
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("CDN available: %s", baseUrl))
+			}
+			break
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+
+	if availableCdn == "" {
+		if model.EnableLoger {
+			Logger.Info("No CDN available, trying direct access")
+		}
+		// Try direct access without CDN
+		resp, err := client.R().Get(endpoint)
 		if err == nil {
 			defer resp.Body.Close()
 			b, err := io.ReadAll(resp.Body)
-			if strings.Contains(string(b), "error") {
-				continue
-			}
-			if err == nil {
+			if err == nil && !strings.Contains(string(b), "error") {
 				if model.EnableLoger {
-					Logger.Info(fmt.Sprintf("Received data length: %d", len(b)))
+					Logger.Info(fmt.Sprintf("Direct access success, received data length: %d", len(b)))
 				}
 				return string(b)
 			}
 		}
 		if model.EnableLoger {
-			Logger.Info(fmt.Sprintf("HTTP request failed: %v", err))
+			Logger.Info("Direct access failed")
 		}
+		return ""
+	}
+
+	// Use the available CDN
+	url := availableCdn + endpoint
+	resp, err := client.R().Get(url)
+	if err == nil {
+		defer resp.Body.Close()
+		b, err := io.ReadAll(resp.Body)
+		if err == nil && !strings.Contains(string(b), "error") {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("CDN access success, received data length: %d", len(b)))
+			}
+			return string(b)
+		}
+	}
+
+	if model.EnableLoger {
+		Logger.Info(fmt.Sprintf("CDN access failed: %v", err))
 	}
 	return ""
 }

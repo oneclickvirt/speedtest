@@ -1,6 +1,6 @@
 module github.com/oneclickvirt/speedtest
 
-go 1.24.5
+go 1.25.3
 
 require (
 	github.com/imroc/req/v3 v3.54.0
