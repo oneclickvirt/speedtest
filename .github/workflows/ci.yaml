@@ -18,7 +18,8 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - name: Test
-        run: go test ./... -coverprofile=coverage.txt
+        # 移除 -coverprofile 参数以避免在某些 Go 版本/环境中触发 `go tool covdata` 错误
+        run: go test ./...
       - name: Create Tag
         if: success() # 仅在测试成功时运行
         run: |
