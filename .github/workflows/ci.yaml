@@ -7,7 +7,6 @@ jobs:
   test:
     strategy:
       matrix:
-        go: [ '1.22.x' ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -16,7 +15,8 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version: ${{ matrix.go }}
+          go-version-file: go.mod
+          check-latest: true
       - name: Test
         # 移除 -coverprofile 参数以避免在某些 Go 版本/环境中触发 `go tool covdata` 错误
         run: go test ./...
