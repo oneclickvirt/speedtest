@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"math"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -270,6 +271,13 @@ func formatString(s string, width int) string {
 		return s + fmt.Sprintf("%*s", padding, "")
 	}
 	return s
+}
+
+func formatMbps(value float64) string {
+	if math.IsNaN(value) || math.IsInf(value, 0) || value < 0 {
+		value = 0
+	}
+	return fmt.Sprintf("%.2f Mbps", value)
 }
 
 func ShowHead(language string) {
