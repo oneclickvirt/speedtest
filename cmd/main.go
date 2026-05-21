@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
@@ -14,7 +15,11 @@ import (
 
 func main() {
 	go func() {
-		http.Get("https://hits.spiritlhl.net/speedtest.svg?action=hit&title=Hits&title_bg=%23555555&count_bg=%230eecf8&edge_flat=false")
+		client := &http.Client{Timeout: 3 * time.Second}
+		resp, err := client.Get("https://hits.spiritlhl.net/speedtest.svg?action=hit&title=Hits&title_bg=%23555555&count_bg=%230eecf8&edge_flat=false")
+		if err == nil && resp != nil {
+			resp.Body.Close()
+		}
 	}()
 	fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 	var showVersion, nearByServer, showHead, help bool

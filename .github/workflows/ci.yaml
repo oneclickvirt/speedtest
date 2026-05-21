@@ -12,9 +12,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go }}
       - name: Test
@@ -25,7 +25,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          TAG="v0.0.11-$(date +'%Y%m%d%H%M%S')"
+          TAG="v0.0.12-$(date +'%Y%m%d%H%M%S')"
           git tag $TAG
           git push origin $TAG
           echo "TAG=$TAG" >> $GITHUB_ENV

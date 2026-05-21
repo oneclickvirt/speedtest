@@ -10,7 +10,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/imroc/req/v3"
-	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/showwin/speedtest-go/speedtest"
 )
@@ -29,7 +28,7 @@ func checkCDN(baseUrl string) bool {
 	client.SetTimeout(6 * time.Second)
 
 	resp, err := client.R().Get(testUrl)
-	if err != nil {
+	if err != nil || resp == nil {
 		return false
 	}
 	defer resp.Body.Close()
@@ -73,7 +72,7 @@ func getData(endpoint string) string {
 		}
 		// Try direct access without CDN
 		resp, err := client.R().Get(endpoint)
-		if err == nil {
+		if err == nil && resp != nil {
 			defer resp.Body.Close()
 			b, err := io.ReadAll(resp.Body)
 			if err == nil && !strings.Contains(string(b), "error") {
@@ -92,7 +91,7 @@ func getData(endpoint string) string {
 	// Use the available CDN
 	url := availableCdn + endpoint
 	resp, err := client.R().Get(url)
-	if err == nil {
+	if err == nil && resp != nil {
 		defer resp.Body.Close()
 		b, err := io.ReadAll(resp.Body)
 		if err == nil && !strings.Contains(string(b), "error") {
@@ -173,6 +172,9 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 			}
 			continue
 		}
+		if target == nil {
+			continue
+		}
 		target.Name = record[10] + record[7] + record[8]
 		targets = append(targets, target)
 	}
@@ -227,6 +229,9 @@ func parseDataFromID(data, url string) speedtest.Servers {
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("Error fetching server by ID %s: %v", id, errFetch))
 			}
+			continue
+		}
+		if serverPtr == nil {
 			continue
 		}
 

@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/showwin/speedtest-go/speedtest"
 	"github.com/showwin/speedtest-go/speedtest/transport"
@@ -120,6 +119,9 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 	var err error
 	serverMap := make(map[time.Duration]*speedtest.Server)
 	for _, server := range targets {
+		if server == nil {
+			continue
+		}
 		err = server.PingTest(nil)
 		if err != nil {
 			server.Latency = 1000 * time.Millisecond
@@ -133,18 +135,22 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 	sort.Slice(pingList, func(i, j int) bool {
 		return pingList[i] < pingList[j]
 	})
-	if num == -1 || num >= len(pingList) {
-		num = len(pingList)
-	} else if len(pingList) == 0 {
+	if len(pingList) == 0 {
 		fmt.Println("No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
+	if num == -1 || num >= len(pingList) {
+		num = len(pingList)
+	}
 	var serverName, UPStr, DLStr, Latency, PacketLoss string
 	for i := 0; i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
+		if server == nil {
+			continue
+		}
 		if i < num {
 			// speedtest --progress=no --accept-license --accept-gdpr
 			sptCheck := execCommand("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
@@ -191,26 +197,65 @@ func NearbySpeedTest() {
 		InitLogger()
 		defer Logger.Sync()
 	}
-	serverList, _ := speedtestClient.FetchServers()
-	targets, _ := serverList.FindServer([]int{})
+	serverList, err := speedtestClient.FetchServers()
+	if err != nil || serverList == nil {
+		if model.EnableLoger && err != nil {
+			Logger.Info(err.Error())
+		}
+		return
+	}
+	targets, err := serverList.FindServer([]int{})
+	if err != nil {
+		if model.EnableLoger {
+			Logger.Info(err.Error())
+		}
+		return
+	}
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
 	var LowestLatency time.Duration
 	var NearbyServer *speedtest.Server
 	var PacketLoss string
 	for _, server := range targets {
-		server.PingTest(nil)
+		if server == nil {
+			continue
+		}
+		if err := server.PingTest(nil); err != nil {
+			if model.EnableLoger {
+				Logger.Info(err.Error())
+			}
+			continue
+		}
 		if LowestLatency == 0 && NearbyServer == nil {
 			LowestLatency = server.Latency
 			NearbyServer = server
 		} else if server.Latency < LowestLatency && NearbyServer != nil {
+			LowestLatency = server.Latency
 			NearbyServer = server
 		}
-		server.Context.Reset()
+		if server.Context != nil {
+			server.Context.Reset()
+		}
 	}
 	if NearbyServer != nil {
-		NearbyServer.DownloadTest()
-		NearbyServer.UploadTest()
+		err = NearbyServer.DownloadTest()
+		if err != nil {
+			if model.EnableLoger {
+				Logger.Info(err.Error())
+			}
+			return
+		}
+		err = NearbyServer.UploadTest()
+		if err != nil {
+			if model.EnableLoger {
+				Logger.Info(err.Error())
+			}
+			return
+		}
 		err := analyzer.Run(NearbyServer.Host, func(packetLoss *transport.PLoss) {
+			if packetLoss == nil {
+				PacketLoss = "N/A"
+				return
+			}
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		if err == nil {
@@ -220,7 +265,9 @@ func NearbySpeedTest() {
 			fmt.Print(formatString(NearbyServer.Latency.String(), 16))
 			fmt.Print(formatString(PacketLoss, 16))
 			fmt.Println()
-			NearbyServer.Context.Reset()
+			if NearbyServer.Context != nil {
+				NearbyServer.Context.Reset()
+			}
 		} else if model.EnableLoger {
 			Logger.Info(err.Error())
 		}
@@ -243,6 +290,9 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 	var err, err1, err2, err3 error
 	serverMap := make(map[time.Duration]*speedtest.Server)
 	for _, server := range targets {
+		if server == nil {
+			continue
+		}
 		err = server.PingTest(nil)
 		if err != nil {
 			server.Latency = 1000 * time.Millisecond
@@ -258,21 +308,29 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 	})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
 	var PacketLoss string
-	if num == -1 || num >= len(pingList) {
-		num = len(pingList)
-	} else if len(pingList) == 0 {
+	if len(pingList) == 0 {
 		fmt.Println("No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
+	if num == -1 || num >= len(pingList) {
+		num = len(pingList)
+	}
 	for i := 0; i < len(pingList); i++ {
 		server := serverMap[pingList[i]]
+		if server == nil {
+			continue
+		}
 		if i < num {
 			err1 = server.DownloadTest()
 			err2 = server.UploadTest()
 			err3 = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
+				if packetLoss == nil {
+					PacketLoss = "N/A"
+					return
+				}
 				PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 			})
 			if err3 != nil {
@@ -287,7 +345,9 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 					Logger.Info(server.ID)
 					Logger.Info(err1.Error())
 				}
-				server.Context.Reset()
+				if server.Context != nil {
+					server.Context.Reset()
+				}
 				continue
 			}
 			if err2 != nil {
@@ -295,7 +355,9 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 					Logger.Info(server.ID)
 					Logger.Info(err2.Error())
 				}
-				server.Context.Reset()
+				if server.Context != nil {
+					server.Context.Reset()
+				}
 				continue
 			}
 			if language == "zh" {
@@ -315,6 +377,8 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 			fmt.Print(formatString(PacketLoss, 16))
 			fmt.Println()
 		}
-		server.Context.Reset()
+		if server.Context != nil {
+			server.Context.Reset()
+		}
 	}
 }
