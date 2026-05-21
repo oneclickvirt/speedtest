@@ -277,7 +277,7 @@ func formatMbps(value float64) string {
 	if math.IsNaN(value) || math.IsInf(value, 0) || value < 0 {
 		value = 0
 	}
-	return fmt.Sprintf("%.2f Mbps", value)
+	return fmt.Sprintf("%.2f Mbps", math.Round((value+1e-9)*100)/100)
 }
 
 func ShowHead(language string) {
