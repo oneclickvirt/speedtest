@@ -91,5 +91,5 @@ rm -rf /usr/bin/spt
 ## 在Golang中使用
 
 ```
-go get github.com/oneclickvirt/speedtest@v0.0.11-20251102151740
+go get github.com/oneclickvirt/speedtest@v0.0.12-20260521180111
 ```
