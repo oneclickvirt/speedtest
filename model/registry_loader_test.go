@@ -1,0 +1,75 @@
+package model
+
+import (
+	"context"
+	"errors"
+	"net"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
+)
+
+func TestResolveServerRegistryFallsBackAndSelects(t *testing.T) {
+	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(`{"message":"temporary proxy payload"}`))
+	}))
+	defer cdn.Close()
+	raw := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(`[
+			{"id":"bad","name":"Bad","host":"bad.test:8080","provider":"one","country":"CN","city":"A"},
+			{"id":"good","name":"Good","host":"good.test:8080","provider":"two","country":"US","city":"B"}
+		]`))
+	}))
+	defer raw.Close()
+
+	report := ResolveServerRegistry(context.Background(), raw.Client(), []RegistrySource{
+		{Name: "cdn", URL: cdn.URL},
+		{Name: "raw", URL: raw.URL},
+	}, 1, 1, time.Second, 2, func(_ context.Context, _, address string) (net.Conn, error) {
+		if address != "good.test:8080" {
+			return nil, errors.New("fixture unavailable")
+		}
+		client, server := net.Pipe()
+		go server.Close()
+		return client, nil
+	})
+	if report.Source != "raw" || !report.Fallback || report.Availability != ServerAvailable {
+		t.Fatalf("unexpected report metadata: %+v", report)
+	}
+	if len(report.Selected) != 1 || report.Selected[0].ID != "good" || report.Selected[0].Source != "raw" {
+		t.Fatalf("unexpected selected servers: %+v", report.Selected)
+	}
+	if report.Servers[0].Availability != ServerUnavailable || report.Servers[0].Error != "connection_error" {
+		t.Fatalf("unavailable evidence missing: %+v", report.Servers)
+	}
+}
+
+func TestResolveServerRegistryReportsAllUnavailable(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(`[{"id":"dead","name":"Dead","host":"dead.test:443"}]`))
+	}))
+	defer server.Close()
+	report := ResolveServerRegistry(context.Background(), server.Client(), []RegistrySource{{Name: "raw", URL: server.URL}}, 1, 1, time.Second, 1,
+		func(context.Context, string, string) (net.Conn, error) { return nil, errors.New("offline") })
+	if report.Availability != ServerUnavailable || len(report.Selected) != 0 || report.Error == "" {
+		t.Fatalf("expected explicit unavailable report: %+v", report)
+	}
+}
+
+func TestLoadServerRegistryFallsBackToEmbeddedSnapshot(t *testing.T) {
+	server := httptest.NewServer(http.NotFoundHandler())
+	defer server.Close()
+	loaded, err := LoadServerRegistry(context.Background(), server.Client(), []RegistrySource{{Name: "cdn", URL: server.URL}}, 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if loaded.Source != "embedded" || !loaded.Fallback || len(loaded.Servers) < 10 {
+		t.Fatalf("unexpected embedded fallback: %#v", loaded)
+	}
+	for _, server := range loaded.Servers {
+		if server.Source != "embedded" || (server.Availability != ServerCandidate && server.Availability != ServerUnavailable) {
+			t.Fatalf("invalid embedded node metadata: %#v", server)
+		}
+	}
+}
