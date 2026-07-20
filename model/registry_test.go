@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"net"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 )
@@ -24,6 +27,19 @@ func TestProbeAndSelectAvailableServers(t *testing.T) {
 	}
 	if len(selected) != 1 || selected[0].ID != "good" || probed[0].Availability != ServerUnavailable {
 		t.Fatalf("unexpected selection: probed=%+v selected=%+v", probed, selected)
+	}
+}
+
+func TestProbeServersRejectsHTTP404(t *testing.T) {
+	server := httptest.NewServer(http.NotFoundHandler())
+	defer server.Close()
+	parsed, err := url.Parse(server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	probed := ProbeServers(context.Background(), []ServerMetadata{{ID: "bad-path", Host: parsed.Host, URL: server.URL + "/upload"}}, time.Second, 1, nil)
+	if len(probed) != 1 || probed[0].Availability != ServerUnavailable || probed[0].Error != "HTTP 404" {
+		t.Fatalf("404 endpoint was accepted: %+v", probed)
 	}
 }
 

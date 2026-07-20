@@ -10,6 +10,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -19,7 +20,7 @@ import (
 var embeddedServerRegistry []byte
 
 const (
-	SpeedtestRegistryRawURL = "https://raw.githubusercontent.com/oneclickvirt/ecs-data/main/data/speedtest-servers.json"
+	SpeedtestRegistryRawURL = "https://raw.githubusercontent.com/oneclickvirt/speedtest/main/model/snapshot/speedtest-servers.json"
 	SpeedtestRegistryCDNURL = "https://cdn.spiritlhl.net/" + SpeedtestRegistryRawURL
 )
 
@@ -39,6 +40,27 @@ func DefaultRegistrySources() []RegistrySource {
 		{Name: "cdn", URL: SpeedtestRegistryCDNURL},
 		{Name: "raw", URL: SpeedtestRegistryRawURL},
 	}
+}
+
+// NormalizeServerRegistrySnapshot validates an upstream registry and emits the
+// stable, minimal shape consumed by this module's embedded loader. It is used
+// by the repository-local updater so runtime never depends on another project.
+func NormalizeServerRegistrySnapshot(data []byte, minimum int) ([]byte, error) {
+	servers, err := decodeServerRegistry(data, "snapshot", minimum)
+	if err != nil {
+		return nil, err
+	}
+	sort.SliceStable(servers, func(i, j int) bool {
+		if servers[i].ID == servers[j].ID {
+			return servers[i].Host < servers[j].Host
+		}
+		return servers[i].ID < servers[j].ID
+	})
+	encoded, err := json.MarshalIndent(servers, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return append(encoded, '\n'), nil
 }
 
 func LoadServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum int) (RegistryLoadResult, error) {

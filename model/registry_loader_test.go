@@ -6,9 +6,18 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
+
+func TestDefaultRegistrySourcesBelongToSpeedtestRepository(t *testing.T) {
+	for _, source := range DefaultRegistrySources() {
+		if !strings.Contains(source.URL, "oneclickvirt/speedtest/main/model/snapshot/speedtest-servers.json") || strings.Contains(source.URL, "ecs-data") {
+			t.Fatalf("unexpected registry source: %+v", source)
+		}
+	}
+}
 
 func TestResolveServerRegistryFallsBackAndSelects(t *testing.T) {
 	cdn := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

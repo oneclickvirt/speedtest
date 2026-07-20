@@ -3,7 +3,9 @@ package model
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net"
+	"net/http"
 	"sort"
 	"strings"
 	"sync"
@@ -51,6 +53,7 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 	if concurrency <= 0 {
 		concurrency = 8
 	}
+	customDial := dial != nil
 	if dial == nil {
 		dial = (&net.Dialer{}).DialContext
 	}
@@ -85,6 +88,26 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 				}
 				if conn != nil {
 					_ = conn.Close()
+				}
+				if !customDial && strings.TrimSpace(server.URL) != "" {
+					probeCtx, probeCancel := context.WithTimeout(ctx, timeout)
+					req, requestErr := http.NewRequestWithContext(probeCtx, http.MethodHead, server.URL, nil)
+					if requestErr == nil {
+						response, httpErr := (&http.Client{Timeout: timeout}).Do(req)
+						if httpErr == nil {
+							_ = response.Body.Close()
+							if response.StatusCode >= 400 && response.StatusCode != http.StatusMethodNotAllowed {
+								server.Availability, server.Error = ServerUnavailable, fmt.Sprintf("HTTP %d", response.StatusCode)
+								probeCancel()
+								continue
+							}
+						} else {
+							server.Availability, server.Error = ServerUnavailable, classifyServerError(httpErr)
+							probeCancel()
+							continue
+						}
+					}
+					probeCancel()
 				}
 				server.Availability, server.Error = ServerAvailable, ""
 			}
