@@ -2,6 +2,9 @@ package model
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"net"
 	"net/http"
@@ -16,6 +19,33 @@ func TestDefaultRegistrySourcesBelongToSpeedtestRepository(t *testing.T) {
 		if !strings.Contains(source.URL, "oneclickvirt/speedtest/main/model/snapshot/speedtest-servers.json") || strings.Contains(source.URL, "ecs-data") {
 			t.Fatalf("unexpected registry source: %+v", source)
 		}
+	}
+}
+
+func TestLoadServerRegistryRejectsBadManifestAndUsesNextSource(t *testing.T) {
+	data := []byte(`[{"id":"fixture","name":"Fixture","host":"fixture.test:443","url":"https://fixture.test/upload"}]`)
+	hash := sha256.Sum256(data)
+	manifest := ServerRegistryManifest{Schema: SpeedtestRegistrySchema, File: "speedtest-servers.json", Count: 1, SHA256: hex.EncodeToString(hash[:]), GeneratedAt: time.Now().UTC().Format(time.RFC3339)}
+	manifestData, _ := json.Marshal(manifest)
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		switch request.URL.Path {
+		case "/cdn-manifest":
+			bad := manifest
+			bad.Count = 2
+			_ = json.NewEncoder(writer).Encode(bad)
+		case "/raw-manifest":
+			_, _ = writer.Write(manifestData)
+		default:
+			_, _ = writer.Write(data)
+		}
+	}))
+	defer server.Close()
+	loaded, err := LoadServerRegistry(context.Background(), server.Client(), []RegistrySource{
+		{Name: "cdn", URL: server.URL + "/cdn-data", ManifestURL: server.URL + "/cdn-manifest"},
+		{Name: "raw", URL: server.URL + "/raw-data", ManifestURL: server.URL + "/raw-manifest"},
+	}, 1)
+	if err != nil || loaded.Source != "raw" || !loaded.Fallback {
+		t.Fatalf("unexpected manifest fallback: %+v, %v", loaded, err)
 	}
 }
 

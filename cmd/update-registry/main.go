@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -11,6 +13,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/oneclickvirt/speedtest/model"
@@ -18,20 +21,49 @@ import (
 
 const defaultSourceURL = "https://raw.githubusercontent.com/xykt/NetQuality/main/ref/speedtest_cn.json"
 
+var defaultGlobalSourceURLs = []string{
+	"https://www.speedtest.net/api/js/servers?engine=js&limit=100&https_functional=true&lat=51.5074&lon=-0.1278",
+	"https://www.speedtest.net/api/js/servers?engine=js&limit=100&https_functional=true&lat=35.6762&lon=139.6503",
+	"https://www.speedtest.net/api/js/servers?engine=js&limit=100&https_functional=true&lat=-33.8688&lon=151.2093",
+	"https://www.speedtest.net/api/js/servers?engine=js&limit=100&https_functional=true&lat=1.3521&lon=103.8198",
+	"https://www.speedtest.net/api/js/servers?engine=js&limit=100&https_functional=true&lat=-23.5505&lon=-46.6333",
+}
+
 type updateConfig struct {
-	Source  string
-	Output  string
-	Minimum int
-	Timeout time.Duration
+	Source        string
+	GlobalSources []string
+	Output        string
+	Manifest      string
+	Minimum       int
+	Timeout       time.Duration
+}
+
+type stringListFlag []string
+
+func (values *stringListFlag) String() string {
+	return strings.Join(*values, ",")
+}
+
+func (values *stringListFlag) Set(value string) error {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return errors.New("source URL is empty")
+	}
+	*values = append(*values, value)
+	return nil
 }
 
 func main() {
 	config := updateConfig{}
+	globalSources := stringListFlag(append([]string(nil), defaultGlobalSourceURLs...))
 	flag.StringVar(&config.Source, "source", defaultSourceURL, "upstream registry URL")
+	flag.Var(&globalSources, "global-source", "additional global Ookla registry URL (repeatable)")
 	flag.StringVar(&config.Output, "output", "model/snapshot/speedtest-servers.json", "snapshot output path")
+	flag.StringVar(&config.Manifest, "manifest", "model/snapshot/manifest.json", "snapshot manifest output path")
 	flag.IntVar(&config.Minimum, "minimum", 10, "minimum valid servers")
 	flag.DurationVar(&config.Timeout, "timeout", 30*time.Second, "upstream request timeout")
 	flag.Parse()
+	config.GlobalSources = append([]string(nil), globalSources...)
 	if err := updateSnapshot(context.Background(), http.DefaultClient, config); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -48,51 +80,208 @@ func updateSnapshot(ctx context.Context, client *http.Client, config updateConfi
 	if config.Source == "" || config.Output == "" || config.Minimum < 1 || config.Timeout <= 0 {
 		return errors.New("source, output, minimum, and timeout must be valid")
 	}
+	if config.Manifest == "" {
+		config.Manifest = filepath.Join(filepath.Dir(config.Output), "manifest.json")
+	}
 	requestCtx, cancel := context.WithTimeout(ctx, config.Timeout)
 	defer cancel()
-	request, err := http.NewRequestWithContext(requestCtx, http.MethodGet, config.Source, nil)
+	raw, err := fetchSource(requestCtx, client, config.Source)
 	if err != nil {
-		return fmt.Errorf("create registry request: %w", err)
+		return err
+	}
+	servers, err := parseServerMetadata(raw)
+	if err != nil {
+		return fmt.Errorf("decode China registry: %w", err)
+	}
+	globalServers, err := fetchGlobalServers(requestCtx, client, config.GlobalSources)
+	if err != nil {
+		return err
+	}
+	servers = append(servers, globalServers...)
+	merged, err := json.Marshal(servers)
+	if err != nil {
+		return err
+	}
+	data, err := model.NormalizeServerRegistrySnapshot(merged, config.Minimum)
+	if err != nil {
+		return fmt.Errorf("validate registry: %w", err)
+	}
+	return replaceSnapshot(config.Output, config.Manifest, data)
+}
+
+func fetchGlobalServers(ctx context.Context, client *http.Client, sources []string) ([]model.ServerMetadata, error) {
+	type fetchResult struct {
+		index   int
+		servers []model.ServerMetadata
+		err     error
+	}
+
+	endpoints := make([]string, 0, len(sources))
+	for _, source := range sources {
+		if source = strings.TrimSpace(source); source != "" {
+			endpoints = append(endpoints, source)
+		}
+	}
+	if len(endpoints) == 0 {
+		return nil, nil
+	}
+
+	results := make(chan fetchResult, len(endpoints))
+	for index, endpoint := range endpoints {
+		go func() {
+			raw, err := fetchSource(ctx, client, endpoint)
+			if err != nil {
+				results <- fetchResult{index: index, err: err}
+				return
+			}
+			servers, err := parseGlobalServers(raw)
+			if err != nil {
+				err = fmt.Errorf("decode registry: %w", err)
+			}
+			results <- fetchResult{index: index, servers: servers, err: err}
+		}()
+	}
+
+	ordered := make([][]model.ServerMetadata, len(endpoints))
+	errorsBySource := make([]error, 0, len(endpoints))
+	successes := 0
+	for range endpoints {
+		result := <-results
+		if result.err != nil {
+			errorsBySource = append(errorsBySource, fmt.Errorf("global source %d: %w", result.index+1, result.err))
+			continue
+		}
+		ordered[result.index] = result.servers
+		successes++
+	}
+	if successes == 0 {
+		return nil, fmt.Errorf("all global registries failed: %w", errors.Join(errorsBySource...))
+	}
+
+	servers := make([]model.ServerMetadata, 0)
+	for _, sourceServers := range ordered {
+		servers = append(servers, sourceServers...)
+	}
+	return servers, nil
+}
+
+func fetchSource(ctx context.Context, client *http.Client, endpoint string) ([]byte, error) {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return nil, fmt.Errorf("create registry request: %w", err)
 	}
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("User-Agent", "oneclickvirt-speedtest-registry-sync/1")
 	response, err := client.Do(request)
 	if err != nil {
-		return fmt.Errorf("fetch registry: %w", err)
+		return nil, fmt.Errorf("fetch registry: %w", err)
 	}
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
-		return fmt.Errorf("fetch registry: HTTP %d", response.StatusCode)
+		return nil, fmt.Errorf("fetch registry: HTTP %d", response.StatusCode)
 	}
 	raw, err := io.ReadAll(io.LimitReader(response.Body, 16<<20))
 	if err != nil {
-		return fmt.Errorf("read registry: %w", err)
+		return nil, fmt.Errorf("read registry: %w", err)
 	}
-	data, err := model.NormalizeServerRegistrySnapshot(raw, config.Minimum)
+	return raw, nil
+}
+
+func parseServerMetadata(data []byte) ([]model.ServerMetadata, error) {
+	var servers []model.ServerMetadata
+	if err := json.Unmarshal(data, &servers); err != nil {
+		return nil, err
+	}
+	return servers, nil
+}
+
+type globalServer struct {
+	ID      string `json:"id"`
+	URL     string `json:"url"`
+	Host    string `json:"host"`
+	Name    string `json:"name"`
+	Country string `json:"country"`
+	Sponsor string `json:"sponsor"`
+}
+
+func parseGlobalServers(data []byte) ([]model.ServerMetadata, error) {
+	var input []globalServer
+	if err := json.Unmarshal(data, &input); err != nil {
+		return nil, err
+	}
+	servers := make([]model.ServerMetadata, 0, len(input))
+	for _, server := range input {
+		id := strings.TrimSpace(server.ID)
+		if id != "" {
+			id = "global-" + id
+		}
+		servers = append(servers, model.ServerMetadata{ID: id, URL: server.URL, Host: server.Host, Name: server.Name, Country: server.Country, City: server.Name, Provider: server.Sponsor})
+	}
+	return servers, nil
+}
+
+type snapshotManifest struct {
+	Schema      string `json:"schema"`
+	File        string `json:"file"`
+	Count       int    `json:"count"`
+	SHA256      string `json:"sha256"`
+	GeneratedAt string `json:"generated_at"`
+}
+
+func replaceSnapshot(output, manifestOutput string, candidate []byte) error {
+	count, err := snapshotCount(candidate)
 	if err != nil {
-		return fmt.Errorf("validate registry: %w", err)
+		return err
 	}
-	current, readErr := os.ReadFile(config.Output)
+	hash := sha256.Sum256(candidate)
+	manifest := snapshotManifest{Schema: model.SpeedtestRegistrySchema, File: filepath.Base(output), Count: count, SHA256: hex.EncodeToString(hash[:]), GeneratedAt: time.Now().UTC().Format(time.RFC3339)}
+	manifestData, err := json.MarshalIndent(manifest, "", "  ")
+	if err != nil {
+		return err
+	}
+	manifestData = append(manifestData, '\n')
+	current, readErr := os.ReadFile(output)
 	if readErr == nil {
 		normalizedCurrent, normalizeErr := model.NormalizeServerRegistrySnapshot(current, 1)
 		if normalizeErr == nil {
 			currentCount, countErr := snapshotCount(normalizedCurrent)
-			candidateCount, candidateErr := snapshotCount(data)
-			if countErr == nil && candidateErr == nil && currentCount > 0 && candidateCount*100 < currentCount*65 {
-				return fmt.Errorf("registry count dropped from %d to %d", currentCount, candidateCount)
+			if countErr == nil && currentCount > 0 && count*100 < currentCount*65 {
+				return fmt.Errorf("registry count dropped from %d to %d", currentCount, count)
 			}
-			if bytes.Equal(normalizedCurrent, data) {
+			if bytes.Equal(normalizedCurrent, candidate) && manifestMatches(manifestOutput, candidate, count) {
 				return nil
 			}
 		}
-	}
-	if readErr != nil && !errors.Is(readErr, os.ErrNotExist) {
+	} else if !errors.Is(readErr, os.ErrNotExist) {
 		return fmt.Errorf("read existing snapshot: %w", readErr)
 	}
-	if err := os.MkdirAll(filepath.Dir(config.Output), 0o755); err != nil {
+	if err := writeAtomicSnapshot(output, candidate); err != nil {
+		return err
+	}
+	return writeAtomicSnapshot(manifestOutput, manifestData)
+}
+
+func manifestMatches(path string, snapshot []byte, count int) bool {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return false
+	}
+	var manifest snapshotManifest
+	if json.Unmarshal(data, &manifest) != nil || manifest.Schema != model.SpeedtestRegistrySchema || manifest.File != "speedtest-servers.json" || manifest.Count != count {
+		return false
+	}
+	hash := sha256.Sum256(snapshot)
+	return manifest.SHA256 == hex.EncodeToString(hash[:])
+}
+
+func writeAtomicSnapshot(output string, data []byte) error {
+	if output == "" {
+		return errors.New("snapshot path is empty")
+	}
+	if err := os.MkdirAll(filepath.Dir(output), 0o755); err != nil {
 		return fmt.Errorf("create snapshot directory: %w", err)
 	}
-	temporary, err := os.CreateTemp(filepath.Dir(config.Output), ".speedtest-registry-*")
+	temporary, err := os.CreateTemp(filepath.Dir(output), ".speedtest-registry-*")
 	if err != nil {
 		return fmt.Errorf("create temporary snapshot: %w", err)
 	}
@@ -113,7 +302,7 @@ func updateSnapshot(ctx context.Context, client *http.Client, config updateConfi
 	if err := temporary.Close(); err != nil {
 		return fmt.Errorf("close snapshot: %w", err)
 	}
-	if err := os.Rename(temporaryName, config.Output); err != nil {
+	if err := os.Rename(temporaryName, output); err != nil {
 		return fmt.Errorf("replace snapshot: %w", err)
 	}
 	return nil

@@ -21,7 +21,7 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Update embedded registry
-        run: go run ./cmd/update-registry -output model/snapshot/speedtest-servers.json
+        run: go run ./cmd/update-registry -output model/snapshot/speedtest-servers.json -manifest model/snapshot/manifest.json
       - name: Verify snapshot
         run: |
           go test -race ./...
@@ -29,11 +29,11 @@ jobs:
           git diff --check
       - name: Commit semantic changes
         run: |
-          if [[ -z "$(git status --porcelain -- model/snapshot/speedtest-servers.json)" ]]; then
+          if [[ -z "$(git status --porcelain -- model/snapshot/speedtest-servers.json model/snapshot/manifest.json)" ]]; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add model/snapshot/speedtest-servers.json
+          git add model/snapshot/speedtest-servers.json model/snapshot/manifest.json
           git commit -m "chore: sync speedtest registry"
           git push
