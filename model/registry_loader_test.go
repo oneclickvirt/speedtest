@@ -47,6 +47,9 @@ func TestLoadServerRegistryRejectsBadManifestAndUsesNextSource(t *testing.T) {
 	if err != nil || loaded.Source != "raw" || !loaded.Fallback {
 		t.Fatalf("unexpected manifest fallback: %+v, %v", loaded, err)
 	}
+	if loaded.Metadata.Schema != SpeedtestRegistrySchema || loaded.Metadata.Count != 1 || loaded.Metadata.SHA256 != manifest.SHA256 {
+		t.Fatalf("manifest metadata missing: %+v", loaded.Metadata)
+	}
 }
 
 func TestResolveServerRegistryFallsBackAndSelects(t *testing.T) {
@@ -105,6 +108,9 @@ func TestLoadServerRegistryFallsBackToEmbeddedSnapshot(t *testing.T) {
 	}
 	if loaded.Source != "embedded" || !loaded.Fallback || len(loaded.Servers) < 10 {
 		t.Fatalf("unexpected embedded fallback: %#v", loaded)
+	}
+	if loaded.Metadata.Schema != SpeedtestRegistrySchema || loaded.Metadata.Count != len(loaded.Servers) || loaded.Metadata.GeneratedAt == "" || len(loaded.Metadata.SHA256) != 64 {
+		t.Fatalf("unexpected embedded metadata: %+v", loaded.Metadata)
 	}
 	for _, server := range loaded.Servers {
 		if server.Source != "embedded" || (server.Availability != ServerCandidate && server.Availability != ServerUnavailable) {

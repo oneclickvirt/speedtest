@@ -38,6 +38,7 @@ type RegistryReport struct {
 	SchemaVersion string             `json:"schema_version"`
 	Source        string             `json:"source,omitempty"`
 	Fallback      bool               `json:"fallback"`
+	Metadata      RegistryMetadata   `json:"metadata"`
 	Availability  ServerAvailability `json:"availability"`
 	Servers       []ServerMetadata   `json:"servers"`
 	Selected      []ServerMetadata   `json:"selected,omitempty"`

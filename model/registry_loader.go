@@ -42,6 +42,14 @@ type RegistryLoadResult struct {
 	Servers  []ServerMetadata
 	Source   string
 	Fallback bool
+	Metadata RegistryMetadata
+}
+
+type RegistryMetadata struct {
+	Schema      string `json:"schema"`
+	Count       int    `json:"count"`
+	SHA256      string `json:"sha256"`
+	GeneratedAt string `json:"generated_at,omitempty"`
 }
 
 func DefaultRegistrySources() []RegistrySource {
@@ -92,7 +100,7 @@ func LoadServerRegistry(ctx context.Context, client *http.Client, sources []Regi
 	}
 	var lastErr error
 	for index, source := range sources {
-		data, err := loadServerRegistrySnapshot(ctx, client, source)
+		data, metadata, err := loadServerRegistrySnapshot(ctx, client, source)
 		if err != nil {
 			lastErr = fmt.Errorf("load %s registry: %w", source.Name, err)
 			continue
@@ -102,15 +110,19 @@ func LoadServerRegistry(ctx context.Context, client *http.Client, sources []Regi
 			lastErr = fmt.Errorf("validate %s registry: %w", source.Name, err)
 			continue
 		}
-		return RegistryLoadResult{Servers: servers, Source: source.Name, Fallback: index > 0}, nil
+		if metadata.Count == 0 {
+			metadata = serverRegistryMetadata(data, servers)
+		}
+		return RegistryLoadResult{Servers: servers, Source: source.Name, Fallback: index > 0, Metadata: metadata}, nil
 	}
 	if len(embeddedServerRegistry) > 0 {
-		if err := validateServerRegistryManifest(embeddedServerRegistryManifest, embeddedServerRegistry); err != nil {
+		metadata, err := validateServerRegistryManifest(embeddedServerRegistryManifest, embeddedServerRegistry)
+		if err != nil {
 			return RegistryLoadResult{}, fmt.Errorf("validate embedded registry manifest: %w", err)
 		}
 		servers, err := decodeServerRegistry(embeddedServerRegistry, "embedded", minimum)
 		if err == nil {
-			return RegistryLoadResult{Servers: servers, Source: "embedded", Fallback: true}, nil
+			return RegistryLoadResult{Servers: servers, Source: "embedded", Fallback: true, Metadata: metadata}, nil
 		}
 		lastErr = fmt.Errorf("validate embedded registry: %w", err)
 	}
@@ -120,53 +132,60 @@ func LoadServerRegistry(ctx context.Context, client *http.Client, sources []Regi
 	return RegistryLoadResult{}, lastErr
 }
 
-func loadServerRegistrySnapshot(ctx context.Context, client *http.Client, source RegistrySource) ([]byte, error) {
+func loadServerRegistrySnapshot(ctx context.Context, client *http.Client, source RegistrySource) ([]byte, RegistryMetadata, error) {
 	if source.ManifestURL == "" {
-		return fetchServerRegistry(ctx, client, source.URL)
+		data, err := fetchServerRegistry(ctx, client, source.URL)
+		return data, RegistryMetadata{}, err
 	}
 	manifestData, err := fetchServerRegistry(ctx, client, source.ManifestURL)
 	if err != nil {
-		return nil, fmt.Errorf("load manifest: %w", err)
+		return nil, RegistryMetadata{}, fmt.Errorf("load manifest: %w", err)
 	}
 	data, err := fetchServerRegistry(ctx, client, source.URL)
 	if err != nil {
-		return nil, err
+		return nil, RegistryMetadata{}, err
 	}
-	if err := validateServerRegistryManifest(manifestData, data); err != nil {
-		return nil, err
+	metadata, err := validateServerRegistryManifest(manifestData, data)
+	if err != nil {
+		return nil, RegistryMetadata{}, err
 	}
-	return data, nil
+	return data, metadata, nil
 }
 
-func validateServerRegistryManifest(data, snapshot []byte) error {
+func validateServerRegistryManifest(data, snapshot []byte) (RegistryMetadata, error) {
 	var manifest ServerRegistryManifest
 	decoder := json.NewDecoder(strings.NewReader(string(data)))
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(&manifest); err != nil {
-		return fmt.Errorf("decode manifest: %w", err)
+		return RegistryMetadata{}, fmt.Errorf("decode manifest: %w", err)
 	}
 	var extra any
 	if err := decoder.Decode(&extra); err != io.EOF {
-		return errors.New("manifest contains trailing JSON")
+		return RegistryMetadata{}, errors.New("manifest contains trailing JSON")
 	}
 	if manifest.Schema != SpeedtestRegistrySchema || manifest.File != "speedtest-servers.json" || manifest.Count < 1 {
-		return errors.New("manifest schema, file, or count is invalid")
+		return RegistryMetadata{}, errors.New("manifest schema, file, or count is invalid")
 	}
 	if _, err := time.Parse(time.RFC3339, manifest.GeneratedAt); err != nil {
-		return fmt.Errorf("manifest generated_at is invalid: %w", err)
+		return RegistryMetadata{}, fmt.Errorf("manifest generated_at is invalid: %w", err)
 	}
 	hash := sha256.Sum256(snapshot)
 	if !strings.EqualFold(manifest.SHA256, hex.EncodeToString(hash[:])) {
-		return errors.New("manifest SHA-256 does not match snapshot")
+		return RegistryMetadata{}, errors.New("manifest SHA-256 does not match snapshot")
 	}
 	servers, err := decodeServerRegistry(snapshot, "manifest", manifest.Count)
 	if err != nil {
-		return fmt.Errorf("manifest snapshot validation failed: %w", err)
+		return RegistryMetadata{}, fmt.Errorf("manifest snapshot validation failed: %w", err)
 	}
 	if len(servers) != manifest.Count {
-		return fmt.Errorf("manifest count %d does not match snapshot count %d", manifest.Count, len(servers))
+		return RegistryMetadata{}, fmt.Errorf("manifest count %d does not match snapshot count %d", manifest.Count, len(servers))
 	}
-	return nil
+	return RegistryMetadata{Schema: manifest.Schema, Count: manifest.Count, SHA256: strings.ToLower(manifest.SHA256), GeneratedAt: manifest.GeneratedAt}, nil
+}
+
+func serverRegistryMetadata(snapshot []byte, servers []ServerMetadata) RegistryMetadata {
+	hash := sha256.Sum256(snapshot)
+	return RegistryMetadata{Schema: SpeedtestRegistrySchema, Count: len(servers), SHA256: hex.EncodeToString(hash[:])}
 }
 
 func ResolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc) RegistryReport {
@@ -186,6 +205,7 @@ func ResolveServerRegistry(ctx context.Context, client *http.Client, sources []R
 	}
 	report.Source = loaded.Source
 	report.Fallback = loaded.Fallback
+	report.Metadata = loaded.Metadata
 	report.Servers = ProbeServers(ctx, loaded.Servers, timeout, concurrency, dial)
 	selected, err := SelectAvailableServers(report.Servers, limit)
 	if err != nil {
