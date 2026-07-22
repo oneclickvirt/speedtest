@@ -160,6 +160,102 @@ func SelectAvailableServers(servers []ServerMetadata, limit int) ([]ServerMetada
 	return available, nil
 }
 
+// IsMainlandChinaServer identifies mainland China without grouping Hong Kong,
+// Macao, or Taiwan into the same scope.
+func IsMainlandChinaServer(server ServerMetadata) bool {
+	country := normalizeCountry(server.Country)
+	switch country {
+	case "hong kong", "hongkong", "hk", "macao", "macau", "mo", "taiwan", "tw":
+		return false
+	case "cn", "china", "mainland china", "china mainland", "prc", "peoples republic of china", "people s republic of china", "中国", "中国大陆", "中华人民共和国":
+		return true
+	default:
+		return strings.Contains(country, "mainland china")
+	}
+}
+
+// FilterServersForLanguage applies the geography contract used by automatic
+// English selection. Unknown countries are omitted because they cannot be
+// proven to be outside mainland China.
+func FilterServersForLanguage(servers []ServerMetadata, language string) []ServerMetadata {
+	if strings.ToLower(strings.TrimSpace(language)) != "en" {
+		return append([]ServerMetadata(nil), servers...)
+	}
+	filtered := make([]ServerMetadata, 0, len(servers))
+	for _, server := range servers {
+		if normalizeCountry(server.Country) == "" || IsMainlandChinaServer(server) {
+			continue
+		}
+		filtered = append(filtered, server)
+	}
+	return filtered
+}
+
+// SelectRepresentativeServers keeps latency ordering within a region while
+// spreading automatic English selections across geographic regions.
+func SelectRepresentativeServers(servers []ServerMetadata, limit int) ([]ServerMetadata, error) {
+	available, err := SelectAvailableServers(servers, 0)
+	if err != nil {
+		return nil, err
+	}
+	if limit <= 0 || limit > len(available) {
+		limit = len(available)
+	}
+
+	regionOrder := []string{"asia", "europe", "north-america", "oceania", "south-america", "africa", "other"}
+	buckets := make(map[string][]ServerMetadata, len(regionOrder))
+	for _, server := range available {
+		region := serverRegion(server.Country)
+		buckets[region] = append(buckets[region], server)
+	}
+
+	selected := make([]ServerMetadata, 0, limit)
+	for len(selected) < limit {
+		added := false
+		for _, region := range regionOrder {
+			bucket := buckets[region]
+			if len(bucket) == 0 {
+				continue
+			}
+			selected = append(selected, bucket[0])
+			buckets[region] = bucket[1:]
+			added = true
+			if len(selected) == limit {
+				break
+			}
+		}
+		if !added {
+			break
+		}
+	}
+	return selected, nil
+}
+
+func normalizeCountry(country string) string {
+	country = strings.ToLower(strings.TrimSpace(country))
+	replacer := strings.NewReplacer("_", " ", "-", " ", ".", " ", ",", " ", "'", " ", "’", " ")
+	return strings.Join(strings.Fields(replacer.Replace(country)), " ")
+}
+
+func serverRegion(country string) string {
+	switch normalizeCountry(country) {
+	case "jp", "japan", "sg", "singapore", "kr", "south korea", "korea", "hk", "hong kong", "hongkong", "tw", "taiwan", "mo", "macao", "macau", "my", "malaysia", "id", "indonesia", "th", "thailand", "vn", "vietnam", "in", "india":
+		return "asia"
+	case "gb", "uk", "united kingdom", "england", "fr", "france", "de", "germany", "nl", "netherlands", "es", "spain", "it", "italy", "se", "sweden", "no", "norway", "fi", "finland", "pl", "poland":
+		return "europe"
+	case "us", "usa", "united states", "united states of america", "ca", "canada", "mx", "mexico":
+		return "north-america"
+	case "au", "australia", "nz", "new zealand":
+		return "oceania"
+	case "br", "brazil", "ar", "argentina", "cl", "chile", "co", "colombia", "pe", "peru":
+		return "south-america"
+	case "za", "south africa", "eg", "egypt", "ng", "nigeria", "ke", "kenya", "ma", "morocco":
+		return "africa"
+	default:
+		return "other"
+	}
+}
+
 func classifyServerError(err error) string {
 	if errors.Is(err, context.Canceled) {
 		return "canceled"

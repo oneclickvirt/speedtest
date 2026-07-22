@@ -48,3 +48,68 @@ func TestSelectAvailableServersReturnsUnavailable(t *testing.T) {
 		t.Fatal("expected unavailable error")
 	}
 }
+
+func TestIsMainlandChinaServerKeepsCompatibilityRegionsSeparate(t *testing.T) {
+	tests := []struct {
+		country  string
+		mainland bool
+	}{
+		{country: "China", mainland: true},
+		{country: "CN", mainland: true},
+		{country: "People's Republic of China", mainland: true},
+		{country: "中国大陆", mainland: true},
+		{country: "Hong Kong"},
+		{country: "HK"},
+		{country: "Taiwan"},
+		{country: "Macao"},
+		{country: "Japan"},
+	}
+	for _, test := range tests {
+		t.Run(test.country, func(t *testing.T) {
+			if got := IsMainlandChinaServer(ServerMetadata{Country: test.country}); got != test.mainland {
+				t.Fatalf("IsMainlandChinaServer(%q) = %v, want %v", test.country, got, test.mainland)
+			}
+		})
+	}
+}
+
+func TestFilterServersForLanguageExcludesMainlandAndUnknownOnlyForEnglish(t *testing.T) {
+	servers := []ServerMetadata{
+		{ID: "cn", Country: "China"},
+		{ID: "unknown"},
+		{ID: "hk", Country: "Hong Kong"},
+		{ID: "jp", Country: "Japan"},
+	}
+	english := FilterServersForLanguage(servers, "en")
+	if len(english) != 2 || english[0].ID != "hk" || english[1].ID != "jp" {
+		t.Fatalf("unexpected English scope: %+v", english)
+	}
+	chinese := FilterServersForLanguage(servers, "zh")
+	if len(chinese) != len(servers) {
+		t.Fatalf("Chinese scope changed: %+v", chinese)
+	}
+}
+
+func TestSelectRepresentativeServersSpreadsRegions(t *testing.T) {
+	servers := []ServerMetadata{
+		{ID: "jp-slow", Country: "Japan", Availability: ServerAvailable, LatencyMS: 20},
+		{ID: "jp-fast", Country: "Japan", Availability: ServerAvailable, LatencyMS: 10},
+		{ID: "uk", Country: "United Kingdom", Availability: ServerAvailable, LatencyMS: 80},
+		{ID: "us", Country: "United States", Availability: ServerAvailable, LatencyMS: 100},
+		{ID: "au", Country: "Australia", Availability: ServerAvailable, LatencyMS: 60},
+		{ID: "br", Country: "Brazil", Availability: ServerAvailable, LatencyMS: 150},
+	}
+	selected, err := SelectRepresentativeServers(servers, 5)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := []string{"jp-fast", "uk", "us", "au", "br"}
+	if len(selected) != len(want) {
+		t.Fatalf("selected %d servers, want %d: %+v", len(selected), len(want), selected)
+	}
+	for index, id := range want {
+		if selected[index].ID != id {
+			t.Fatalf("selected[%d] = %q, want %q: %+v", index, selected[index].ID, id, selected)
+		}
+	}
+}

@@ -89,7 +89,7 @@ func OfficialNearbySpeedTest() {
 			}
 		}
 		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
-			fmt.Print(formatString("Speedtest.net", 16))
+			fmt.Print(" " + formatString("Speedtest.net", 16))
 			fmt.Print(formatString(UPStr, 16))
 			fmt.Print(formatString(DLStr, 16))
 			fmt.Print(formatString(Latency, 16))
@@ -115,43 +115,73 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 	} else if byWhat == "url" {
 		targets = parseDataFromURL(data, url)
 	}
-	var pingList []time.Duration
-	var err error
-	serverMap := make(map[time.Duration]*speedtest.Server)
+	officialTargetsSpeedTest(targets, num, language)
+}
+
+// OfficialRegistrySpeedTest runs the official client only against the
+// prefiltered registry selection supplied by the caller.
+func OfficialRegistrySpeedTest(servers []model.ServerMetadata, language string) {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
+	targets := make(speedtest.Servers, 0, len(servers))
+	for _, metadata := range servers {
+		serverID := strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
+		if serverID == "" {
+			continue
+		}
+		server, err := speedtestClient.FetchServerByID(serverID)
+		if err != nil || server == nil {
+			if model.EnableLoger && err != nil {
+				Logger.Info(err.Error())
+			}
+			continue
+		}
+		server.ID = serverID
+		server.Name = registryServerLabel(metadata)
+		targets = append(targets, server)
+	}
+	officialTargetsSpeedTest(targets, len(targets), language)
+}
+
+func officialTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
+	type pingedServer struct {
+		server *speedtest.Server
+	}
+	pinged := make([]pingedServer, 0, len(targets))
 	for _, server := range targets {
 		if server == nil {
 			continue
 		}
-		err = server.PingTest(nil)
-		if err != nil {
+		if err := server.PingTest(nil); err != nil {
 			server.Latency = 1000 * time.Millisecond
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
 		}
-		pingList = append(pingList, server.Latency)
-		serverMap[server.Latency] = server
+		pinged = append(pinged, pingedServer{server: server})
 	}
-	sort.Slice(pingList, func(i, j int) bool {
-		return pingList[i] < pingList[j]
+	sort.SliceStable(pinged, func(i, j int) bool {
+		if pinged[i].server.Latency == pinged[j].server.Latency {
+			return pinged[i].server.ID < pinged[j].server.ID
+		}
+		return pinged[i].server.Latency < pinged[j].server.Latency
 	})
-	if len(pingList) == 0 {
+	if len(pinged) == 0 {
 		fmt.Println("No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
-	if num == -1 || num >= len(pingList) {
-		num = len(pingList)
+	if num == -1 || num >= len(pinged) {
+		num = len(pinged)
 	}
-	var serverName, UPStr, DLStr, Latency, PacketLoss string
-	for i := 0; i < len(pingList); i++ {
-		server := serverMap[pingList[i]]
-		if server == nil {
-			continue
-		}
+	for i := 0; i < len(pinged); i++ {
+		server := pinged[i].server
 		if i < num {
+			var serverName, UPStr, DLStr, Latency, PacketLoss string
 			// speedtest --progress=no --accept-license --accept-gdpr
 			sptCheck := execCommand("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
 			temp, err := sptCheck.CombinedOutput()
@@ -171,7 +201,7 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 				}
 				if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
 					if language == "zh" {
-						fmt.Print(formatString(serverName, 16))
+						fmt.Print(" " + formatString(serverName, 16))
 					} else if language == "en" {
 						name := serverName
 						name = strings.ReplaceAll(name, "中国香港", "HongKong")
@@ -179,7 +209,7 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 						name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
 						name = strings.ReplaceAll(name, "新加坡", "Singapore")
 						name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-						fmt.Print(formatString(name, 16))
+						fmt.Print(" " + formatString(name, 16))
 					}
 					fmt.Print(formatString(UPStr, 16))
 					fmt.Print(formatString(DLStr, 16))
@@ -190,6 +220,21 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 			}
 		}
 	}
+}
+
+func registryServerLabel(server model.ServerMetadata) string {
+	city := strings.TrimSpace(server.City)
+	country := strings.TrimSpace(server.Country)
+	if city != "" && country != "" {
+		return city + "," + country
+	}
+	if name := strings.TrimSpace(server.Name); name != "" {
+		return name
+	}
+	if country != "" {
+		return country
+	}
+	return strings.TrimSpace(server.ID)
 }
 
 func NearbySpeedTest() {
@@ -259,7 +304,7 @@ func NearbySpeedTest() {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		if err == nil {
-			fmt.Print(formatString("Speedtest.net", 16))
+			fmt.Print(" " + formatString("Speedtest.net", 16))
 			fmt.Print(formatString(formatMbps(NearbyServer.ULSpeed.Mbps()), 16))
 			fmt.Print(formatString(formatMbps(NearbyServer.DLSpeed.Mbps()), 16))
 			fmt.Print(formatString(NearbyServer.Latency.String(), 16))
@@ -286,9 +331,41 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 	} else if byWhat == "url" {
 		targets = parseDataFromURL(data, url)
 	}
-	var pingList []time.Duration
+	customTargetsSpeedTest(targets, num, language)
+}
+
+// RegistrySpeedTest runs speedtest-go only against a caller-owned, prefiltered
+// registry selection.
+func RegistrySpeedTest(servers []model.ServerMetadata, language string) {
+	if model.EnableLoger {
+		InitLogger()
+		defer Logger.Sync()
+	}
+	targets := make(speedtest.Servers, 0, len(servers))
+	for _, metadata := range servers {
+		if strings.TrimSpace(metadata.URL) == "" {
+			continue
+		}
+		server, err := speedtestClient.CustomServer(metadata.URL)
+		if err != nil || server == nil {
+			if model.EnableLoger && err != nil {
+				Logger.Info(err.Error())
+			}
+			continue
+		}
+		server.ID = strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
+		server.Name = registryServerLabel(metadata)
+		targets = append(targets, server)
+	}
+	customTargetsSpeedTest(targets, len(targets), language)
+}
+
+func customTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
+	type pingedServer struct {
+		server *speedtest.Server
+	}
+	pinged := make([]pingedServer, 0, len(targets))
 	var err, err1, err2, err3 error
-	serverMap := make(map[time.Duration]*speedtest.Server)
 	for _, server := range targets {
 		if server == nil {
 			continue
@@ -300,29 +377,28 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 				Logger.Info(err.Error())
 			}
 		}
-		pingList = append(pingList, server.Latency)
-		serverMap[server.Latency] = server
+		pinged = append(pinged, pingedServer{server: server})
 	}
-	sort.Slice(pingList, func(i, j int) bool {
-		return pingList[i] < pingList[j]
+	sort.SliceStable(pinged, func(i, j int) bool {
+		if pinged[i].server.Latency == pinged[j].server.Latency {
+			return pinged[i].server.ID < pinged[j].server.ID
+		}
+		return pinged[i].server.Latency < pinged[j].server.Latency
 	})
 	analyzer := speedtest.NewPacketLossAnalyzer(nil)
 	var PacketLoss string
-	if len(pingList) == 0 {
+	if len(pinged) == 0 {
 		fmt.Println("No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
-	if num == -1 || num >= len(pingList) {
-		num = len(pingList)
+	if num == -1 || num >= len(pinged) {
+		num = len(pinged)
 	}
-	for i := 0; i < len(pingList); i++ {
-		server := serverMap[pingList[i]]
-		if server == nil {
-			continue
-		}
+	for i := 0; i < len(pinged); i++ {
+		server := pinged[i].server
 		if i < num {
 			err1 = server.DownloadTest()
 			err2 = server.UploadTest()
@@ -361,7 +437,7 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 				continue
 			}
 			if language == "zh" {
-				fmt.Print(formatString(server.Name, 16))
+				fmt.Print(" " + formatString(server.Name, 16))
 			} else if language == "en" {
 				name := server.Name
 				name = strings.ReplaceAll(name, "中国香港", "HongKong")
@@ -369,7 +445,7 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 				name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
 				name = strings.ReplaceAll(name, "新加坡", "Singapore")
 				name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-				fmt.Print(formatString(name, 16))
+				fmt.Print(" " + formatString(name, 16))
 			}
 			fmt.Print(formatString(formatMbps(server.ULSpeed.Mbps()), 16))
 			fmt.Print(formatString(formatMbps(server.DLSpeed.Mbps()), 16))

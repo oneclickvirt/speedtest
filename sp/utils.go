@@ -284,12 +284,18 @@ func ShowHead(language string) {
 	headers1 := []string{"位置", "上传速度", "下载速度", "延迟", "丢包率"}
 	headers2 := []string{"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss"}
 	if language == "zh" {
-		for _, header := range headers1 {
+		for index, header := range headers1 {
+			if index == 0 {
+				fmt.Print(" ")
+			}
 			fmt.Print(formatString(header, 16))
 		}
 		fmt.Println()
 	} else if language == "en" {
-		for _, header := range headers2 {
+		for index, header := range headers2 {
+			if index == 0 {
+				fmt.Print(" ")
+			}
 			fmt.Print(formatString(header, 16))
 		}
 		fmt.Println()

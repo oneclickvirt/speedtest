@@ -102,12 +102,12 @@ func LoadServerRegistry(ctx context.Context, client *http.Client, sources []Regi
 	for index, source := range sources {
 		data, metadata, err := loadServerRegistrySnapshot(ctx, client, source)
 		if err != nil {
-			lastErr = fmt.Errorf("load %s registry: %w", source.Name, err)
+			lastErr = fmt.Errorf("load %s registry: %w", registrySourceLabel(source.Name), err)
 			continue
 		}
 		servers, err := decodeServerRegistry(data, source.Name, minimum)
 		if err != nil {
-			lastErr = fmt.Errorf("validate %s registry: %w", source.Name, err)
+			lastErr = fmt.Errorf("validate %s registry: %w", registrySourceLabel(source.Name), err)
 			continue
 		}
 		if metadata.Count == 0 {
@@ -189,6 +189,17 @@ func serverRegistryMetadata(snapshot []byte, servers []ServerMetadata) RegistryM
 }
 
 func ResolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc) RegistryReport {
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, "")
+}
+
+// ResolveServerRegistryForLanguage preserves the existing registry behavior
+// for Chinese callers and applies the international selection policy for
+// English callers.
+func ResolveServerRegistryForLanguage(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string) RegistryReport {
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, language)
+}
+
+func resolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string) RegistryReport {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -206,8 +217,18 @@ func ResolveServerRegistry(ctx context.Context, client *http.Client, sources []R
 	report.Source = loaded.Source
 	report.Fallback = loaded.Fallback
 	report.Metadata = loaded.Metadata
-	report.Servers = ProbeServers(ctx, loaded.Servers, timeout, concurrency, dial)
-	selected, err := SelectAvailableServers(report.Servers, limit)
+	eligible := FilterServersForLanguage(loaded.Servers, language)
+	if len(eligible) == 0 {
+		report.Error = "no eligible speedtest servers for language scope"
+		return report
+	}
+	report.Servers = ProbeServers(ctx, eligible, timeout, concurrency, dial)
+	var selected []ServerMetadata
+	if strings.EqualFold(strings.TrimSpace(language), "en") {
+		selected, err = SelectRepresentativeServers(report.Servers, limit)
+	} else {
+		selected, err = SelectAvailableServers(report.Servers, limit)
+	}
 	if err != nil {
 		report.Error = err.Error()
 		return report
@@ -224,13 +245,16 @@ func fetchServerRegistry(ctx context.Context, client *http.Client, endpoint stri
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("create registry request failed")
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", "oneclickvirt-speedtest/registry-v1")
 	response, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		if ctxErr := ctx.Err(); ctxErr != nil {
+			return nil, ctxErr
+		}
+		return nil, errors.New("registry request failed")
 	}
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
@@ -238,12 +262,21 @@ func fetchServerRegistry(ctx context.Context, client *http.Client, endpoint stri
 	}
 	data, err := io.ReadAll(io.LimitReader(response.Body, 16<<20))
 	if err != nil {
-		return nil, err
+		return nil, errors.New("registry response read failed")
 	}
 	if !json.Valid(data) {
 		return nil, errors.New("registry response is not valid JSON")
 	}
 	return data, nil
+}
+
+func registrySourceLabel(name string) string {
+	switch strings.ToLower(strings.TrimSpace(name)) {
+	case "cdn", "raw":
+		return strings.ToLower(strings.TrimSpace(name))
+	default:
+		return "remote"
+	}
 }
 
 func decodeServerRegistry(data []byte, source string, minimum int) ([]ServerMetadata, error) {

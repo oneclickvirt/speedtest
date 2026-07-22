@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -30,6 +31,20 @@ type cliOptions struct {
 	registry    bool
 }
 
+type cliTargetMode string
+
+const (
+	targetCustom               cliTargetMode = "custom"
+	targetAutomaticNearby      cliTargetMode = "automatic-nearby"
+	targetRepresentativeGlobal cliTargetMode = "representative-global"
+)
+
+type cliTarget struct {
+	mode      cliTargetMode
+	url       string
+	parseType string
+}
+
 func newSpeedtestFlagSet(options *cliOptions) *flag.FlagSet {
 	set := flag.NewFlagSet("speedtest", flag.ContinueOnError)
 	set.BoolVar(&options.help, "h", false, "Show help information")
@@ -47,36 +62,177 @@ func newSpeedtestFlagSet(options *cliOptions) *flag.FlagSet {
 }
 
 func writeRegistryReport(ctx context.Context, output io.Writer, client *http.Client, sources []model.RegistrySource, limit int, dial model.ServerDialFunc) error {
+	return writeRegistryReportForLanguage(ctx, output, client, sources, limit, dial, "")
+}
+
+func writeRegistryReportForLanguage(ctx context.Context, output io.Writer, client *http.Client, sources []model.RegistrySource, limit int, dial model.ServerDialFunc, language string) error {
 	if limit <= 0 {
 		limit = 2
 	}
-	report := model.ResolveServerRegistry(ctx, client, sources, 1, limit, 2*time.Second, 8, dial)
+	report := model.ResolveServerRegistryForLanguage(ctx, client, sources, 1, limit, 2*time.Second, 8, dial, language)
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(report)
+}
+
+func normalizeAndValidateCLI(options cliOptions, positional []string) (cliOptions, error) {
+	options.language = strings.ToLower(strings.TrimSpace(options.language))
+	options.platform = strings.ToLower(strings.TrimSpace(options.platform))
+	options.operator = strings.ToLower(strings.TrimSpace(options.operator))
+	options.method = strings.ToLower(strings.TrimSpace(options.method))
+
+	if len(positional) > 0 {
+		return options, fmt.Errorf("unexpected positional arguments: %s", strings.Join(positional, " "))
+	}
+	if options.language != "en" && options.language != "zh" {
+		return options, fmt.Errorf("invalid -l %q: supported values are en and zh", options.language)
+	}
+	if options.platform != "net" && options.platform != "cn" {
+		return options, fmt.Errorf("invalid -pf %q: supported values are net and cn", options.platform)
+	}
+	validOperators := map[string]bool{"cmcc": true, "cu": true, "ct": true, "sg": true, "tw": true, "jp": true, "hk": true, "global": true}
+	if !validOperators[options.operator] {
+		return options, fmt.Errorf("invalid -opt %q: supported values are cmcc, cu, ct, sg, tw, jp, hk, and global", options.operator)
+	}
+	if options.method != "origin" && options.method != "speedtest" && options.method != "speedtest-go" {
+		return options, fmt.Errorf("invalid -m %q: supported values are origin, speedtest, and speedtest-go", options.method)
+	}
+	if options.num == 0 || options.num < -1 {
+		return options, fmt.Errorf("invalid -num %d: use -1 or a positive number", options.num)
+	}
+	if options.registry && options.nearby {
+		return options, fmt.Errorf("-registry and -nearby cannot be used together")
+	}
+	if options.platform == "cn" && options.operator == "global" && !options.nearby && !options.registry {
+		return options, fmt.Errorf("invalid combination: -pf cn does not support -opt global")
+	}
+	if options.language == "en" {
+		if options.platform == "cn" {
+			return options, fmt.Errorf("invalid English selection: -pf cn is mainland-China specific; use -pf net")
+		}
+		switch options.operator {
+		case "cmcc", "cu", "ct":
+			return options, fmt.Errorf("invalid English selection: -opt %s is mainland-China specific; choose global, sg, tw, jp, or hk", options.operator)
+		}
+	}
+	return options, nil
+}
+
+func resolveCLITarget(options cliOptions) (cliTarget, error) {
+	if options.nearby {
+		if options.language == "en" {
+			return cliTarget{mode: targetRepresentativeGlobal}, nil
+		}
+		return cliTarget{mode: targetAutomaticNearby}, nil
+	}
+	if options.language == "en" && options.platform == "net" && options.operator == "global" {
+		return cliTarget{mode: targetRepresentativeGlobal}, nil
+	}
+
+	target := cliTarget{mode: targetCustom}
+	if options.platform == "cn" {
+		target.parseType = "url"
+		switch options.operator {
+		case "cmcc":
+			target.url = model.CnCMCC
+		case "cu":
+			target.url = model.CnCU
+		case "ct":
+			target.url = model.CnCT
+		case "hk":
+			target.url = model.CnHK
+		case "tw":
+			target.url = model.CnTW
+		case "jp":
+			target.url = model.CnJP
+		case "sg":
+			target.url = model.CnSG
+		}
+	} else {
+		target.parseType = "id"
+		switch options.operator {
+		case "cmcc":
+			target.url = model.NetCMCC
+		case "cu":
+			target.url = model.NetCU
+		case "ct":
+			target.url = model.NetCT
+		case "hk":
+			target.url = model.NetHK
+		case "tw":
+			target.url = model.NetTW
+		case "jp":
+			target.url = model.NetJP
+		case "sg":
+			target.url = model.NetSG
+		case "global":
+			target.url = model.NetGlobal
+		}
+	}
+	if target.url == "" || target.parseType == "" {
+		return cliTarget{}, fmt.Errorf("unsupported -pf %s and -opt %s combination", options.platform, options.operator)
+	}
+	return target, nil
+}
+
+func runRepresentativeGlobal(options cliOptions) error {
+	limit := options.num
+	if limit <= 0 {
+		limit = 2
+	}
+	report := model.ResolveServerRegistryForLanguage(context.Background(), nil, model.DefaultRegistrySources(), 1, limit, 2*time.Second, 8, (model.ServerDialFunc)((&net.Dialer{}).DialContext), options.language)
+	if report.Availability != model.ServerAvailable || len(report.Selected) == 0 {
+		if report.Error == "" {
+			report.Error = "no representative global speedtest servers are available"
+		}
+		return errors.New(report.Error)
+	}
+	if options.method == "speedtest" {
+		if err := sp.OfficialAvailableTest(); err == nil {
+			sp.OfficialRegistrySpeedTest(report.Selected, options.language)
+			return nil
+		}
+		fmt.Println("Can not match speedtest command, switch to use origin test")
+	}
+	sp.RegistrySpeedTest(report.Selected, options.language)
+	return nil
 }
 
 func main() {
 	var options cliOptions
 	speedtestFlag := newSpeedtestFlagSet(&options)
 	if err := speedtestFlag.Parse(os.Args[1:]); err != nil {
-		return
+		os.Exit(2)
 	}
-	if options.registry {
-		if err := writeRegistryReport(context.Background(), os.Stdout, nil, model.DefaultRegistrySources(), options.num, (model.ServerDialFunc)((&net.Dialer{}).DialContext)); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		return
-	}
-	fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 	if options.help {
+		fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 		fmt.Printf("Usage: %s [options]\n", os.Args[0])
 		speedtestFlag.PrintDefaults()
 		return
 	}
 	if options.showVersion {
+		fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
 		fmt.Println(model.SpeedTestVersion)
 		return
+	}
+	var err error
+	options, err = normalizeAndValidateCLI(options, speedtestFlag.Args())
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "parameter error:", err)
+		os.Exit(2)
+	}
+	if options.registry {
+		if err := writeRegistryReportForLanguage(context.Background(), os.Stdout, nil, model.DefaultRegistrySources(), options.num, (model.ServerDialFunc)((&net.Dialer{}).DialContext), options.language); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
+	fmt.Println("项目地址:", Blue("https://github.com/oneclickvirt/speedtest"))
+	target, err := resolveCLITarget(options)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "parameter error:", err)
+		os.Exit(2)
 	}
 	go func() {
 		client := &http.Client{Timeout: 3 * time.Second}
@@ -88,76 +244,29 @@ func main() {
 	if options.showHead {
 		sp.ShowHead(options.language)
 	}
-	if options.nearby {
-		if strings.ToLower(options.method) == "origin" {
+	if target.mode == targetAutomaticNearby {
+		if options.method == "origin" || options.method == "speedtest-go" {
 			sp.NearbySpeedTest()
-		} else if strings.ToLower(options.method) == "speedtest" {
+		} else {
 			sp.OfficialNearbySpeedTest()
 		}
 		return
 	}
-	var url, parseType string
-	if strings.ToLower(options.platform) == "cn" {
-		if strings.ToLower(options.operator) == "cmcc" {
-			url = model.CnCMCC
-		} else if strings.ToLower(options.operator) == "cu" {
-			url = model.CnCU
-		} else if strings.ToLower(options.operator) == "ct" {
-			url = model.CnCT
-		} else if strings.ToLower(options.operator) == "hk" {
-			url = model.CnHK
-		} else if strings.ToLower(options.operator) == "tw" {
-			url = model.CnTW
-		} else if strings.ToLower(options.operator) == "jp" {
-			url = model.CnJP
-		} else if strings.ToLower(options.operator) == "sg" {
-			url = model.CnSG
+	if target.mode == targetRepresentativeGlobal {
+		if err := runRepresentativeGlobal(options); err != nil {
+			fmt.Fprintln(os.Stderr, "speedtest unavailable:", err)
 		}
-		parseType = "url"
-	} else if strings.ToLower(options.platform) == "net" {
-		if strings.ToLower(options.operator) == "cmcc" {
-			url = model.NetCMCC
-		} else if strings.ToLower(options.operator) == "cu" {
-			url = model.NetCU
-		} else if strings.ToLower(options.operator) == "ct" {
-			url = model.NetCT
-		} else if strings.ToLower(options.operator) == "hk" {
-			url = model.NetHK
-		} else if strings.ToLower(options.operator) == "tw" {
-			url = model.NetTW
-		} else if strings.ToLower(options.operator) == "jp" {
-			url = model.NetJP
-		} else if strings.ToLower(options.operator) == "sg" {
-			url = model.NetSG
-		} else if strings.ToLower(options.operator) == "global" {
-			url = model.NetGlobal
-		}
-		parseType = "id"
+		return
 	}
-	if strings.ToLower(options.method) == "origin" {
-		if url != "" && parseType != "" {
-			sp.CustomSpeedTest(url, parseType, options.num, options.language)
-		} else {
-			fmt.Println("-opt/-pf with wrong operator.")
-		}
-	} else if strings.ToLower(options.method) == "speedtest" {
+	if options.method == "origin" || options.method == "speedtest-go" {
+		sp.CustomSpeedTest(target.url, target.parseType, options.num, options.language)
+	} else {
 		err := sp.OfficialAvailableTest()
 		if err == nil {
-			if url != "" && parseType != "" {
-				sp.OfficialCustomSpeedTest(url, parseType, options.num, options.language)
-			} else {
-				fmt.Println("-opt/-pf with wrong operator.")
-			}
+			sp.OfficialCustomSpeedTest(target.url, target.parseType, options.num, options.language)
 		} else {
 			fmt.Println("Can not match speedtest command, switch to use origin test")
-			if url != "" && parseType != "" {
-				sp.CustomSpeedTest(url, parseType, options.num, options.language)
-			} else {
-				fmt.Println("-opt/-pf with wrong operator.")
-			}
+			sp.CustomSpeedTest(target.url, target.parseType, options.num, options.language)
 		}
-	} else {
-		fmt.Println("-m with wrong operator.")
 	}
-
 }
