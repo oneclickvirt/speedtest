@@ -407,6 +407,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-2054",
+    "name": "Singapore",
+    "host": "speedtest10.vqbn.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest10.vqbn.com:8080/speedtest/upload.php",
+    "provider": "ViewQwest",
+    "country": "Singapore",
+    "city": "Singapore",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-21118",
     "name": "Naha",
     "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
@@ -649,6 +660,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-30376",
+    "name": "London",
+    "host": "speed-test.ukservers.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speed-test.ukservers.com:8080/speedtest/upload.php",
+    "provider": "UK Dedicated Servers",
+    "country": "United Kingdom",
+    "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-30690",
     "name": "London",
     "host": "speedtest.thn.lon.network.as201838.net.prod.hosts.ooklaserver.net:8080",
@@ -755,6 +777,17 @@
     "provider": "Cerberus Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-34630",
+    "name": "São Paulo",
+    "host": "coa-1.speedtest.bbhost.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://coa-1.speedtest.bbhost.com.br:8080/speedtest/upload.php",
+    "provider": "BB Host",
+    "country": "Brazil",
+    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1006,17 +1039,6 @@
     "host": "teste.collisinternet.com.br:8080",
     "url": "http://teste.collisinternet.com.br:8080/speedtest/upload.php",
     "provider": "COLLIS INTERNET",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-40690",
-    "name": "São Paulo",
-    "host": "velocidade.triplonetfibra.com.br:8080",
-    "url": "http://velocidade.triplonetfibra.com.br:8080/speedtest/upload.php",
-    "provider": "TriploNet",
     "country": "Brazil",
     "city": "São Paulo",
     "source": "snapshot",
@@ -1331,6 +1353,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1492,6 +1525,17 @@
     "provider": "Grain Connect",
     "country": "United Kingdom",
     "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-51518",
+    "name": "Batam",
+    "host": "speedtest.nomaden.tv.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.nomaden.tv:8080/speedtest/upload.php",
+    "provider": "VNT NETWORKS - BTM ID",
+    "country": "Indonesia",
+    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1683,17 +1727,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-55137",
-    "name": "London",
-    "host": "speedtest-1.london.network.as212655.net:8080",
-    "url": "http://speedtest-1.london.network.as212655.net:8080/speedtest/upload.php",
-    "provider": "YouFibre",
-    "country": "United Kingdom",
-    "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-55158",
     "name": "São Paulo",
     "host": "speedtest.avivtelecom.com.br:8080",
@@ -1778,17 +1811,6 @@
     "provider": "GSL Networks",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2339,17 +2361,6 @@
     "provider": "LIKENET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-64839",
-    "name": "Singapore",
-    "host": "speedtest.sin.atharva.co.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.sin.atharva.co.id:8080/speedtest/upload.php",
-    "provider": "Atharva",
-    "country": "Singapore",
-    "city": "Singapore",
     "source": "snapshot",
     "availability": "candidate"
   },
