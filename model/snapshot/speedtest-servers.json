@@ -1540,6 +1540,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-51839",
+    "name": "Singapore",
+    "host": "speedtest.singapore.globalxtreme.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.singapore.globalxtreme.net:8080/speedtest/upload.php",
+    "provider": "GlobalXtreme",
+    "country": "Singapore",
+    "city": "Singapore",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-51905",
     "name": "São Paulo",
     "host": "velocimetro.kfinternet.com.br:8080",
@@ -1727,6 +1738,28 @@
     "availability": "candidate"
   },
   {
+    "id": "global-55137",
+    "name": "London",
+    "host": "speedtest-1.london.network.as212655.net:8080",
+    "url": "http://speedtest-1.london.network.as212655.net:8080/speedtest/upload.php",
+    "provider": "YouFibre",
+    "country": "United Kingdom",
+    "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-55158",
+    "name": "São Paulo",
+    "host": "speedtest.avivtelecom.com.br:8080",
+    "url": "http://speedtest.avivtelecom.com.br:8080/speedtest/upload.php",
+    "provider": "Aviv Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-55847",
     "name": "São Paulo",
     "host": "speed.fenixbrasil.com.br:8080",
@@ -1782,17 +1815,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-56684",
-    "name": "Johor Bahru",
-    "host": "speedtestjhr.u.net.my:8080",
-    "url": "http://speedtestjhr.u.net.my:8080/speedtest/upload.php",
-    "provider": "U Mobile Sdn Bhd",
-    "country": "Malaysia",
-    "city": "Johor Bahru",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-56811",
     "name": "London",
     "host": "thn.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -1811,28 +1833,6 @@
     "provider": "Contabo",
     "country": "Japan",
     "city": "Tokyo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-57318",
-    "name": "Slough",
-    "host": "speedtest.zzoomm.com:8080",
-    "url": "http://speedtest.zzoomm.com:8080/speedtest/upload.php",
-    "provider": "Zzoomm Plc",
-    "country": "United Kingdom",
-    "city": "Slough",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-57385",
-    "name": "São Paulo",
-    "host": "speedtest.nocglobal.net.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.nocglobal.net.br:8080/speedtest/upload.php",
-    "provider": "Global Banda Larga",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2607,17 +2607,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-70147",
-    "name": "São Paulo",
-    "host": "speedtest.hostingnow.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.hostingnow.com.br:8080/speedtest/upload.php",
-    "provider": "Hosting Now",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-70522",
     "name": "Guildford",
     "host": "speedtest.networks.bt.com:8080",
@@ -2816,6 +2805,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-72929",
+    "name": "São Paulo",
+    "host": "scontest.sconfibras.com.br:8080",
+    "url": "http://scontest.sconfibras.com.br:8080/speedtest/upload.php",
+    "provider": "SconFibras",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-7311",
     "name": "Singapore",
     "host": "m1speedtest1.m1net.com.sg:8080",
@@ -2900,17 +2900,6 @@
     "provider": "1310",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-74095",
-    "name": "Batam",
-    "host": "speedtest.hydra.co.id:8080",
-    "url": "http://speedtest.hydra.co.id:8080/speedtest/upload.php",
-    "provider": "PT HYDRA MEDIA INDONESIA",
-    "country": "Indonesia",
-    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
