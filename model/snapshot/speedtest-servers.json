@@ -506,6 +506,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-24974",
+    "name": "Keelung",
+    "host": "kl-speedtest.homeplus.net.tw:8080",
+    "url": "http://kl-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
+    "provider": "Homeplus",
+    "country": "Taiwan",
+    "city": "Keelung",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-26375",
     "name": "São Paulo",
     "host": "speedtest.fastprovedor.net.br:8080",
@@ -858,17 +869,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37178",
-    "name": "São Paulo",
-    "host": "speedtest.vdnet.com.br:8080",
-    "url": "http://speedtest.vdnet.com.br:8080/speedtest/upload.php",
-    "provider": "VDNET TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37180",
     "name": "São Paulo",
     "host": "teste.ariastelecom.com.br:8080",
@@ -885,6 +885,17 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
+    "country": "United Kingdom",
+    "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "source": "snapshot",
@@ -1195,17 +1206,6 @@
     "provider": "Melbikomas UAB",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-45578",
-    "name": "São Paulo",
-    "host": "test.3wacces.com.br:8080",
-    "url": "http://test.3wacces.com.br:8080/speedtest/upload.php",
-    "provider": "3Wacces",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1826,13 +1826,24 @@
     "availability": "candidate"
   },
   {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
+    "id": "global-57318",
+    "name": "Slough",
+    "host": "speedtest.zzoomm.com:8080",
+    "url": "http://speedtest.zzoomm.com:8080/speedtest/upload.php",
+    "provider": "Zzoomm Plc",
+    "country": "United Kingdom",
+    "city": "Slough",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-57385",
+    "name": "São Paulo",
+    "host": "speedtest.nocglobal.net.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.nocglobal.net.br:8080/speedtest/upload.php",
+    "provider": "Global Banda Larga",
+    "country": "Brazil",
+    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2398,17 +2409,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-66834",
-    "name": "Batam",
-    "host": "speedtest.filltech.network.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.filltech.network:8080/speedtest/upload.php",
-    "provider": "FiLLTECH",
-    "country": "Indonesia",
-    "city": "Batam",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-67542",
     "name": "Slough",
     "host": "st-6.fibrenest.com.prod.hosts.ooklaserver.net:8080",
@@ -2695,17 +2695,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-71549",
-    "name": "London",
-    "host": "owst.gilat.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://owst.gilat.net:8080/speedtest/upload.php",
-    "provider": "Gilat Telecom",
-    "country": "United Kingdom",
-    "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-71674",
     "name": "São Paulo",
     "host": "stmc.novanetworktelecom.com.br:8080",
@@ -2893,6 +2882,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-73773",
+    "name": "São Paulo",
+    "host": "teste.faisertelecomunicacoes.com.br:8080",
+    "url": "http://teste.faisertelecomunicacoes.com.br:8080/speedtest/upload.php",
+    "provider": "Faiser Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-73809",
     "name": "London",
     "host": "ookla1.the.net.1310.io:8080",
@@ -2900,6 +2900,17 @@
     "provider": "1310",
     "country": "United Kingdom",
     "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74095",
+    "name": "Batam",
+    "host": "speedtest.hydra.co.id:8080",
+    "url": "http://speedtest.hydra.co.id:8080/speedtest/upload.php",
+    "provider": "PT HYDRA MEDIA INDONESIA",
+    "country": "Indonesia",
+    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
