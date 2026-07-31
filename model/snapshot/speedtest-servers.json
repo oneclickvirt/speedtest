@@ -231,6 +231,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -638,6 +649,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-29716",
+    "name": "Neihu District",
+    "host": "lg-speedtest.homeplus.net.tw:8080",
+    "url": "http://lg-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
+    "provider": "Homeplus",
+    "country": "Taiwan",
+    "city": "Neihu District",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-30306",
     "name": "São Paulo",
     "host": "speedtest-br.grupogtd.com.prod.hosts.ooklaserver.net:8080",
@@ -667,17 +689,6 @@
     "provider": "Community Fibre Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-30838",
-    "name": "Batam",
-    "host": "speedtest-wir.idola.net.id:8080",
-    "url": "http://speedtest-wir.idola.net.id:8080/speedtest/upload.php",
-    "provider": "PT. Aplikanusa Lintasarta",
-    "country": "Indonesia",
-    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -869,6 +880,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37178",
+    "name": "São Paulo",
+    "host": "speedtest.vdnet.com.br:8080",
+    "url": "http://speedtest.vdnet.com.br:8080/speedtest/upload.php",
+    "provider": "VDNET TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37180",
     "name": "São Paulo",
     "host": "teste.ariastelecom.com.br:8080",
@@ -898,17 +920,6 @@
     "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1353,17 +1364,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1371,17 +1371,6 @@
     "provider": "Angola Cables",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48463",
-    "name": "Tokyo",
-    "host": "speed.udx.icscoe.jp:8080",
-    "url": "http://speed.udx.icscoe.jp:8080/speedtest/upload.php",
-    "provider": "IPA CyberLab 400G",
-    "country": "Japan",
-    "city": "Tokyo",
     "source": "snapshot",
     "availability": "candidate"
   },
