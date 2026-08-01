@@ -231,17 +231,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-13506",
-    "name": "Taipei",
-    "host": "speedtest.taifo.com.tw:8080",
-    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
-    "provider": "TAIFO Taiwan",
-    "country": "Taiwan",
-    "city": "Taipei",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -902,6 +891,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37328",
+    "name": "São Paulo",
+    "host": "ookla.thmtc.com.br:8080",
+    "url": "http://ookla.thmtc.com.br:8080/speedtest/upload.php",
+    "provider": "TH Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37536",
     "name": "London",
     "host": "speedtest-lon.veloxserv.net:8080",
@@ -920,6 +920,17 @@
     "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1239,17 +1250,6 @@
     "provider": "Líder Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-46304",
-    "name": "Singapore",
-    "host": "sg.cloudhost.asia:8080",
-    "url": "http://sg.cloudhost.asia:8080/speedtest/upload.php",
-    "provider": "IDCloudHost",
-    "country": "Singapore",
-    "city": "Singapore",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1815,6 +1815,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-56935",
+    "name": "Tokyo",
+    "host": "tyo.speedtest.contabo.net:8080",
+    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Japan",
+    "city": "Tokyo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -1899,17 +1910,6 @@
     "provider": "Spintel",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-58548",
-    "name": "São Paulo",
-    "host": "stmc.edumartelecom.com.br:8080",
-    "url": "http://stmc.edumartelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Edumar Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2867,17 +2867,6 @@
     "provider": "Tata Communications",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73773",
-    "name": "São Paulo",
-    "host": "teste.faisertelecomunicacoes.com.br:8080",
-    "url": "http://teste.faisertelecomunicacoes.com.br:8080/speedtest/upload.php",
-    "provider": "Faiser Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
