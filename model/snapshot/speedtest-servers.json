@@ -1364,6 +1364,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1815,17 +1826,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -2086,17 +2086,6 @@
     "provider": "Burstfire Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-61629",
-    "name": "São Paulo",
-    "host": "speedtest.lffibra.com.br:8080",
-    "url": "http://speedtest.lffibra.com.br:8080/speedtest/upload.php",
-    "provider": "LF TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2651,6 +2640,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-70886",
+    "name": "São Paulo",
+    "host": "speedtest.acessanet.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.acessanet.com.br:8080/speedtest/upload.php",
+    "provider": "Acessanet Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-71174",
     "name": "São Paulo",
     "host": "ookla3.e3telecom.com.br:8080",
@@ -2849,17 +2849,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73568",
-    "name": "São Paulo",
-    "host": "srv1298004.hstgr.cloud.prod.hosts.ooklaserver.net:8080",
-    "url": "http://srv1298004.hstgr.cloud:8080/speedtest/upload.php",
-    "provider": "Hostinger",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73627",
     "name": "Singapore",
     "host": "ookla.svw.as6453.net.prod.hosts.ooklaserver.net:8080",
@@ -2955,6 +2944,17 @@
     "provider": "Exascale",
     "country": "United Kingdom",
     "city": "London",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-75168",
+    "name": "São Paulo",
+    "host": "ookla.netfi.com.br:8080",
+    "url": "http://ookla.netfi.com.br:8080/speedtest/upload.php",
+    "provider": "NETFI SERVIÇOS DE COMUNICAÇÕES",
+    "country": "Brazil",
+    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
