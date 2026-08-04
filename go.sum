@@ -25,8 +25,8 @@ github.com/quic-go/quic-go v0.60.0 h1:xcQioE8OM66UQLeUMHltK1CCcOu3JbVB4JAQdDQSB+
 github.com/quic-go/quic-go v0.60.0/go.mod h1:wpKpjmPpftl30sL6pFh7REVpjbcCVy4zt2vDyK1TuJk=
 github.com/refraction-networking/utls v1.8.2 h1:j4Q1gJj0xngdeH+Ox/qND11aEfhpgoEvV+S9iJ2IdQo=
 github.com/refraction-networking/utls v1.8.2/go.mod h1:jkSOEkLqn+S/jtpEHPOsVv/4V4EVnelwbMQl4vCWXAM=
-github.com/showwin/speedtest-go v1.7.10 h1:9o5zb7KsuzZKn+IE2//z5btLKJ870JwO6ETayUkqRFw=
-github.com/showwin/speedtest-go v1.7.10/go.mod h1:Ei7OCTmNPdWofMadzcfgq1rUO7mvJy9Jycj//G7vyfA=
+github.com/showwin/speedtest-go v1.7.11 h1:IMm3MSDewzOmgZSg6+It9AlxKYT9JBK1cxb0PF52DYE=
+github.com/showwin/speedtest-go v1.7.11/go.mod h1:MAtq5zxTo0kbqC90RStARJV6DQwDzvtPM6VF5AKzpYc=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/xyproto/randomstring v1.0.5 h1:YtlWPoRdgMu3NZtP45drfy1GKoojuR7hmRcnhZqKjWU=

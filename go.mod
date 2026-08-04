@@ -5,7 +5,7 @@ go 1.25.3
 require (
 	github.com/imroc/req/v3 v3.59.0
 	github.com/oneclickvirt/defaultset v0.0.2-20240624082446
-	github.com/showwin/speedtest-go v1.7.10
+	github.com/showwin/speedtest-go v1.7.11
 	golang.org/x/sys v0.45.0
 )
 
