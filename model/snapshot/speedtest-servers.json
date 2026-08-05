@@ -407,6 +407,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-2054",
+    "name": "Singapore",
+    "host": "speedtest10.vqbn.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest10.vqbn.com:8080/speedtest/upload.php",
+    "provider": "ViewQwest",
+    "country": "Singapore",
+    "city": "Singapore",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-21118",
     "name": "Naha",
     "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
@@ -634,17 +645,6 @@
     "provider": "EdgeUno",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-29716",
-    "name": "Neihu District",
-    "host": "lg-speedtest.homeplus.net.tw:8080",
-    "url": "http://lg-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
-    "provider": "Homeplus",
-    "country": "Taiwan",
-    "city": "Neihu District",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -1826,6 +1826,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-56935",
+    "name": "Tokyo",
+    "host": "tyo.speedtest.contabo.net:8080",
+    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Japan",
+    "city": "Tokyo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -2141,6 +2152,17 @@
     "provider": "Symphony Communication PCL",
     "country": "Singapore",
     "city": "Singapore",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-62612",
+    "name": "São Paulo",
+    "host": "speedtest.conectiva.srv.br:8080",
+    "url": "http://speedtest.conectiva.srv.br:8080/speedtest/upload.php",
+    "provider": "Conectiva Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2497,17 +2519,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-68585",
-    "name": "Batam",
-    "host": "speedtest2.skynetwork.id:8080",
-    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
-    "provider": "PT Skynet Indonesia Madani",
-    "country": "Indonesia",
-    "city": "Batam",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-68924",
     "name": "Sydney",
     "host": "ookla.sy1.neptune.net.au.prod.hosts.ooklaserver.net:8080",
@@ -2805,17 +2816,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2944,17 +2944,6 @@
     "provider": "Exascale",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-75168",
-    "name": "São Paulo",
-    "host": "ookla.netfi.com.br:8080",
-    "url": "http://ookla.netfi.com.br:8080/speedtest/upload.php",
-    "provider": "NETFI SERVIÇOS DE COMUNICAÇÕES",
-    "country": "Brazil",
-    "city": "São Paulo",
     "source": "snapshot",
     "availability": "candidate"
   },
