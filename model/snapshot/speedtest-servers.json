@@ -341,17 +341,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-18392",
-    "name": "Sydney",
-    "host": "speed4.snap.net.nz.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speed4.snap.net.nz:8080/speedtest/upload.php",
-    "provider": "2degrees",
-    "country": "Australia",
-    "city": "Sydney",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-18475",
     "name": "Keelung",
     "host": "klv3-1.speedtest.idv.tw:8080",
@@ -638,17 +627,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-29716",
-    "name": "Neihu District",
-    "host": "lg-speedtest.homeplus.net.tw:8080",
-    "url": "http://lg-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
-    "provider": "Homeplus",
-    "country": "Taiwan",
-    "city": "Neihu District",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-30306",
     "name": "São Paulo",
     "host": "speedtest-br.grupogtd.com.prod.hosts.ooklaserver.net:8080",
@@ -907,17 +885,6 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
-    "country": "United Kingdom",
-    "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "source": "snapshot",
@@ -1826,6 +1793,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-56935",
+    "name": "Tokyo",
+    "host": "tyo.speedtest.contabo.net:8080",
+    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Japan",
+    "city": "Tokyo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -2145,6 +2123,17 @@
     "availability": "candidate"
   },
   {
+    "id": "global-62612",
+    "name": "São Paulo",
+    "host": "speedtest.conectiva.srv.br:8080",
+    "url": "http://speedtest.conectiva.srv.br:8080/speedtest/upload.php",
+    "provider": "Conectiva Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
     "id": "global-62770",
     "name": "Batam",
     "host": "speedtest.iplus.net.id:8080",
@@ -2453,17 +2442,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-68263",
-    "name": "São Paulo",
-    "host": "velocidade.mgenetwork.com.br:8080",
-    "url": "http://velocidade.mgenetwork.com.br:8080/speedtest/upload.php",
-    "provider": "MGE NETWORK",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
     "id": "global-68284",
     "name": "London",
     "host": "speedtest-ookla-alpha.giant.net.uk:8080",
@@ -2493,17 +2471,6 @@
     "provider": "HubTelecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-68585",
-    "name": "Batam",
-    "host": "speedtest2.skynetwork.id:8080",
-    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
-    "provider": "PT Skynet Indonesia Madani",
-    "country": "Indonesia",
-    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
@@ -2746,17 +2713,6 @@
     "provider": "Infranet Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-72736",
-    "name": "Batam",
-    "host": "speedtest.infi.net.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.infi.net.id:8080/speedtest/upload.php",
-    "provider": "Infinet",
-    "country": "Indonesia",
-    "city": "Batam",
     "source": "snapshot",
     "availability": "candidate"
   },
