@@ -28,7 +28,7 @@ type ServerMetadata struct {
 	Provider     string             `json:"provider,omitempty"`
 	Country      string             `json:"country,omitempty"`
 	City         string             `json:"city,omitempty"`
-	Source       string             `json:"source,omitempty"`
+	Source       string             `json:"-"`
 	Availability ServerAvailability `json:"availability"`
 	LatencyMS    int64              `json:"latency_ms,omitempty"`
 	Error        string             `json:"error,omitempty"`
@@ -36,8 +36,8 @@ type ServerMetadata struct {
 
 type RegistryReport struct {
 	SchemaVersion string             `json:"schema_version"`
-	Source        string             `json:"source,omitempty"`
-	Fallback      bool               `json:"fallback"`
+	Source        string             `json:"-"`
+	Fallback      bool               `json:"-"`
 	Metadata      RegistryMetadata   `json:"metadata"`
 	Availability  ServerAvailability `json:"availability"`
 	Servers       []ServerMetadata   `json:"servers"`

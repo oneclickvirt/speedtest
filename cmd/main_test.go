@@ -129,8 +129,11 @@ func TestWriteRegistryReportProducesStructuredJSON(t *testing.T) {
 	if err := json.Unmarshal(output.Bytes(), &report); err != nil {
 		t.Fatal(err)
 	}
-	if report.Availability != model.ServerAvailable || len(report.Selected) != 1 || report.Source != "fixture" {
+	if report.Availability != model.ServerAvailable || len(report.Selected) != 1 || report.Source != "" {
 		t.Fatalf("unexpected CLI report: %+v", report)
+	}
+	if strings.Contains(output.String(), `"fallback"`) || strings.Contains(output.String(), `"source"`) {
+		t.Fatalf("registry provenance leaked into structured output: %s", output.String())
 	}
 }
 
