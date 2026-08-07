@@ -7,7 +7,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Suzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -18,7 +17,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Fuzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -29,7 +27,6 @@
     "provider": "CU",
     "country": "China",
     "city": "Shanghai",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -40,7 +37,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Beijing",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -51,7 +47,6 @@
     "provider": "CE",
     "country": "China",
     "city": "Kunshan",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -62,7 +57,6 @@
     "provider": "CT",
     "country": "China",
     "city": "ZhenJ",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -73,7 +67,6 @@
     "provider": "CU",
     "country": "Hong Kong",
     "city": "HongKong",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -84,7 +77,6 @@
     "provider": "CU",
     "country": "China",
     "city": "Beijing",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -95,7 +87,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Chengdu",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -106,7 +97,6 @@
     "provider": "CT",
     "country": "China",
     "city": "Suzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -117,7 +107,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Hangzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -128,7 +117,6 @@
     "provider": "CT",
     "country": "China",
     "city": "Hangzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -139,7 +127,6 @@
     "provider": "CT",
     "country": "China",
     "city": "Ningbo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -150,7 +137,6 @@
     "provider": "CM",
     "country": "China",
     "city": "Shenzhen",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -161,7 +147,6 @@
     "provider": "CM",
     "country": "China",
     "city": "GuangZh",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -172,7 +157,6 @@
     "provider": "Spitfire Network Services",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -183,7 +167,6 @@
     "provider": "Structured Communications",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -194,7 +177,6 @@
     "provider": "Telstra",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -205,7 +187,6 @@
     "provider": "Optus",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -216,7 +197,6 @@
     "provider": "PT. Indosat Tbk",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -227,7 +207,6 @@
     "provider": "Exetel",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -238,7 +217,6 @@
     "provider": "IPA CyberLab",
     "country": "Japan",
     "city": "Bunkyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -249,7 +227,6 @@
     "provider": "Hyperoptic Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -260,7 +237,6 @@
     "provider": "Aussie Broadband",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -271,7 +247,6 @@
     "provider": "JSQY",
     "country": "China",
     "city": "Suzhou",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -282,7 +257,6 @@
     "provider": "Claro Fibra - SPO",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -293,7 +267,6 @@
     "provider": "PW Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -304,7 +277,6 @@
     "provider": "Vocus Communications",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -315,7 +287,6 @@
     "provider": "Telekom Malaysia Berhad",
     "country": "Malaysia",
     "city": "Johor Bahru",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -326,7 +297,6 @@
     "provider": "Claro Móvel - SPO1",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -337,7 +307,6 @@
     "provider": "Ipconect Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -348,7 +317,6 @@
     "provider": "Chief Telecom",
     "country": "Taiwan",
     "city": "Keelung",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -359,7 +327,6 @@
     "provider": "Telstra",
     "country": "Australia",
     "city": "Chatswood",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -370,7 +337,6 @@
     "provider": "Sothis Telecomunicações",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -381,7 +347,6 @@
     "provider": "Fiber Banda Larga",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -392,7 +357,16 @@
     "provider": "RMNETWORK",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-2054",
+    "name": "Singapore",
+    "host": "speedtest10.vqbn.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest10.vqbn.com:8080/speedtest/upload.php",
+    "provider": "ViewQwest",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -403,7 +377,6 @@
     "provider": "GLBB Japan",
     "country": "Japan",
     "city": "Naha",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -414,7 +387,6 @@
     "provider": "Mauritius Telecom Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -425,7 +397,6 @@
     "provider": "Yes Fibra Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -436,7 +407,6 @@
     "provider": "Vodafone UK",
     "country": "United Kingdom",
     "city": "Bracknell",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -447,7 +417,6 @@
     "provider": "PT. Indonesia Comnets Plus",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -458,7 +427,6 @@
     "provider": "Vodafone UK",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -469,7 +437,6 @@
     "provider": "Rakuten Mobile, Inc",
     "country": "Japan",
     "city": "Tokyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -480,7 +447,6 @@
     "provider": "China Unicom 5G",
     "country": "China",
     "city": "Shanghai",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -491,7 +457,6 @@
     "provider": "Jump Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -502,7 +467,6 @@
     "provider": "Homeplus",
     "country": "Taiwan",
     "city": "Keelung",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -513,7 +477,6 @@
     "provider": "Fast Provedor",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -524,7 +487,6 @@
     "provider": "M247 Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -535,7 +497,6 @@
     "provider": "fdcservers.net",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -546,7 +507,6 @@
     "provider": "SILVERNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -557,7 +517,6 @@
     "provider": "toob Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -568,7 +527,6 @@
     "provider": "DataMossa",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -579,7 +537,6 @@
     "provider": "fdcservers.net",
     "country": "Japan",
     "city": "Tokyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -590,7 +547,6 @@
     "provider": "PhoenixNAP Global IT Services",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -601,7 +557,6 @@
     "provider": "JASGAB TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -612,7 +567,6 @@
     "provider": "Rede Spirit",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -623,7 +577,6 @@
     "provider": "EdgeUno",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -634,7 +587,6 @@
     "provider": "Grupo GTD",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -645,7 +597,6 @@
     "provider": "UK Dedicated Servers",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -656,7 +607,6 @@
     "provider": "Community Fibre Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -667,7 +617,6 @@
     "provider": "Duke Kunshan University",
     "country": "China",
     "city": "Kunshan",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -678,7 +627,6 @@
     "provider": "Campana",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -689,7 +637,6 @@
     "provider": "RETN",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -700,7 +647,6 @@
     "provider": "Pacific Internet (S)",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -711,7 +657,6 @@
     "provider": "OPPONET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -722,7 +667,6 @@
     "provider": "FIBRANETBR TECNOLOGIA.",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -733,7 +677,6 @@
     "provider": "Mythic Beasts Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -744,7 +687,6 @@
     "provider": "Cerberus Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -755,7 +697,6 @@
     "provider": "BB Host",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -766,7 +707,6 @@
     "provider": "fdcservers.net",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -777,7 +717,6 @@
     "provider": "Click Connect Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -788,7 +727,6 @@
     "provider": "Leaptel",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -799,7 +737,6 @@
     "provider": "Clouvider Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -810,7 +747,6 @@
     "provider": "Voip-Unlimited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -821,7 +757,6 @@
     "provider": "GigaComm Pty Ltd",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -832,7 +767,6 @@
     "provider": "TIM Brasil",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -843,7 +777,6 @@
     "provider": "FibrAtiva",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -854,7 +787,6 @@
     "provider": "VDNET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -865,7 +797,6 @@
     "provider": "Arias Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -876,7 +807,6 @@
     "provider": "TH Internet",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -887,18 +817,6 @@
     "provider": "VeloxServ Communications",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -909,7 +827,6 @@
     "provider": "Brightstar Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -920,7 +837,6 @@
     "provider": "Telekomunikasi Indonesia International Pte Ltd (Telin Singapore)",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -931,7 +847,6 @@
     "provider": "Thryve Group - Thryve Broadband",
     "country": "Australia",
     "city": "Fairlight",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -942,7 +857,6 @@
     "provider": "kejoraNET",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -953,7 +867,6 @@
     "provider": "Voneus Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -964,7 +877,6 @@
     "provider": "Restarty Tech Internet",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -975,7 +887,6 @@
     "provider": "blueAPACHE",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -986,7 +897,6 @@
     "provider": "PT.MEDIANUSA PERMANA",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -997,7 +907,6 @@
     "provider": "Vtal",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1008,7 +917,6 @@
     "provider": "74 JC Informática Ltda",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1019,7 +927,6 @@
     "provider": "COLLIS INTERNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1030,7 +937,6 @@
     "provider": "CPGNet",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1041,7 +947,6 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1052,7 +957,6 @@
     "provider": "Contabo",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1063,7 +967,6 @@
     "provider": "IX Telecom",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1074,18 +977,6 @@
     "provider": "PT XLSMART Telecom Sejahtera",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-43044",
-    "name": "São Paulo",
-    "host": "speedtestspo.telium.com.br:8080",
-    "url": "http://speedtestspo.telium.com.br:8080/speedtest/upload.php",
-    "provider": "Telium Network",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1096,7 +987,6 @@
     "provider": "Telkomsel",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1107,7 +997,6 @@
     "provider": "Conecta Gold",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1118,7 +1007,6 @@
     "provider": "REAJNet Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1129,7 +1017,6 @@
     "provider": "REDE CONECTA TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1140,7 +1027,6 @@
     "provider": "Hosted Network",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1151,7 +1037,6 @@
     "provider": "Elite Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1162,7 +1047,6 @@
     "provider": "SPTEL PTE. LTD.",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1173,7 +1057,6 @@
     "provider": "BRSK",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1184,7 +1067,6 @@
     "provider": "Macquarie Telecom",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1195,7 +1077,6 @@
     "provider": "Melbikomas UAB",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1206,7 +1087,6 @@
     "provider": "Erick Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1217,7 +1097,6 @@
     "provider": "Líder Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1228,7 +1107,6 @@
     "provider": "Rackdog",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1239,7 +1117,6 @@
     "provider": "EzerNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1250,7 +1127,6 @@
     "provider": "Visionet Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1261,7 +1137,6 @@
     "provider": "Octopus Telecom",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1272,7 +1147,6 @@
     "provider": "ITS Technology Group",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1283,7 +1157,6 @@
     "provider": "Vorboss Limited",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1294,7 +1167,6 @@
     "provider": "PT. Mora Telematika Indonesia",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1305,7 +1177,6 @@
     "provider": "HopNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1316,7 +1187,6 @@
     "provider": "PT Cipta Informatika Cemerlang",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1327,7 +1197,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1338,7 +1207,6 @@
     "provider": "kdatacenter.com",
     "country": "South Korea",
     "city": "Seoul",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1349,7 +1217,6 @@
     "provider": "Angola Cables",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1360,7 +1227,6 @@
     "provider": "IDNet",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1371,7 +1237,6 @@
     "provider": "GAM Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1382,7 +1247,6 @@
     "provider": "Eletronet SA",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1393,7 +1257,6 @@
     "provider": "Connect Link Tech",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1404,7 +1267,6 @@
     "provider": "Edgoo Networks",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1415,7 +1277,6 @@
     "provider": "GSL Networks",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1426,7 +1287,6 @@
     "provider": "Verizon",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1437,7 +1297,6 @@
     "provider": "Verizon",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1448,7 +1307,6 @@
     "provider": "Verizon",
     "country": "Japan",
     "city": "Tokyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1459,7 +1317,16 @@
     "provider": "OCTAPLUS BROADBAND",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-50686",
+    "name": "Tokyo",
+    "host": "ty8.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://ty8.speedtest.gslnetworks.com:8080/speedtest/upload.php",
+    "provider": "GSL Networks",
+    "country": "Japan",
+    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -1470,7 +1337,6 @@
     "provider": "FHNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1481,7 +1347,6 @@
     "provider": "Edgoo Networks",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1492,7 +1357,6 @@
     "provider": "Grain Connect",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1503,7 +1367,6 @@
     "provider": "VNT NETWORKS - BTM ID",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1514,7 +1377,6 @@
     "provider": "GlobalXtreme",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1525,7 +1387,6 @@
     "provider": "KF Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1536,7 +1397,6 @@
     "provider": "PT Lintas Jaringan Nusantara",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1547,7 +1407,6 @@
     "provider": "WJ INTERNET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1558,7 +1417,6 @@
     "provider": "LK MAIA",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1569,7 +1427,6 @@
     "provider": "NetzOn",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1580,7 +1437,6 @@
     "provider": "Grupo A Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1591,7 +1447,6 @@
     "provider": "LEKST TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1602,7 +1457,6 @@
     "provider": "Verizon.com",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1613,7 +1467,6 @@
     "provider": "WCS",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1624,7 +1477,6 @@
     "provider": "GIGAFY",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1635,7 +1487,6 @@
     "provider": "Encoo",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1646,7 +1497,6 @@
     "provider": "Matrix NAP Info",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1657,7 +1507,6 @@
     "provider": "Contabo",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1668,7 +1517,6 @@
     "provider": "Connect Fibre",
     "country": "United Kingdom",
     "city": "Basiildon",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1679,7 +1527,6 @@
     "provider": "Trooli",
     "country": "United Kingdom",
     "city": "Slough",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1690,7 +1537,6 @@
     "provider": "Wireline Group",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1701,7 +1547,6 @@
     "provider": "INOVAFIBRA NET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1712,7 +1557,6 @@
     "provider": "YouFibre",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1723,7 +1567,6 @@
     "provider": "Aviv Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1734,7 +1577,6 @@
     "provider": "FÊNIX BRASIL TELECOMUNICAÇÕES EIRELI",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1745,7 +1587,6 @@
     "provider": "ALFA NEET",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1756,7 +1597,6 @@
     "provider": "FiBrasil",
     "country": "Brazil",
     "city": "Santana de Parnaíba",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1767,7 +1607,6 @@
     "provider": "JNET FIBRAS",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1778,7 +1617,6 @@
     "provider": "HyperFilter DDoS Protection Solutions",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1789,18 +1627,6 @@
     "provider": "GSL Networks",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1811,7 +1637,6 @@
     "provider": "Zzoomm Plc",
     "country": "United Kingdom",
     "city": "Slough",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1822,7 +1647,6 @@
     "provider": "Global Banda Larga",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1833,7 +1657,6 @@
     "provider": "Digital Pacific",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1844,7 +1667,6 @@
     "provider": "Connect Banda Larga",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1855,7 +1677,6 @@
     "provider": "Rocha Fiber",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1866,7 +1687,6 @@
     "provider": "ATLASNET SERVIÇOS DE COMUNICAÇÃO",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1877,7 +1697,6 @@
     "provider": "x99.cloud",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1888,7 +1707,6 @@
     "provider": "Spintel",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1899,7 +1717,6 @@
     "provider": "CBN",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1910,7 +1727,6 @@
     "provider": "PT. Telekomunikasi Indonesia",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1921,7 +1737,6 @@
     "provider": "MyRepublic Singapore",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1932,7 +1747,6 @@
     "provider": "Interlink Soluções em Telecomunicações Ltda",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1943,7 +1757,6 @@
     "provider": "Connect Fibre",
     "country": "United Kingdom",
     "city": "Slough",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1954,7 +1767,6 @@
     "provider": "ULTRANET IPAVA TELECOM LTDA",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1965,7 +1777,6 @@
     "provider": "Free Life Conect",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1976,7 +1787,6 @@
     "provider": "TESA TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1987,7 +1797,6 @@
     "provider": "MTN GlobalConnect Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -1998,7 +1807,6 @@
     "provider": "サーバーならDDPS.jp",
     "country": "Japan",
     "city": "Tokyo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2009,7 +1817,6 @@
     "provider": "NovaNet SP Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2020,7 +1827,6 @@
     "provider": "Star Fiber",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2031,7 +1837,6 @@
     "provider": "Giga Net Paraisópolis",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2042,7 +1847,6 @@
     "provider": "Cybersmart Pty Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2053,7 +1857,6 @@
     "provider": "GONET INDONESIA",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2064,7 +1867,16 @@
     "provider": "Burstfire Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-61629",
+    "name": "São Paulo",
+    "host": "speedtest.lffibra.com.br:8080",
+    "url": "http://speedtest.lffibra.com.br:8080/speedtest/upload.php",
+    "provider": "LF TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2075,7 +1887,6 @@
     "provider": "PalapaNET",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2086,7 +1897,6 @@
     "provider": "Launtel",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2097,7 +1907,6 @@
     "provider": "Axclusive Pte Ltd",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2108,7 +1917,6 @@
     "provider": "LEVEN",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2119,7 +1927,6 @@
     "provider": "Symphony Communication PCL",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2130,7 +1937,6 @@
     "provider": "Conectiva Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2141,7 +1947,6 @@
     "provider": "Iplus",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2152,7 +1957,6 @@
     "provider": "Mundivox Telecom Ltda",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2163,7 +1967,6 @@
     "provider": "Netcalibre",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2174,7 +1977,6 @@
     "provider": "EBF Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2185,7 +1987,6 @@
     "provider": "ION Network",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2196,7 +1997,6 @@
     "provider": "PT Solnet Indonesia",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2207,7 +2007,6 @@
     "provider": "Real World",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2218,7 +2017,6 @@
     "provider": "AARNet",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2229,7 +2027,6 @@
     "provider": "IPV6 Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2240,7 +2037,6 @@
     "provider": "AIPEER TECNOLOGIA",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2251,7 +2047,6 @@
     "provider": "NDL CONNECT",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2262,7 +2057,6 @@
     "provider": "Allied Telesis Capital Corporation",
     "country": "Japan",
     "city": "Misawa",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2273,7 +2067,6 @@
     "provider": "Rakuten Mobile, Inc",
     "country": "Japan",
     "city": "Sanda",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2284,7 +2077,6 @@
     "provider": "Opus Broadband",
     "country": "United Kingdom",
     "city": "Stevenage",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2295,7 +2087,6 @@
     "provider": "JRNET COMUNICAÇÂO",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2306,7 +2097,6 @@
     "provider": "Airband Community Internet",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2317,7 +2107,6 @@
     "provider": "I-Systems",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2328,7 +2117,6 @@
     "provider": "LIKENET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2339,7 +2127,6 @@
     "provider": "Superloop Australia Pty Ltd",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2350,7 +2137,6 @@
     "provider": "Kairun Services",
     "country": "Japan",
     "city": "Chiba",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2361,7 +2147,6 @@
     "provider": "Glide",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2372,7 +2157,6 @@
     "provider": "FiLLTECH",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2383,7 +2167,6 @@
     "provider": "FibreNest",
     "country": "United Kingdom",
     "city": "Slough",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2394,7 +2177,6 @@
     "provider": "MOACK Data Center",
     "country": "South Korea",
     "city": "Yongin-si",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2405,7 +2187,6 @@
     "provider": "FPT Telecom",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2416,7 +2197,6 @@
     "provider": "Hivelocity, Inc.",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2427,7 +2207,6 @@
     "provider": "Smart Connecting People",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2438,7 +2217,6 @@
     "provider": "Host Universal",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2449,7 +2227,6 @@
     "provider": "Giant",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2460,7 +2237,6 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2471,7 +2247,16 @@
     "provider": "HubTelecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-68585",
+    "name": "Batam",
+    "host": "speedtest2.skynetwork.id:8080",
+    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
+    "provider": "PT Skynet Indonesia Madani",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2482,7 +2267,6 @@
     "provider": "Neptune Internet",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2493,7 +2277,6 @@
     "provider": "Wildanet",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2504,7 +2287,6 @@
     "provider": "INETX",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2515,7 +2297,6 @@
     "provider": "SpaceCore.pro | Premium VPS Hosting",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2526,7 +2307,6 @@
     "provider": "Nearoute Limited",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2537,7 +2317,6 @@
     "provider": "SPARCS",
     "country": "South Korea",
     "city": "Daejeon",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2548,7 +2327,6 @@
     "provider": "TCA TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2559,7 +2337,6 @@
     "provider": "BT",
     "country": "United Kingdom",
     "city": "Guildford",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2570,7 +2347,6 @@
     "provider": "MCD Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2581,7 +2357,6 @@
     "provider": "IPGLOBE",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2592,7 +2367,6 @@
     "provider": "IPSCAPE",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2603,7 +2377,6 @@
     "provider": "CelcomDigi Berhad",
     "country": "Malaysia",
     "city": "Johor Bahru",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2614,7 +2387,6 @@
     "provider": "Acessanet Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2625,7 +2397,6 @@
     "provider": "E3 Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2636,7 +2407,6 @@
     "provider": "PT. Nusa Data Multimedia",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2647,7 +2417,6 @@
     "provider": "Gilat Telecom",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2658,7 +2427,6 @@
     "provider": "Novanet Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2669,7 +2437,6 @@
     "provider": "Aquiss",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2680,7 +2447,6 @@
     "provider": "BT",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2691,7 +2457,6 @@
     "provider": "Pongar Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2702,7 +2467,6 @@
     "provider": "Paraíso Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2713,7 +2477,16 @@
     "provider": "Infranet Fibra",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-72736",
+    "name": "Batam",
+    "host": "speedtest.infi.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.infi.net.id:8080/speedtest/upload.php",
+    "provider": "Infinet",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2724,7 +2497,6 @@
     "provider": "GKG NET BRASIL",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2735,18 +2507,6 @@
     "provider": "SAPULIDI",
     "country": "Indonesia",
     "city": "Kota Batam",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-72929",
-    "name": "São Paulo",
-    "host": "scontest.sconfibras.com.br:8080",
-    "url": "http://scontest.sconfibras.com.br:8080/speedtest/upload.php",
-    "provider": "SconFibras",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2757,7 +2517,16 @@
     "provider": "M1 Limited",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73154",
+    "name": "São Paulo",
+    "host": "ookla.swaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://ookla.swaptelecom.com.br:8080/speedtest/upload.php",
+    "provider": "Swap Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2768,7 +2537,6 @@
     "provider": "Optinet U.K. Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2779,7 +2547,6 @@
     "provider": "GSL Networks",
     "country": "South Korea",
     "city": "Seoul",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2790,7 +2557,6 @@
     "provider": "Krystal Hosting",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2801,7 +2567,6 @@
     "provider": "Hostinger",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2812,7 +2577,6 @@
     "provider": "Tata Communications",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2823,7 +2587,6 @@
     "provider": "Tata Communications",
     "country": "Australia",
     "city": "Sydney",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2834,7 +2597,6 @@
     "provider": "Faiser Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2845,7 +2607,16 @@
     "provider": "1310",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73918",
+    "name": "São Paulo",
+    "host": "startspeed.startnet.com.br:8080",
+    "url": "http://startspeed.startnet.com.br:8080/speedtest/upload.php",
+    "provider": "STARTNET SP",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2856,7 +2627,6 @@
     "provider": "PT HYDRA MEDIA INDONESIA",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2867,7 +2637,6 @@
     "provider": "binteks.id",
     "country": "Indonesia",
     "city": "Batam",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2878,7 +2647,6 @@
     "provider": "ISP FIBRA Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2889,7 +2657,16 @@
     "provider": "Rocket Fibre",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74675",
+    "name": "São Paulo",
+    "host": "speedtest.dilife.net.br:8080",
+    "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
+    "provider": "DiLife Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2900,18 +2677,6 @@
     "provider": "Exascale",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-75168",
-    "name": "São Paulo",
-    "host": "ookla.netfi.com.br:8080",
-    "url": "http://ookla.netfi.com.br:8080/speedtest/upload.php",
-    "provider": "NETFI SERVIÇOS DE COMUNICAÇÕES",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2922,7 +2687,6 @@
     "provider": "Digi UK",
     "country": "United Kingdom",
     "city": "Luton",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2933,7 +2697,6 @@
     "provider": "Gisho Work",
     "country": "Japan",
     "city": "Ginowan",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2944,7 +2707,6 @@
     "provider": "Firstmedia",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2955,7 +2717,6 @@
     "provider": "GENZNET",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2966,7 +2727,6 @@
     "provider": "HostGrap",
     "country": "Singapore",
     "city": "Singapore",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2977,7 +2737,6 @@
     "provider": "ASAP GLOBAL TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2988,7 +2747,6 @@
     "provider": "Coreix Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "source": "snapshot",
     "availability": "candidate"
   },
   {
@@ -2999,7 +2757,6 @@
     "provider": "Optus",
     "country": "Australia",
     "city": "Blacktown",
-    "source": "snapshot",
     "availability": "candidate"
   }
 ]
