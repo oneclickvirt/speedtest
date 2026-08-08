@@ -220,16 +220,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14679",
-    "name": "London",
-    "host": "speedlon.hyperoptic.com:8080",
-    "url": "http://speedlon.hyperoptic.com:8080/speedtest/upload.php",
-    "provider": "Hyperoptic Limited",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-15132",
     "name": "Sydney",
     "host": "speed.syd.aussiebroadband.com.au.prod.hosts.ooklaserver.net:8080",
@@ -247,16 +237,6 @@
     "provider": "JSQY",
     "country": "China",
     "city": "Suzhou",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-16322",
-    "name": "São Paulo",
-    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
-    "provider": "Claro Fibra - SPO",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -817,6 +797,26 @@
     "provider": "VeloxServ Communications",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1420,16 +1420,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-52773",
-    "name": "São Paulo",
-    "host": "speed1teste.netzon.com.br:8080",
-    "url": "http://speed1teste.netzon.com.br:8080/speedtest/upload.php",
-    "provider": "NetzOn",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-52798",
     "name": "São Paulo",
     "host": "speedtest.grupoatelecom.com.br:8080",
@@ -1707,6 +1697,16 @@
     "provider": "Spintel",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-58548",
+    "name": "São Paulo",
+    "host": "stmc.edumartelecom.com.br:8080",
+    "url": "http://stmc.edumartelecom.com.br:8080/speedtest/upload.php",
+    "provider": "Edumar Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2150,16 +2150,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-66834",
-    "name": "Batam",
-    "host": "speedtest.filltech.network.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.filltech.network:8080/speedtest/upload.php",
-    "provider": "FiLLTECH",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-67542",
     "name": "Slough",
     "host": "st-6.fibrenest.com.prod.hosts.ooklaserver.net:8080",
@@ -2527,16 +2517,6 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
