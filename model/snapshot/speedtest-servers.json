@@ -490,6 +490,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-26799",
+    "name": "São Paulo",
+    "host": "teste.silvernetdns.net.br:8080",
+    "url": "http://teste.silvernetdns.net.br:8080/speedtest/upload.php",
+    "provider": "SILVERNET",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-26922",
     "name": "London",
     "host": "speedtest.toob.co.uk:8080",
@@ -1880,16 +1890,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-61629",
-    "name": "São Paulo",
-    "host": "speedtest.lffibra.com.br:8080",
-    "url": "http://speedtest.lffibra.com.br:8080/speedtest/upload.php",
-    "provider": "LF TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-61693",
     "name": "Batam",
     "host": "speedtest.bth.palapa.net.id.prod.hosts.ooklaserver.net:8080",
@@ -1937,16 +1937,6 @@
     "provider": "Symphony Communication PCL",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-62612",
-    "name": "São Paulo",
-    "host": "speedtest.conectiva.srv.br:8080",
-    "url": "http://speedtest.conectiva.srv.br:8080/speedtest/upload.php",
-    "provider": "Conectiva Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2675,6 +2665,16 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-75066",
+    "name": "São Paulo",
+    "host": "ookla.jmfibra.com.br:8080",
+    "url": "http://ookla.jmfibra.com.br:8080/speedtest/upload.php",
+    "provider": "JM FIBRA COMUNICAÇÃO MULTIMIDIA LTDA",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
