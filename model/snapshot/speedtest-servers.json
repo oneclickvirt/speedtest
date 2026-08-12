@@ -210,6 +210,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -247,16 +257,6 @@
     "provider": "JSQY",
     "country": "China",
     "city": "Suzhou",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-16322",
-    "name": "São Paulo",
-    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
-    "provider": "Claro Fibra - SPO",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -437,16 +437,6 @@
     "provider": "Rakuten Mobile, Inc",
     "country": "Japan",
     "city": "Tokyo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-24447",
-    "name": "Shanghai",
-    "host": "mobile.shunicomtest.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://mobile.shunicomtest.com:8080/speedtest/upload.php",
-    "provider": "China Unicom 5G",
-    "country": "China",
-    "city": "Shanghai",
     "availability": "candidate"
   },
   {
@@ -1630,16 +1620,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-56469",
-    "name": "São Paulo",
-    "host": "speedtest-br.hyperfilter.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-br.hyperfilter.com:8080/speedtest/upload.php",
-    "provider": "HyperFilter DDoS Protection Solutions",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-56811",
     "name": "London",
     "host": "thn.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2300,6 +2280,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-69121",
+    "name": "São Paulo",
+    "host": "speed.inetk.com.br:8080",
+    "url": "http://speed.inetk.com.br:8080/speedtest/upload.php",
+    "provider": "INETX",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-69765",
     "name": "Sydney",
     "host": "au.st.spacecore.pro.prod.hosts.ooklaserver.net:8080",
@@ -2667,6 +2657,16 @@
     "provider": "Rocket Fibre",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74601",
+    "name": "São Paulo",
+    "host": "srv1speed.silasnet.com.br:8080",
+    "url": "http://srv1speed.silasnet.com.br:8080/speedtest/upload.php",
+    "provider": "Checkout Online",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
