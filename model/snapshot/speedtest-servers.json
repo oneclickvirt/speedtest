@@ -210,16 +210,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-13506",
-    "name": "Taipei",
-    "host": "speedtest.taifo.com.tw:8080",
-    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
-    "provider": "TAIFO Taiwan",
-    "country": "Taiwan",
-    "city": "Taipei",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -260,6 +250,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-16322",
+    "name": "São Paulo",
+    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
+    "provider": "Claro Fibra - SPO",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-16606",
     "name": "São Paulo",
     "host": "teste10ge.pwfibraoptica.com.br:8080",
@@ -277,16 +277,6 @@
     "provider": "Vocus Communications",
     "country": "Australia",
     "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-18031",
-    "name": "Johor Bahru",
-    "host": "speedtest-jb.tm.com.my.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-jb.tm.com.my:8080/speedtest/upload.php",
-    "provider": "Telekom Malaysia Berhad",
-    "country": "Malaysia",
-    "city": "Johor Bahru",
     "availability": "candidate"
   },
   {
@@ -487,16 +477,6 @@
     "provider": "fdcservers.net",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-26799",
-    "name": "São Paulo",
-    "host": "teste.silvernetdns.net.br:8080",
-    "url": "http://teste.silvernetdns.net.br:8080/speedtest/upload.php",
-    "provider": "SILVERNET",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -810,11 +790,11 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37536",
+    "id": "global-37540",
     "name": "London",
-    "host": "speedtest-lon.veloxserv.net:8080",
-    "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
-    "provider": "VeloxServ Communications",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1230,6 +1210,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1615,6 +1605,16 @@
     "host": "teste.jnetfibras.com.br:8080",
     "url": "http://teste.jnetfibras.com.br:8080/speedtest/upload.php",
     "provider": "JNET FIBRAS",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-56469",
+    "name": "São Paulo",
+    "host": "speedtest-br.hyperfilter.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-br.hyperfilter.com:8080/speedtest/upload.php",
+    "provider": "HyperFilter DDoS Protection Solutions",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2737,16 +2737,6 @@
     "provider": "HostGrap",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-7690",
-    "name": "São Paulo",
-    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
-    "provider": "ASAP GLOBAL TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
