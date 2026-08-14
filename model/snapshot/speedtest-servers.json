@@ -250,16 +250,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-16322",
-    "name": "São Paulo",
-    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
-    "provider": "Claro Fibra - SPO",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-16606",
     "name": "São Paulo",
     "host": "teste10ge.pwfibraoptica.com.br:8080",
@@ -1030,16 +1020,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-44593",
-    "name": "London",
-    "host": "speedtest-lon1.elite.net.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-lon1.elite.net.uk:8080/speedtest/upload.php",
-    "provider": "Elite Limited",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-44817",
     "name": "Singapore",
     "host": "speedtest.sptel.com.prod.hosts.ooklaserver.net:8080",
@@ -1380,16 +1360,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-51518",
-    "name": "Batam",
-    "host": "speedtest.nomaden.tv.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.nomaden.tv:8080/speedtest/upload.php",
-    "provider": "VNT NETWORKS - BTM ID",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-51839",
     "name": "Singapore",
     "host": "speedtest.singapore.globalxtreme.net.prod.hosts.ooklaserver.net:8080",
@@ -1407,16 +1377,6 @@
     "provider": "KF Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-52293",
-    "name": "Batam",
-    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
-    "provider": "PT Lintas Jaringan Nusantara",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -1470,6 +1430,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-53637",
+    "name": "São Paulo",
+    "host": "speedtest.wsnet.com.br:8080",
+    "url": "http://speedtest.wsnet.com.br:8080/speedtest/upload.php",
+    "provider": "WCS",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-53798",
     "name": "São Paulo",
     "host": "velocidade.gigafy.com.br.prod.hosts.ooklaserver.net:8080",
@@ -1477,16 +1447,6 @@
     "provider": "GIGAFY",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-54213",
-    "name": "Sydney",
-    "host": "speedtest-syd0.encoo.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-syd0.encoo.com.au:8080/speedtest/upload.php",
-    "provider": "Encoo",
-    "country": "Australia",
-    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -2530,16 +2490,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2585,6 +2535,16 @@
     "host": "ookla.m3h.as6453.net.prod.hosts.ooklaserver.net:8080",
     "url": "http://ookla.m3h.as6453.net:8080/speedtest/upload.php",
     "provider": "Tata Communications",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73770",
+    "name": "Sydney",
+    "host": "sydspeedtest.solitary.net.au.prod.hosts.ooklaserver.net:8080",
+    "url": "http://sydspeedtest.solitary.net.au:8080/speedtest/upload.php",
+    "provider": "Solitary Technology",
     "country": "Australia",
     "city": "Sydney",
     "availability": "candidate"
@@ -2735,6 +2695,16 @@
     "host": "speedtest.hostgrap.com:8080",
     "url": "http://speedtest.hostgrap.com:8080/speedtest/upload.php",
     "provider": "HostGrap",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-75893",
+    "name": "Singapore",
+    "host": "speedtest.whizcomms.com.sg.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.whizcomms.com.sg:8080/speedtest/upload.php",
+    "provider": "WhizComms",
     "country": "Singapore",
     "city": "Singapore",
     "availability": "candidate"
