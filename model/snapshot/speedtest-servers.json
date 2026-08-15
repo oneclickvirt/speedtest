@@ -310,16 +310,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-19721",
-    "name": "São Paulo",
-    "host": "speedtest.sothis.com.br:8080",
-    "url": "http://speedtest.sothis.com.br:8080/speedtest/upload.php",
-    "provider": "Sothis Telecomunicações",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-20086",
     "name": "São Paulo",
     "host": "ooklaspeedtest.fiberbandalarga.net.br.prod.hosts.ooklaserver.net:8080",
@@ -467,6 +457,16 @@
     "provider": "fdcservers.net",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-26799",
+    "name": "São Paulo",
+    "host": "teste.silvernetdns.net.br:8080",
+    "url": "http://teste.silvernetdns.net.br:8080/speedtest/upload.php",
+    "provider": "SILVERNET",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -860,6 +860,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-3914",
+    "name": "Singapore",
+    "host": "pl.speedtest.singnet.com.sg.prod.hosts.ooklaserver.net:8080",
+    "url": "http://pl.speedtest.singnet.com.sg:8080/speedtest/upload.php",
+    "provider": "Red Dots",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
     "id": "global-39585",
     "name": "Sydney",
     "host": "speedtest-syd-dn1.empower.net.au.prod.hosts.ooklaserver.net:8080",
@@ -1017,6 +1027,16 @@
     "provider": "Hosted Network",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-44593",
+    "name": "London",
+    "host": "speedtest-lon1.elite.net.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-lon1.elite.net.uk:8080/speedtest/upload.php",
+    "provider": "Elite Limited",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -1360,6 +1380,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-51518",
+    "name": "Batam",
+    "host": "speedtest.nomaden.tv.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.nomaden.tv:8080/speedtest/upload.php",
+    "provider": "VNT NETWORKS - BTM ID",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-51839",
     "name": "Singapore",
     "host": "speedtest.singapore.globalxtreme.net.prod.hosts.ooklaserver.net:8080",
@@ -1377,6 +1407,16 @@
     "provider": "KF Telecom",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-52293",
+    "name": "Batam",
+    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
+    "provider": "PT Lintas Jaringan Nusantara",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -1597,16 +1637,6 @@
     "provider": "Zzoomm Plc",
     "country": "United Kingdom",
     "city": "Slough",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-57385",
-    "name": "São Paulo",
-    "host": "speedtest.nocglobal.net.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.nocglobal.net.br:8080/speedtest/upload.php",
-    "provider": "Global Banda Larga",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2147,16 +2177,6 @@
     "provider": "FPT Telecom",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-67909",
-    "name": "London",
-    "host": "speedtest.lon1.hivelocity.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.lon1.hivelocity.net:8080/speedtest/upload.php",
-    "provider": "Hivelocity, Inc.",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2707,6 +2727,16 @@
     "provider": "WhizComms",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-7690",
+    "name": "São Paulo",
+    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
+    "provider": "ASAP GLOBAL TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
