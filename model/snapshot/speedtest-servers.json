@@ -250,6 +250,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-16322",
+    "name": "São Paulo",
+    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
+    "provider": "Claro Fibra - SPO",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-16606",
     "name": "São Paulo",
     "host": "teste10ge.pwfibraoptica.com.br:8080",
@@ -417,16 +427,6 @@
     "provider": "Jump Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-24974",
-    "name": "Keelung",
-    "host": "kl-speedtest.homeplus.net.tw:8080",
-    "url": "http://kl-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
-    "provider": "Homeplus",
-    "country": "Taiwan",
-    "city": "Keelung",
     "availability": "candidate"
   },
   {
@@ -1020,16 +1020,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-44593",
-    "name": "London",
-    "host": "speedtest-lon1.elite.net.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-lon1.elite.net.uk:8080/speedtest/upload.php",
-    "provider": "Elite Limited",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-44817",
     "name": "Singapore",
     "host": "speedtest.sptel.com.prod.hosts.ooklaserver.net:8080",
@@ -1480,6 +1470,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-54213",
+    "name": "Sydney",
+    "host": "speedtest-syd0.encoo.com.au.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-syd0.encoo.com.au:8080/speedtest/upload.php",
+    "provider": "Encoo",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-54359",
     "name": "Singapore",
     "host": "speedtest-sg.napinfo.co.id.prod.hosts.ooklaserver.net:8080",
@@ -1620,6 +1620,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-56935",
+    "name": "Tokyo",
+    "host": "tyo.speedtest.contabo.net:8080",
+    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -1627,16 +1637,6 @@
     "provider": "Zzoomm Plc",
     "country": "United Kingdom",
     "city": "Slough",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-57385",
-    "name": "São Paulo",
-    "host": "speedtest.nocglobal.net.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.nocglobal.net.br:8080/speedtest/upload.php",
-    "provider": "Global Banda Larga",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1867,6 +1867,16 @@
     "provider": "Burstfire Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-61629",
+    "name": "São Paulo",
+    "host": "speedtest.lffibra.com.br:8080",
+    "url": "http://speedtest.lffibra.com.br:8080/speedtest/upload.php",
+    "provider": "LF TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2427,16 +2437,6 @@
     "provider": "BT",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-72200",
-    "name": "São Paulo",
-    "host": "stmc.pongar.com.br:8080",
-    "url": "http://stmc.pongar.com.br:8080/speedtest/upload.php",
-    "provider": "Pongar Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
