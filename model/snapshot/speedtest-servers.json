@@ -210,6 +210,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -277,6 +287,16 @@
     "provider": "Vocus Communications",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-18031",
+    "name": "Johor Bahru",
+    "host": "speedtest-jb.tm.com.my.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-jb.tm.com.my:8080/speedtest/upload.php",
+    "provider": "Telekom Malaysia Berhad",
+    "country": "Malaysia",
+    "city": "Johor Bahru",
     "availability": "candidate"
   },
   {
@@ -427,6 +447,16 @@
     "provider": "Jump Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-24974",
+    "name": "Keelung",
+    "host": "kl-speedtest.homeplus.net.tw:8080",
+    "url": "http://kl-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
+    "provider": "Homeplus",
+    "country": "Taiwan",
+    "city": "Keelung",
     "availability": "candidate"
   },
   {
@@ -780,13 +810,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1190,16 +1220,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
-    "availability": "candidate"
-  },
-  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1470,16 +1490,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-54213",
-    "name": "Sydney",
-    "host": "speedtest-syd0.encoo.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-syd0.encoo.com.au:8080/speedtest/upload.php",
-    "provider": "Encoo",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-54359",
     "name": "Singapore",
     "host": "speedtest-sg.napinfo.co.id.prod.hosts.ooklaserver.net:8080",
@@ -1620,16 +1630,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -1637,6 +1637,16 @@
     "provider": "Zzoomm Plc",
     "country": "United Kingdom",
     "city": "Slough",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-57385",
+    "name": "São Paulo",
+    "host": "speedtest.nocglobal.net.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.nocglobal.net.br:8080/speedtest/upload.php",
+    "provider": "Global Banda Larga",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2110,16 +2120,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-64732",
-    "name": "São Paulo",
-    "host": "speedtest.likenettelecom.com.br:8080",
-    "url": "http://speedtest.likenettelecom.com.br:8080/speedtest/upload.php",
-    "provider": "LIKENET TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-65184",
     "name": "Sydney",
     "host": "spd03-syd.au.superloop.com.prod.hosts.ooklaserver.net:8080",
@@ -2327,16 +2327,6 @@
     "provider": "BT",
     "country": "United Kingdom",
     "city": "Guildford",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-70553",
-    "name": "São Paulo",
-    "host": "speed-sp.mcdtelecom.com.br:8080",
-    "url": "http://speed-sp.mcdtelecom.com.br:8080/speedtest/upload.php",
-    "provider": "MCD Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2560,16 +2550,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73631",
-    "name": "Sydney",
-    "host": "ookla.m3h.as6453.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://ookla.m3h.as6453.net:8080/speedtest/upload.php",
-    "provider": "Tata Communications",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73770",
     "name": "Sydney",
     "host": "sydspeedtest.solitary.net.au.prod.hosts.ooklaserver.net:8080",
@@ -2740,13 +2720,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-7690",
-    "name": "São Paulo",
-    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
-    "provider": "ASAP GLOBAL TELECOM",
+    "id": "global-75947",
+    "name": "Sao Paulo",
+    "host": "speedtest.velink.net.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.velink.net.br:8080/speedtest/upload.php",
+    "provider": "VELiNK FiBRA",
     "country": "Brazil",
-    "city": "São Paulo",
+    "city": "Sao Paulo",
     "availability": "candidate"
   },
   {
