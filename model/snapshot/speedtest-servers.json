@@ -980,16 +980,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-43044",
-    "name": "São Paulo",
-    "host": "speedtestspo.telium.com.br:8080",
-    "url": "http://speedtestspo.telium.com.br:8080/speedtest/upload.php",
-    "provider": "Telium Network",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-43255",
     "name": "Batam",
     "host": "speedtest.batam.telkomsel.com.prod.hosts.ooklaserver.net:8080",
@@ -1490,16 +1480,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-54213",
-    "name": "Sydney",
-    "host": "speedtest-syd0.encoo.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-syd0.encoo.com.au:8080/speedtest/upload.php",
-    "provider": "Encoo",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-54359",
     "name": "Singapore",
     "host": "speedtest-sg.napinfo.co.id.prod.hosts.ooklaserver.net:8080",
@@ -1717,6 +1697,16 @@
     "provider": "Spintel",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-58548",
+    "name": "São Paulo",
+    "host": "stmc.edumartelecom.com.br:8080",
+    "url": "http://stmc.edumartelecom.com.br:8080/speedtest/upload.php",
+    "provider": "Edumar Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2007,6 +1997,16 @@
     "provider": "Real World",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
