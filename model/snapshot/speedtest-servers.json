@@ -300,16 +300,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-18475",
-    "name": "Keelung",
-    "host": "klv3-1.speedtest.idv.tw:8080",
-    "url": "http://klv3-1.speedtest.idv.tw:8080/speedtest/upload.php",
-    "provider": "Chief Telecom",
-    "country": "Taiwan",
-    "city": "Keelung",
-    "availability": "candidate"
-  },
-  {
     "id": "global-18713",
     "name": "Chatswood",
     "host": "cha1.speedtest.telstra.net:8080",
@@ -940,16 +930,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-41358",
-    "name": "Singapore",
-    "host": "sin.speedtest.contabo.net:8080",
-    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-41801",
     "name": "Singapore",
     "host": "speedtest-eqx-sg1.ixtelecom.net.prod.hosts.ooklaserver.net:8080",
@@ -967,16 +947,6 @@
     "provider": "PT XLSMART Telecom Sejahtera",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-43044",
-    "name": "São Paulo",
-    "host": "speedtestspo.telium.com.br:8080",
-    "url": "http://speedtestspo.telium.com.br:8080/speedtest/upload.php",
-    "provider": "Telium Network",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1640,6 +1610,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-56935",
+    "name": "Tokyo",
+    "host": "tyo.speedtest.contabo.net:8080",
+    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-57318",
     "name": "Slough",
     "host": "speedtest.zzoomm.com:8080",
@@ -1937,6 +1917,16 @@
     "provider": "Symphony Communication PCL",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-62612",
+    "name": "São Paulo",
+    "host": "speedtest.conectiva.srv.br:8080",
+    "url": "http://speedtest.conectiva.srv.br:8080/speedtest/upload.php",
+    "provider": "Conectiva Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2587,16 +2577,6 @@
     "provider": "STARTNET SP",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-74095",
-    "name": "Batam",
-    "host": "speedtest.hydra.co.id:8080",
-    "url": "http://speedtest.hydra.co.id:8080/speedtest/upload.php",
-    "provider": "PT HYDRA MEDIA INDONESIA",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
