@@ -256,7 +256,7 @@ func NearbySpeedTest() {
 		}
 		return
 	}
-	analyzer := speedtest.NewPacketLossAnalyzer(nil)
+	analyzer := speedtestClient.NewPacketLossAnalyzer()
 	var LowestLatency time.Duration
 	var NearbyServer *speedtest.Server
 	var PacketLoss string
@@ -385,7 +385,7 @@ func customTargetsSpeedTest(targets speedtest.Servers, num int, language string)
 		}
 		return pinged[i].server.Latency < pinged[j].server.Latency
 	})
-	analyzer := speedtest.NewPacketLossAnalyzer(nil)
+	analyzer := speedtestClient.NewPacketLossAnalyzer()
 	var PacketLoss string
 	if len(pinged) == 0 {
 		fmt.Println("No match servers")
