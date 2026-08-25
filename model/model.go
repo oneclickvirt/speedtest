@@ -1,6 +1,6 @@
 package model
 
-const SpeedTestVersion = "v0.0.20"
+const SpeedTestVersion = "v0.0.21"
 
 var EnableLoger = false
 var (
