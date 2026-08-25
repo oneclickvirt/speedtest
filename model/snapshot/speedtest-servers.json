@@ -300,6 +300,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-18475",
+    "name": "Keelung",
+    "host": "klv3-1.speedtest.idv.tw:8080",
+    "url": "http://klv3-1.speedtest.idv.tw:8080/speedtest/upload.php",
+    "provider": "Chief Telecom",
+    "country": "Taiwan",
+    "city": "Keelung",
+    "availability": "candidate"
+  },
+  {
     "id": "global-18713",
     "name": "Chatswood",
     "host": "cha1.speedtest.telstra.net:8080",
@@ -770,6 +780,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37663",
     "name": "São Paulo",
     "host": "teste.surubiminternet.com.br:8080",
@@ -927,6 +947,16 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-41358",
+    "name": "Singapore",
+    "host": "sin.speedtest.contabo.net:8080",
+    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -1480,16 +1510,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-54360",
-    "name": "Sydney",
-    "host": "syd.speedtest.contabo.net:8080",
-    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-54586",
     "name": "Basiildon",
     "host": "speedtest.ths.connectfibre.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -1607,16 +1627,6 @@
     "provider": "GSL Networks",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -2360,16 +2370,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-71174",
-    "name": "São Paulo",
-    "host": "ookla3.e3telecom.com.br:8080",
-    "url": "http://ookla3.e3telecom.com.br:8080/speedtest/upload.php",
-    "provider": "E3 Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-71346",
     "name": "Batam",
     "host": "speedtest.nusadata.co.id.prod.hosts.ooklaserver.net:8080",
@@ -2425,6 +2425,16 @@
     "host": "stmc.pongar.com.br:8080",
     "url": "http://stmc.pongar.com.br:8080/speedtest/upload.php",
     "provider": "Pongar Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-72244",
+    "name": "São Paulo",
+    "host": "speedmc.paraisofibra.com.br:8080",
+    "url": "http://speedmc.paraisofibra.com.br:8080/speedtest/upload.php",
+    "provider": "Paraíso Fibra",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2487,16 +2497,6 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
