@@ -36,6 +36,22 @@ type updateConfig struct {
 	Manifest      string
 	Minimum       int
 	Timeout       time.Duration
+	AllowStale    bool
+}
+
+// remoteFetchError marks a transport, HTTP, or body-read failure. A successful
+// response with malformed data is intentionally not wrapped in this type: it
+// needs human attention instead of silently retaining stale data.
+type remoteFetchError struct {
+	err error
+}
+
+func (err *remoteFetchError) Error() string {
+	return err.err.Error()
+}
+
+func (err *remoteFetchError) Unwrap() error {
+	return err.err
 }
 
 type stringListFlag []string
@@ -62,6 +78,7 @@ func main() {
 	flag.StringVar(&config.Manifest, "manifest", "model/snapshot/manifest.json", "snapshot manifest output path")
 	flag.IntVar(&config.Minimum, "minimum", 10, "minimum valid servers")
 	flag.DurationVar(&config.Timeout, "timeout", 30*time.Second, "upstream request timeout")
+	flag.BoolVar(&config.AllowStale, "allow-stale", false, "retain a verified embedded snapshot when all remote fetches are unavailable")
 	flag.Parse()
 	config.GlobalSources = append([]string(nil), globalSources...)
 	if err := updateSnapshot(context.Background(), http.DefaultClient, config); err != nil {
@@ -87,6 +104,10 @@ func updateSnapshot(ctx context.Context, client *http.Client, config updateConfi
 	defer cancel()
 	raw, err := fetchSource(requestCtx, client, config.Source)
 	if err != nil {
+		var fetchErr *remoteFetchError
+		if errors.As(err, &fetchErr) {
+			return retainVerifiedStaleSnapshot(config, err)
+		}
 		return err
 	}
 	servers, err := parseServerMetadata(raw)
@@ -95,6 +116,10 @@ func updateSnapshot(ctx context.Context, client *http.Client, config updateConfi
 	}
 	globalServers, err := fetchGlobalServers(requestCtx, client, config.GlobalSources)
 	if err != nil {
+		var fetchErr *remoteFetchError
+		if errors.As(err, &fetchErr) {
+			return retainVerifiedStaleSnapshot(config, err)
+		}
 		return err
 	}
 	servers = append(servers, globalServers...)
@@ -107,6 +132,16 @@ func updateSnapshot(ctx context.Context, client *http.Client, config updateConfi
 		return fmt.Errorf("validate registry: %w", err)
 	}
 	return replaceSnapshot(config.Output, config.Manifest, data)
+}
+
+func retainVerifiedStaleSnapshot(config updateConfig, upstreamErr error) error {
+	if !config.AllowStale {
+		return upstreamErr
+	}
+	if err := validateExistingSnapshot(config.Output, config.Manifest, config.Minimum); err != nil {
+		return fmt.Errorf("%w; cannot retain stale snapshot: %v", upstreamErr, err)
+	}
+	return nil
 }
 
 func fetchGlobalServers(ctx context.Context, client *http.Client, sources []string) ([]model.ServerMetadata, error) {
@@ -144,18 +179,27 @@ func fetchGlobalServers(ctx context.Context, client *http.Client, sources []stri
 
 	ordered := make([][]model.ServerMetadata, len(endpoints))
 	errorsBySource := make([]error, 0, len(endpoints))
+	parseErrors := make([]error, 0)
 	successes := 0
 	for range endpoints {
 		result := <-results
 		if result.err != nil {
-			errorsBySource = append(errorsBySource, fmt.Errorf("global source %d: %w", result.index+1, result.err))
+			wrapped := fmt.Errorf("global source %d: %w", result.index+1, result.err)
+			errorsBySource = append(errorsBySource, wrapped)
+			var fetchErr *remoteFetchError
+			if !errors.As(result.err, &fetchErr) {
+				parseErrors = append(parseErrors, wrapped)
+			}
 			continue
 		}
 		ordered[result.index] = result.servers
 		successes++
 	}
+	if len(parseErrors) > 0 {
+		return nil, errors.Join(parseErrors...)
+	}
 	if successes == 0 {
-		return nil, fmt.Errorf("all global registries failed: %w", errors.Join(errorsBySource...))
+		return nil, &remoteFetchError{err: fmt.Errorf("all global registries failed: %w", errors.Join(errorsBySource...))}
 	}
 
 	servers := make([]model.ServerMetadata, 0)
@@ -174,15 +218,15 @@ func fetchSource(ctx context.Context, client *http.Client, endpoint string) ([]b
 	request.Header.Set("User-Agent", "oneclickvirt-speedtest-registry-sync/1")
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, fmt.Errorf("fetch registry: %w", err)
+		return nil, &remoteFetchError{err: fmt.Errorf("fetch registry: %w", err)}
 	}
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("fetch registry: HTTP %d", response.StatusCode)
+		return nil, &remoteFetchError{err: fmt.Errorf("fetch registry: HTTP %d", response.StatusCode)}
 	}
 	raw, err := io.ReadAll(io.LimitReader(response.Body, 16<<20))
 	if err != nil {
-		return nil, fmt.Errorf("read registry: %w", err)
+		return nil, &remoteFetchError{err: fmt.Errorf("read registry: %w", err)}
 	}
 	return raw, nil
 }
@@ -248,7 +292,7 @@ func replaceSnapshot(output, manifestOutput string, candidate []byte) error {
 			if countErr == nil && currentCount > 0 && count*100 < currentCount*65 {
 				return fmt.Errorf("registry count dropped from %d to %d", currentCount, count)
 			}
-			if bytes.Equal(normalizedCurrent, candidate) && manifestMatches(manifestOutput, candidate, count) {
+			if bytes.Equal(current, candidate) && manifestMatches(manifestOutput, output, candidate, count) {
 				return nil
 			}
 		}
@@ -261,17 +305,54 @@ func replaceSnapshot(output, manifestOutput string, candidate []byte) error {
 	return writeAtomicSnapshot(manifestOutput, manifestData)
 }
 
-func manifestMatches(path string, snapshot []byte, count int) bool {
+func manifestMatches(path, output string, snapshot []byte, count int) bool {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return false
 	}
 	var manifest snapshotManifest
-	if json.Unmarshal(data, &manifest) != nil || manifest.Schema != model.SpeedtestRegistrySchema || manifest.File != "speedtest-servers.json" || manifest.Count != count {
+	if json.Unmarshal(data, &manifest) != nil || manifest.Schema != model.SpeedtestRegistrySchema || manifest.File != filepath.Base(output) || manifest.Count != count {
 		return false
 	}
 	hash := sha256.Sum256(snapshot)
 	return manifest.SHA256 == hex.EncodeToString(hash[:])
+}
+
+func validateExistingSnapshot(output, manifestOutput string, minimum int) error {
+	snapshot, err := os.ReadFile(output)
+	if err != nil {
+		return fmt.Errorf("read existing snapshot: %w", err)
+	}
+	normalized, err := model.NormalizeServerRegistrySnapshot(snapshot, minimum)
+	if err != nil {
+		return fmt.Errorf("validate existing snapshot: %w", err)
+	}
+	if !bytes.Equal(snapshot, normalized) {
+		return errors.New("existing snapshot is not canonical")
+	}
+	count, err := snapshotCount(snapshot)
+	if err != nil {
+		return fmt.Errorf("count existing snapshot: %w", err)
+	}
+	manifestData, err := os.ReadFile(manifestOutput)
+	if err != nil {
+		return fmt.Errorf("read existing manifest: %w", err)
+	}
+	var manifest snapshotManifest
+	if err := json.Unmarshal(manifestData, &manifest); err != nil {
+		return fmt.Errorf("decode existing manifest: %w", err)
+	}
+	if manifest.Schema != model.SpeedtestRegistrySchema || manifest.File != filepath.Base(output) || manifest.Count != count {
+		return errors.New("existing manifest does not match snapshot metadata")
+	}
+	if _, err := time.Parse(time.RFC3339, manifest.GeneratedAt); err != nil {
+		return fmt.Errorf("validate existing manifest timestamp: %w", err)
+	}
+	hash := sha256.Sum256(snapshot)
+	if manifest.SHA256 != hex.EncodeToString(hash[:]) {
+		return errors.New("existing manifest hash does not match snapshot")
+	}
+	return nil
 }
 
 func writeAtomicSnapshot(output string, data []byte) error {

@@ -14,6 +14,7 @@ import (
 	"time"
 
 	. "github.com/oneclickvirt/defaultset"
+	"github.com/oneclickvirt/basics/network/resolver"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/oneclickvirt/speedtest/sp"
 )
@@ -27,6 +28,7 @@ type cliOptions struct {
 	operator    string
 	platform    string
 	method      string
+	dnsMode     string
 	num         int
 	registry    bool
 }
@@ -56,6 +58,7 @@ func newSpeedtestFlagSet(options *cliOptions) *flag.FlagSet {
 	set.StringVar(&options.platform, "pf", "net", "Platform parameter (options: net, cn)")
 	set.StringVar(&options.operator, "opt", "global", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
 	set.StringVar(&options.method, "m", "speedtest", "Test Method parameter (options: origin, speedtest, speedtest-go)")
+	set.StringVar(&options.dnsMode, "dns-mode", "auto", "DNS mode (auto, system, doh, or dot)")
 	set.IntVar(&options.num, "num", -1, "Number of test servers, default -1 not to limit")
 	set.BoolVar(&options.registry, "registry", false, "Load, probe, and select registry servers as JSON")
 	return set
@@ -80,6 +83,7 @@ func normalizeAndValidateCLI(options cliOptions, positional []string) (cliOption
 	options.platform = strings.ToLower(strings.TrimSpace(options.platform))
 	options.operator = strings.ToLower(strings.TrimSpace(options.operator))
 	options.method = strings.ToLower(strings.TrimSpace(options.method))
+	options.dnsMode = strings.ToLower(strings.TrimSpace(options.dnsMode))
 
 	if len(positional) > 0 {
 		return options, fmt.Errorf("unexpected positional arguments: %s", strings.Join(positional, " "))
@@ -96,6 +100,9 @@ func normalizeAndValidateCLI(options cliOptions, positional []string) (cliOption
 	}
 	if options.method != "origin" && options.method != "speedtest" && options.method != "speedtest-go" {
 		return options, fmt.Errorf("invalid -m %q: supported values are origin, speedtest, and speedtest-go", options.method)
+	}
+	if options.dnsMode != "auto" && options.dnsMode != "system" && options.dnsMode != "doh" && options.dnsMode != "dot" {
+		return options, fmt.Errorf("invalid -dns-mode %q: supported values are auto, system, doh, and dot", options.dnsMode)
 	}
 	if options.num == 0 || options.num < -1 {
 		return options, fmt.Errorf("invalid -num %d: use -1 or a positive number", options.num)
@@ -220,6 +227,10 @@ func main() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "parameter error:", err)
 		os.Exit(2)
+	}
+	dnsStatus := resolver.Configure(context.Background(), resolver.Config{Mode: resolver.ParseMode(options.dnsMode)})
+	if dnsStatus.Active == resolver.ModeDoH || dnsStatus.Active == resolver.ModeDoT {
+		defer resolver.Shutdown()
 	}
 	if options.registry {
 		if err := writeRegistryReportForLanguage(context.Background(), os.Stdout, nil, model.DefaultRegistrySources(), options.num, (model.ServerDialFunc)((&net.Dialer{}).DialContext), options.language); err != nil {

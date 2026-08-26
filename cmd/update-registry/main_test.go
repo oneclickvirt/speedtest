@@ -96,6 +96,149 @@ func TestUpdateSnapshotRejectsAllFailedGlobalSources(t *testing.T) {
 	}
 }
 
+func TestUpdateSnapshotRetainsVerifiedStaleSnapshotWhenGlobalSourcesFail(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/china" {
+			_, _ = w.Write([]byte(`[{"id":"1","host":"cn.example:443","name":"China"}]`))
+			return
+		}
+		http.Error(w, "unavailable", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	directory := t.TempDir()
+	output := filepath.Join(directory, "speedtest-servers.json")
+	manifest := filepath.Join(directory, "manifest.json")
+	seed := updateConfig{Source: server.URL + "/china", Output: output, Manifest: manifest, Minimum: 1, Timeout: time.Second}
+	if err := updateSnapshot(context.Background(), server.Client(), seed); err != nil {
+		t.Fatal(err)
+	}
+	beforeSnapshot, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	beforeManifest, err := os.ReadFile(manifest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = updateSnapshot(context.Background(), server.Client(), updateConfig{
+		Source:        server.URL + "/china",
+		GlobalSources: []string{server.URL + "/failed-a", server.URL + "/failed-b"},
+		Output:        output,
+		Manifest:      manifest,
+		Minimum:       1,
+		Timeout:       time.Second,
+		AllowStale:    true,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	afterSnapshot, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatal(err)
+	}
+	afterManifest, err := os.ReadFile(manifest)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(beforeSnapshot) != string(afterSnapshot) || string(beforeManifest) != string(afterManifest) {
+		t.Fatal("stale retention changed verified snapshot files")
+	}
+}
+
+func TestUpdateSnapshotRejectsStaleRetentionWithoutVerifiedSnapshot(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		http.Error(w, "unavailable", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	directory := t.TempDir()
+	err := updateSnapshot(context.Background(), server.Client(), updateConfig{
+		Source:     server.URL,
+		Output:     filepath.Join(directory, "speedtest-servers.json"),
+		Manifest:   filepath.Join(directory, "manifest.json"),
+		Minimum:    1,
+		Timeout:    time.Second,
+		AllowStale: true,
+	})
+	if err == nil {
+		t.Fatal("expected stale retention without a snapshot to fail")
+	}
+}
+
+func TestUpdateSnapshotRejectsStaleRetentionWithInvalidSnapshot(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		http.Error(w, "unavailable", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+	directory := t.TempDir()
+	output := filepath.Join(directory, "speedtest-servers.json")
+	if err := os.WriteFile(output, []byte(`not-json`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	err := updateSnapshot(context.Background(), server.Client(), updateConfig{
+		Source:     server.URL,
+		Output:     output,
+		Manifest:   filepath.Join(directory, "manifest.json"),
+		Minimum:    1,
+		Timeout:    time.Second,
+		AllowStale: true,
+	})
+	if err == nil {
+		t.Fatal("expected stale retention with an invalid snapshot to fail")
+	}
+}
+
+func TestUpdateSnapshotDoesNotMaskInvalidSourceConfiguration(t *testing.T) {
+	directory := t.TempDir()
+	output := filepath.Join(directory, "speedtest-servers.json")
+	manifest := filepath.Join(directory, "manifest.json")
+	if err := replaceSnapshot(output, manifest, []byte("[{\"id\":\"1\",\"host\":\"example.test:443\",\"name\":\"Fixture\"}]\n")); err != nil {
+		t.Fatal(err)
+	}
+	err := updateSnapshot(context.Background(), nil, updateConfig{
+		Source:     "://not-a-url",
+		Output:     output,
+		Manifest:   manifest,
+		Minimum:    1,
+		Timeout:    time.Second,
+		AllowStale: true,
+	})
+	if err == nil {
+		t.Fatal("expected invalid source configuration to fail")
+	}
+}
+
+func TestUpdateSnapshotRejectsMalformedGlobalResponseEvenWhenStaleAllowed(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/china":
+			_, _ = w.Write([]byte(`[{"id":"1","host":"cn.example:443","name":"China"}]`))
+		case "/malformed":
+			_, _ = w.Write([]byte(`not-json`))
+		default:
+			_, _ = w.Write([]byte(`[{"id":"9001","host":"global.example:443","name":"Global"}]`))
+		}
+	}))
+	defer server.Close()
+	directory := t.TempDir()
+	output := filepath.Join(directory, "speedtest-servers.json")
+	manifest := filepath.Join(directory, "manifest.json")
+	if err := updateSnapshot(context.Background(), server.Client(), updateConfig{Source: server.URL + "/china", Output: output, Manifest: manifest, Minimum: 1, Timeout: time.Second}); err != nil {
+		t.Fatal(err)
+	}
+	err := updateSnapshot(context.Background(), server.Client(), updateConfig{
+		Source:        server.URL + "/china",
+		GlobalSources: []string{server.URL + "/malformed", server.URL + "/global"},
+		Output:        output,
+		Manifest:      manifest,
+		Minimum:       1,
+		Timeout:       time.Second,
+		AllowStale:    true,
+	})
+	if err == nil {
+		t.Fatal("expected malformed successful global response to fail")
+	}
+}
+
 func TestDefaultGlobalSourcesUseDistinctGeographicAnchors(t *testing.T) {
 	if len(defaultGlobalSourceURLs) != 5 {
 		t.Fatalf("default global source count = %d", len(defaultGlobalSourceURLs))

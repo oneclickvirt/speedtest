@@ -11,6 +11,7 @@
 - [x] 基于[speedtest.net-爬虫](https://github.com/spiritLHLS/speedtest.net-CN-ID)、[speedtest.cn-爬虫](https://github.com/spiritLHLS/speedtest.cn-CN-ID)的数据
 - [x] 基于[speedtest-go](https://github.com/showwin/speedtest-go)二次开发，go原生实现就近测速无需使用shell命令
 - [x] 已适配 speedtest-go v1.8.2：用户配置请求使用随机缓存旁路参数，避免共享 CDN 返回其他客户端的配置
+- [x] `-dns-mode=auto` 在本地 DNS 被独立探测确认失效时，仅在当前进程中选择最低延迟的内置 DoH/DoT；瞬时网络错误不会改变系统解析路径
 - [x] 主体逻辑借鉴了[ecsspeed](https://github.com/spiritLHLS/ecsspeed)
 - [x] 使用shell命令使用```speedtest```进行测速
 
@@ -60,7 +61,7 @@ spt
 
 进行测试
 
-无环境依赖，理论上适配所有系统和主流架构，更多架构请查看 https://github.com/oneclickvirt/speedtest/releases/tag/output
+无环境依赖，理论上适配所有系统和主流架构，更多架构请查看 https://github.com/oneclickvirt/speedtest/releases
 
 ```
 Usage: spt [options]
@@ -70,6 +71,8 @@ Usage: spt [options]
         Language parameter (options: en, zh) (default "zh")
   -m string
         Test Method parameter (options: origin, speedtest, speedtest-go) (default "speedtest")
+  -dns-mode string
+        DNS mode (auto, system, doh, or dot) (default "auto")
   -nearby
         Test only nearby servers
   -num int
@@ -92,5 +95,5 @@ rm -rf /usr/bin/spt
 ## 在Golang中使用
 
 ```
-go get github.com/oneclickvirt/speedtest@v0.0.24
+go get github.com/oneclickvirt/speedtest@v0.0.25
 ```

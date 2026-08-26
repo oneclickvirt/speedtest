@@ -35,13 +35,16 @@ case $os in
 Linux)
   case $arch in
   "x86_64" | "x86" | "amd64" | "x64")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-linux-amd64"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-linux-amd64"
     ;;
   "i386" | "i686")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-linux-386"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-linux-386"
     ;;
-  "armv7l" | "armv8" | "armv8l" | "aarch64" | "arm64")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-linux-arm64"
+  "armv7l" | "armv8" | "armv8l")
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-linux-arm"
+    ;;
+  "aarch64" | "arm64")
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-linux-arm64"
     ;;
   *)
     echo "Unsupported architecture: $arch"
@@ -52,13 +55,13 @@ Linux)
 Darwin)
   case $arch in
   "x86_64" | "x86" | "amd64" | "x64")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-darwin-amd64"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-darwin-amd64"
     ;;
   "i386" | "i686")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-darwin-386"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-darwin-386"
     ;;
-  "armv7l" | "armv8" | "armv8l" | "aarch64" | "arm64")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-darwin-arm64"
+  "aarch64" | "arm64")
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-darwin-arm64"
     ;;
   *)
     echo "Unsupported architecture: $arch"
@@ -69,13 +72,16 @@ Darwin)
 FreeBSD)
   case $arch in
   amd64)
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-freebsd-amd64"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-freebsd-amd64"
     ;;
   "i386" | "i686")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-freebsd-386"
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-freebsd-386"
     ;;
-  "armv7l" | "armv8" | "armv8l" | "aarch64" | "arm64")
-    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/download/output/speedtest-freebsd-arm64"
+  "armv7l" | "armv8" | "armv8l")
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-freebsd-arm"
+    ;;
+  "aarch64" | "arm64")
+    wget -O spt "${cdn_success_url}https://github.com/oneclickvirt/speedtest/releases/latest/download/speedtest-freebsd-arm64"
     ;;
   *)
     echo "Unsupported architecture: $arch"

@@ -1,91 +1,35 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: speedtest-release
-  cancel-in-progress: false
+  group: speedtest-ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - name: Setup Go
-        uses: actions/setup-go@v7
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
           check-latest: true
-      - name: Prepare release version
-        id: release
+      - name: Verify module, upstream contract, and source
+        shell: bash
         run: |
           set -euo pipefail
-          TAG="$(sed -n 's/^const SpeedTestVersion = "\(v[0-9.]*\)"$/\1/p' model/model.go)"
-          if [[ -z "$TAG" ]]; then
-            echo "Unable to derive SpeedTestVersion from model/model.go" >&2
-            exit 1
-          fi
-          if [[ "${GITHUB_REF_TYPE}" != "branch" ]]; then
-            echo "Release workflow must run from a branch, got ref type ${GITHUB_REF_TYPE}" >&2
-            exit 1
-          fi
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
-      - name: Refresh embedded registry before release
-        run: |
-          set -euo pipefail
-          go run ./cmd/update-registry \
-            -output model/snapshot/speedtest-servers.json \
-            -manifest model/snapshot/manifest.json
-      - name: Test
-        # 移除 -coverprofile 参数以避免在某些 Go 版本/环境中触发 `go tool covdata` 错误
-        run: |
-          set -euo pipefail
+          go mod verify
+          test "$(go list -m -f '{{.Version}}' github.com/showwin/speedtest-go)" = "v1.8.2"
           go test -race -count=1 ./...
           go vet ./...
+          go build -o "$RUNNER_TEMP/speedtest" ./cmd
           git diff --check
-      - name: Verify upstream speedtest-go version
-        run: |
-          set -euo pipefail
-          grep -Fq 'github.com/showwin/speedtest-go v1.8.2' go.mod
-          test "$(go list -m -f '{{.Version}}' github.com/showwin/speedtest-go)" = 'v1.8.2'
-      - name: Commit release registry and documentation
-        if: success()
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          set -euo pipefail
-          sed -i "s|go get github.com/oneclickvirt/speedtest@.*|go get github.com/oneclickvirt/speedtest@${TAG}|" README.md
-          git diff --check
-          git add model/snapshot/speedtest-servers.json model/snapshot/manifest.json README.md
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m "chore: refresh speedtest registry for ${TAG}"
-          git push origin HEAD:"${GITHUB_REF_NAME}"
-      - name: Create Tag
-        if: success()
-        env:
-          TAG: ${{ steps.release.outputs.tag }}
-        run: |
-          set -euo pipefail
-          git fetch --force --tags origin
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "Release tag already exists: $TAG" >&2
-            exit 1
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git tag -a "$TAG" -m "Release $TAG"
-          git push origin "refs/tags/$TAG"

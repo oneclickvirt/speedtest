@@ -4,6 +4,16 @@ on:
   schedule:
     - cron: "31 3 * * *"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-registry.yml"
+      - ".github/workflows/release.yaml"
+      - "cmd/update-registry/**"
+      - "model/registry*.go"
+      - "model/snapshot/**"
+      - "go.mod"
+      - "go.sum"
 
 permissions:
   contents: write
@@ -21,7 +31,7 @@ jobs:
         with:
           go-version-file: go.mod
       - name: Update embedded registry
-        run: go run ./cmd/update-registry -output model/snapshot/speedtest-servers.json -manifest model/snapshot/manifest.json
+        run: go run ./cmd/update-registry -output model/snapshot/speedtest-servers.json -manifest model/snapshot/manifest.json -allow-stale
       - name: Verify snapshot
         run: |
           go test -race ./...
