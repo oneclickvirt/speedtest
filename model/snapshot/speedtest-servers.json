@@ -290,6 +290,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-18108",
+    "name": "Batam",
+    "host": "corebth4.tri.co.id:8080",
+    "url": "http://corebth4.tri.co.id:8080/speedtest/upload.php",
+    "provider": "PT. Indosat Tbk",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-18348",
     "name": "São Paulo",
     "host": "stmc.ipconectelecom.com.br:8080",
@@ -787,16 +797,6 @@
     "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1507,6 +1507,16 @@
     "provider": "Matrix NAP Info",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-54360",
+    "name": "Sydney",
+    "host": "syd.speedtest.contabo.net:8080",
+    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Australia",
+    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -2695,6 +2705,16 @@
     "host": "speedtest.velink.net.br.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.velink.net.br:8080/speedtest/upload.php",
     "provider": "VELiNK FiBRA",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76018",
+    "name": "São Paulo",
+    "host": "speedtest.ultralineoficial.com.br:8080",
+    "url": "http://speedtest.ultralineoficial.com.br:8080/speedtest/upload.php",
+    "provider": "ULTRALINE",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
