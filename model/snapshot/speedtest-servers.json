@@ -800,26 +800,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37721",
     "name": "London",
     "host": "speedtest.brightstar.cloud.prod.hosts.ooklaserver.net:8080",
@@ -837,16 +817,6 @@
     "provider": "Telekomunikasi Indonesia International Pte Ltd (Telin Singapore)",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37994",
-    "name": "Fairlight",
-    "host": "speedtest.thryve.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thryve.com.au:8080/speedtest/upload.php",
-    "provider": "Thryve Group - Thryve Broadband",
-    "country": "Australia",
-    "city": "Fairlight",
     "availability": "candidate"
   },
   {
@@ -1017,6 +987,16 @@
     "provider": "Telkomsel",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-44256",
+    "name": "São Paulo",
+    "host": "ooklaspeed.reajnet.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://ooklaspeed.reajnet.com.br:8080/speedtest/upload.php",
+    "provider": "REAJNet Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1720,16 +1700,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-58548",
-    "name": "São Paulo",
-    "host": "stmc.edumartelecom.com.br:8080",
-    "url": "http://stmc.edumartelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Edumar Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-59016",
     "name": "Singapore",
     "host": "speedtest-sg.cbn.id:8080",
@@ -2280,16 +2250,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-69840",
-    "name": "Singapore",
-    "host": "sg-bgp-speedtest.nearoute.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://sg-bgp-speedtest.nearoute.io:8080/speedtest/upload.php",
-    "provider": "Nearoute Limited",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-70133",
     "name": "Daejeon",
     "host": "speed.sparcs.net.prod.hosts.ooklaserver.net:8080",
@@ -2317,6 +2277,16 @@
     "provider": "BT",
     "country": "United Kingdom",
     "city": "Guildford",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-70553",
+    "name": "São Paulo",
+    "host": "speed-sp.mcdtelecom.com.br:8080",
+    "url": "http://speed-sp.mcdtelecom.com.br:8080/speedtest/upload.php",
+    "provider": "MCD Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2477,6 +2447,16 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
