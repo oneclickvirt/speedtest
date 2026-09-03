@@ -280,6 +280,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-16606",
+    "name": "São Paulo",
+    "host": "teste10ge.pwfibraoptica.com.br:8080",
+    "url": "http://teste10ge.pwfibraoptica.com.br:8080/speedtest/upload.php",
+    "provider": "PW Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-17618",
     "name": "Sydney",
     "host": "speedtest-syd.vocus.net.prod.hosts.ooklaserver.net:8080",
@@ -690,6 +700,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-34846",
+    "name": "London",
+    "host": "speedtest-thn.uk.airbytes.network:8080",
+    "url": "http://speedtest-thn.uk.airbytes.network:8080/speedtest/upload.php",
+    "provider": "Airbytes",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-34967",
     "name": "Sydney",
     "host": "nsw.speedtest.leaptel.com.au.prod.hosts.ooklaserver.net:8080",
@@ -767,6 +787,16 @@
     "provider": "TH Internet",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -910,6 +940,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-40724",
+    "name": "São Paulo",
+    "host": "sp.cpgnet.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://sp.cpgnet.com.br:8080/speedtest/upload.php",
+    "provider": "CPGNet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-40788",
     "name": "London",
     "host": "speedtest02a.web.zen.net.uk.prod.hosts.ooklaserver.net:8080",
@@ -1007,6 +1047,16 @@
     "provider": "Hosted Network",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-44593",
+    "name": "London",
+    "host": "speedtest-lon1.elite.net.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-lon1.elite.net.uk:8080/speedtest/upload.php",
+    "provider": "Elite Limited",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -1410,16 +1460,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-52397",
-    "name": "São Paulo",
-    "host": "stmc.hbnets.com.br:8080",
-    "url": "http://stmc.hbnets.com.br:8080/speedtest/upload.php",
-    "provider": "HBNets",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-52551",
     "name": "São Paulo",
     "host": "test.wjinternet.com.br:8080",
@@ -1537,16 +1577,6 @@
     "provider": "YouFibre",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-55158",
-    "name": "São Paulo",
-    "host": "speedtest.avivtelecom.com.br:8080",
-    "url": "http://speedtest.avivtelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Aviv Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1790,16 +1820,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-60640",
-    "name": "Água Branca",
-    "host": "speedtest.fhnet.com.br:8080",
-    "url": "http://speedtest.fhnet.com.br:8080/speedtest/upload.php",
-    "provider": "FH.Net",
-    "country": "Brazil",
-    "city": "Água Branca",
-    "availability": "candidate"
-  },
-  {
     "id": "global-60826",
     "name": "São Paulo",
     "host": "fast.starfiber.com.br:8080",
@@ -1967,6 +1987,16 @@
     "provider": "Real World",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2420,6 +2450,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2527,6 +2567,16 @@
     "provider": "binteks.id",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74209",
+    "name": "São Paulo",
+    "host": "speedtest.ispfibra.com.br:8080",
+    "url": "http://speedtest.ispfibra.com.br:8080/speedtest/upload.php",
+    "provider": "ISP FIBRA Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
