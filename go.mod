@@ -6,7 +6,7 @@ require (
 	github.com/imroc/req/v3 v3.59.0
 	github.com/oneclickvirt/basics v0.0.34
 	github.com/oneclickvirt/defaultset v0.0.2-20240624082446
-	github.com/showwin/speedtest-go v1.8.2
+	github.com/showwin/speedtest-go v1.8.3
 	golang.org/x/sys v0.47.0
 )
 

@@ -3,7 +3,7 @@
 # 2025.08.26
 
 speedtest_ver="1.2.0"
-speedtest_go_version="1.8.2"
+speedtest_go_version="1.8.3"
 _red() { echo -e "\033[31m\033[01m$@\033[0m"; }
 _green() { echo -e "\033[32m\033[01m$@\033[0m"; }
 _yellow() { echo -e "\033[33m\033[01m$@\033[0m"; }

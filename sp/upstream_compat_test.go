@@ -17,12 +17,12 @@ func (fn roundTripFunc) RoundTrip(request *http.Request) (*http.Response, error)
 	return fn(request)
 }
 
-func TestSpeedtestGoV182UserConfigCacheBust(t *testing.T) {
-	if got := showwinspeedtest.Version(); got != "1.8.2" {
-		t.Fatalf("speedtest-go version = %q, want 1.8.2", got)
+func TestSpeedtestGoV183UserConfigCacheBust(t *testing.T) {
+	if got := showwinspeedtest.Version(); got != "1.8.3" {
+		t.Fatalf("speedtest-go version = %q, want 1.8.3", got)
 	}
-	if !strings.Contains(showwinspeedtest.DefaultUserAgent, "speedtest-go 1.8.2") {
-		t.Fatalf("default user agent = %q, want v1.8.2", showwinspeedtest.DefaultUserAgent)
+	if !strings.Contains(showwinspeedtest.DefaultUserAgent, "speedtest-go 1.8.3") {
+		t.Fatalf("default user agent = %q, want v1.8.3", showwinspeedtest.DefaultUserAgent)
 	}
 
 	requests := make([]*http.Request, 0, 2)
