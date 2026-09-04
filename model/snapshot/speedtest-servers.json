@@ -790,16 +790,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37663",
     "name": "São Paulo",
     "host": "teste.surubiminternet.com.br:8080",
@@ -1047,16 +1037,6 @@
     "provider": "Hosted Network",
     "country": "Australia",
     "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-44593",
-    "name": "London",
-    "host": "speedtest-lon1.elite.net.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-lon1.elite.net.uk:8080/speedtest/upload.php",
-    "provider": "Elite Limited",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
@@ -1530,6 +1510,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-54360",
+    "name": "Sydney",
+    "host": "syd.speedtest.contabo.net:8080",
+    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-54586",
     "name": "Basiildon",
     "host": "speedtest.ths.connectfibre.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -1990,16 +1980,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-63503",
-    "name": "London",
-    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
-    "provider": "Absolute Validation Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2075,6 +2055,16 @@
     "host": "spo.i-systems.com:8080",
     "url": "http://spo.i-systems.com:8080/speedtest/upload.php",
     "provider": "I-Systems",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-64732",
+    "name": "São Paulo",
+    "host": "speedtest.likenettelecom.com.br:8080",
+    "url": "http://speedtest.likenettelecom.com.br:8080/speedtest/upload.php",
+    "provider": "LIKENET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2285,16 +2275,6 @@
     "host": "speedtest.ipglobe.tel.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.ipglobe.tel:8080/speedtest/upload.php",
     "provider": "IPGLOBE - SP",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-70618",
-    "name": "São Paulo",
-    "host": "ipscape.consultoriatechnet.online:8080",
-    "url": "http://ipscape.consultoriatechnet.online:8080/speedtest/upload.php",
-    "provider": "IPSCAPE",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
