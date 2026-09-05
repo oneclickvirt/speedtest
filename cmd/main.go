@@ -7,14 +7,13 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"net"
 	"net/http"
 	"os"
 	"strings"
 	"time"
 
-	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/basics/network/resolver"
+	. "github.com/oneclickvirt/defaultset"
 	"github.com/oneclickvirt/speedtest/model"
 	"github.com/oneclickvirt/speedtest/sp"
 )
@@ -29,6 +28,7 @@ type cliOptions struct {
 	platform    string
 	method      string
 	dnsMode     string
+	network     string
 	num         int
 	registry    bool
 }
@@ -59,20 +59,26 @@ func newSpeedtestFlagSet(options *cliOptions) *flag.FlagSet {
 	set.StringVar(&options.operator, "opt", "global", "Operator parameter (options: cmcc, cu, ct, sg, tw, jp, hk, global)")
 	set.StringVar(&options.method, "m", "speedtest", "Test Method parameter (options: origin, speedtest, speedtest-go)")
 	set.StringVar(&options.dnsMode, "dns-mode", "auto", "DNS mode (auto, system, doh, or dot)")
+	set.StringVar(&options.network, "ip-version", "auto", "Request IP family (auto, 4/ipv4, or 6/ipv6)")
 	set.IntVar(&options.num, "num", -1, "Number of test servers, default -1 not to limit")
 	set.BoolVar(&options.registry, "registry", false, "Load, probe, and select registry servers as JSON")
 	return set
 }
 
 func writeRegistryReport(ctx context.Context, output io.Writer, client *http.Client, sources []model.RegistrySource, limit int, dial model.ServerDialFunc) error {
-	return writeRegistryReportForLanguage(ctx, output, client, sources, limit, dial, "")
+	return writeRegistryReportForLanguageWithNetwork(ctx, output, client, sources, limit, dial, "", "")
 }
 
 func writeRegistryReportForLanguage(ctx context.Context, output io.Writer, client *http.Client, sources []model.RegistrySource, limit int, dial model.ServerDialFunc, language string) error {
+	return writeRegistryReportForLanguageWithNetwork(ctx, output, client, sources, limit, dial, language, "")
+}
+
+func writeRegistryReportForLanguageWithNetwork(ctx context.Context, output io.Writer, client *http.Client, sources []model.RegistrySource, limit int, dial model.ServerDialFunc, language, networkValue string) error {
 	if limit <= 0 {
 		limit = 2
 	}
-	report := model.ResolveServerRegistryForLanguage(ctx, client, sources, 1, limit, 2*time.Second, 8, dial, language)
+	network, _ := model.NormalizeNetwork(networkValue)
+	report := model.ResolveServerRegistryForLanguageWithNetwork(ctx, client, sources, 1, limit, 2*time.Second, 8, dial, language, network)
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(report)
@@ -84,6 +90,7 @@ func normalizeAndValidateCLI(options cliOptions, positional []string) (cliOption
 	options.operator = strings.ToLower(strings.TrimSpace(options.operator))
 	options.method = strings.ToLower(strings.TrimSpace(options.method))
 	options.dnsMode = strings.ToLower(strings.TrimSpace(options.dnsMode))
+	options.network = strings.ToLower(strings.TrimSpace(options.network))
 
 	if len(positional) > 0 {
 		return options, fmt.Errorf("unexpected positional arguments: %s", strings.Join(positional, " "))
@@ -103,6 +110,9 @@ func normalizeAndValidateCLI(options cliOptions, positional []string) (cliOption
 	}
 	if options.dnsMode != "auto" && options.dnsMode != "system" && options.dnsMode != "doh" && options.dnsMode != "dot" {
 		return options, fmt.Errorf("invalid -dns-mode %q: supported values are auto, system, doh, and dot", options.dnsMode)
+	}
+	if _, err := model.NormalizeNetwork(options.network); err != nil {
+		return options, fmt.Errorf("invalid -ip-version %q: use auto, 4/ipv4, or 6/ipv6", options.network)
 	}
 	if options.num == 0 || options.num < -1 {
 		return options, fmt.Errorf("invalid -num %d: use -1 or a positive number", options.num)
@@ -187,7 +197,8 @@ func runRepresentativeGlobal(options cliOptions) error {
 	if limit <= 0 {
 		limit = 2
 	}
-	report := model.ResolveServerRegistryForLanguage(context.Background(), nil, model.DefaultRegistrySources(), 1, limit, 2*time.Second, 8, (model.ServerDialFunc)((&net.Dialer{}).DialContext), options.language)
+	network, _ := model.NormalizeNetwork(options.network)
+	report := model.ResolveServerRegistryForLanguageWithNetwork(context.Background(), nil, model.DefaultRegistrySources(), 1, limit, 2*time.Second, 8, nil, options.language, network)
 	if report.Availability != model.ServerAvailable || len(report.Selected) == 0 {
 		if report.Error == "" {
 			report.Error = "no representative global speedtest servers are available"
@@ -196,12 +207,12 @@ func runRepresentativeGlobal(options cliOptions) error {
 	}
 	if options.method == "speedtest" {
 		if err := sp.OfficialAvailableTest(); err == nil {
-			sp.OfficialRegistrySpeedTest(report.Selected, options.language)
+			sp.OfficialRegistrySpeedTestWithNetwork(report.Selected, options.language, options.network)
 			return nil
 		}
 		fmt.Println("Can not match speedtest command, switch to use origin test")
 	}
-	sp.RegistrySpeedTest(report.Selected, options.language)
+	sp.RegistrySpeedTestWithNetwork(report.Selected, options.language, options.network)
 	return nil
 }
 
@@ -233,7 +244,7 @@ func main() {
 		defer resolver.Shutdown()
 	}
 	if options.registry {
-		if err := writeRegistryReportForLanguage(context.Background(), os.Stdout, nil, model.DefaultRegistrySources(), options.num, (model.ServerDialFunc)((&net.Dialer{}).DialContext), options.language); err != nil {
+		if err := writeRegistryReportForLanguageWithNetwork(context.Background(), os.Stdout, nil, model.DefaultRegistrySources(), options.num, nil, options.language, options.network); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
@@ -246,7 +257,8 @@ func main() {
 		os.Exit(2)
 	}
 	go func() {
-		client := &http.Client{Timeout: 3 * time.Second}
+		network, _ := model.NormalizeNetwork(options.network)
+		client := model.NewHTTPClient(network, 3*time.Second)
 		resp, err := client.Get("https://hits.spiritlhl.net/speedtest.svg?action=hit&title=Hits&title_bg=%23555555&count_bg=%230eecf8&edge_flat=false")
 		if err == nil && resp != nil {
 			resp.Body.Close()
@@ -257,9 +269,9 @@ func main() {
 	}
 	if target.mode == targetAutomaticNearby {
 		if options.method == "origin" || options.method == "speedtest-go" {
-			sp.NearbySpeedTest()
+			sp.NearbySpeedTestWithNetwork(options.network)
 		} else {
-			sp.OfficialNearbySpeedTest()
+			sp.OfficialNearbySpeedTestWithNetwork(options.network)
 		}
 		return
 	}
@@ -270,14 +282,14 @@ func main() {
 		return
 	}
 	if options.method == "origin" || options.method == "speedtest-go" {
-		sp.CustomSpeedTest(target.url, target.parseType, options.num, options.language)
+		sp.CustomSpeedTestWithNetwork(target.url, target.parseType, options.num, options.language, options.network)
 	} else {
 		err := sp.OfficialAvailableTest()
 		if err == nil {
-			sp.OfficialCustomSpeedTest(target.url, target.parseType, options.num, options.language)
+			sp.OfficialCustomSpeedTestWithNetwork(target.url, target.parseType, options.num, options.language, options.network)
 		} else {
 			fmt.Println("Can not match speedtest command, switch to use origin test")
-			sp.CustomSpeedTest(target.url, target.parseType, options.num, options.language)
+			sp.CustomSpeedTestWithNetwork(target.url, target.parseType, options.num, options.language, options.network)
 		}
 	}
 }

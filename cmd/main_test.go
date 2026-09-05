@@ -18,15 +18,15 @@ func TestSpeedtestFlagDefaultsAndParsing(t *testing.T) {
 	if err := newSpeedtestFlagSet(&defaults).Parse(nil); err != nil {
 		t.Fatal(err)
 	}
-	if defaults.language != "zh" || defaults.platform != "net" || defaults.operator != "global" || defaults.method != "speedtest" || defaults.dnsMode != "auto" || defaults.num != -1 || !defaults.showHead {
+	if defaults.language != "zh" || defaults.platform != "net" || defaults.operator != "global" || defaults.method != "speedtest" || defaults.dnsMode != "auto" || defaults.network != "auto" || defaults.num != -1 || !defaults.showHead {
 		t.Fatalf("unexpected defaults: %+v", defaults)
 	}
 
 	var configured cliOptions
-	if err := newSpeedtestFlagSet(&configured).Parse([]string{"-l", "en", "-pf", "cn", "-opt", "ct", "-m", "origin", "-num", "2", "-nearby", "-s=false"}); err != nil {
+	if err := newSpeedtestFlagSet(&configured).Parse([]string{"-l", "en", "-pf", "cn", "-opt", "ct", "-m", "origin", "-ip-version", "4", "-num", "2", "-nearby", "-s=false"}); err != nil {
 		t.Fatal(err)
 	}
-	if configured.language != "en" || configured.platform != "cn" || configured.operator != "ct" || configured.method != "origin" || configured.dnsMode != "auto" || configured.num != 2 || !configured.nearby || configured.showHead {
+	if configured.language != "en" || configured.platform != "cn" || configured.operator != "ct" || configured.method != "origin" || configured.dnsMode != "auto" || configured.network != "4" || configured.num != 2 || !configured.nearby || configured.showHead {
 		t.Fatalf("unexpected parsed options: %+v", configured)
 	}
 
@@ -40,12 +40,12 @@ func TestSpeedtestFlagDefaultsAndParsing(t *testing.T) {
 }
 
 func TestNormalizeAndValidateCLI(t *testing.T) {
-	base := cliOptions{language: " EN ", platform: " NET ", operator: " GLOBAL ", method: " SPEEDTEST-GO ", dnsMode: " DoT ", num: -1}
+	base := cliOptions{language: " EN ", platform: " NET ", operator: " GLOBAL ", method: " SPEEDTEST-GO ", dnsMode: " DoT ", network: " IPV4 ", num: -1}
 	normalized, err := normalizeAndValidateCLI(base, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if normalized.language != "en" || normalized.platform != "net" || normalized.operator != "global" || normalized.method != "speedtest-go" || normalized.dnsMode != "dot" {
+	if normalized.language != "en" || normalized.platform != "net" || normalized.operator != "global" || normalized.method != "speedtest-go" || normalized.dnsMode != "dot" || normalized.network != "ipv4" {
 		t.Fatalf("options were not normalized: %+v", normalized)
 	}
 
@@ -60,6 +60,7 @@ func TestNormalizeAndValidateCLI(t *testing.T) {
 		{name: "operator", mutate: func(o *cliOptions) { o.operator = "other" }, message: "invalid -opt"},
 		{name: "method", mutate: func(o *cliOptions) { o.method = "other" }, message: "invalid -m"},
 		{name: "DNS mode", mutate: func(o *cliOptions) { o.dnsMode = "other" }, message: "invalid -dns-mode"},
+		{name: "IP version", mutate: func(o *cliOptions) { o.network = "other" }, message: "invalid -ip-version"},
 		{name: "zero count", mutate: func(o *cliOptions) { o.num = 0 }, message: "invalid -num"},
 		{name: "negative count", mutate: func(o *cliOptions) { o.num = -2 }, message: "invalid -num"},
 		{name: "positional", args: []string{"unexpected"}, message: "unexpected positional"},
@@ -72,7 +73,7 @@ func TestNormalizeAndValidateCLI(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			options := cliOptions{language: "zh", platform: "net", operator: "global", method: "speedtest", dnsMode: "auto", num: -1}
+			options := cliOptions{language: "zh", platform: "net", operator: "global", method: "speedtest", dnsMode: "auto", network: "auto", num: -1}
 			if test.mutate != nil {
 				test.mutate(&options)
 			}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
 	"net/url"
 	"strings"
 	"time"
@@ -37,6 +38,10 @@ type ThroughputProbe func(context.Context, ServerMetadata) ThroughputResult
 // probes do not compete for the same link. The caller's deadline bounds the
 // ping, download, and upload requests through speedtest-go's context APIs.
 func BenchmarkServers(ctx context.Context, servers []ServerMetadata, limit int, probe ThroughputProbe) []ThroughputResult {
+	return BenchmarkServersWithNetwork(ctx, servers, limit, probe, NetworkAuto)
+}
+
+func BenchmarkServersWithNetwork(ctx context.Context, servers []ServerMetadata, limit int, probe ThroughputProbe, network Network) []ThroughputResult {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -44,7 +49,9 @@ func BenchmarkServers(ctx context.Context, servers []ServerMetadata, limit int, 
 		limit = len(servers)
 	}
 	if probe == nil {
-		probe = ProbeThroughput
+		probe = func(ctx context.Context, server ServerMetadata) ThroughputResult {
+			return ProbeThroughputWithNetwork(ctx, server, network)
+		}
 	}
 	results := make([]ThroughputResult, 0, limit)
 	for _, server := range servers[:limit] {
@@ -60,6 +67,10 @@ func BenchmarkServers(ctx context.Context, servers []ServerMetadata, limit int, 
 }
 
 func ProbeThroughput(ctx context.Context, metadata ServerMetadata) (result ThroughputResult) {
+	return ProbeThroughputWithNetwork(ctx, metadata, effectiveNetwork(metadata))
+}
+
+func ProbeThroughputWithNetwork(ctx context.Context, metadata ServerMetadata, network Network) (result ThroughputResult) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -72,10 +83,39 @@ func ProbeThroughput(ctx context.Context, metadata ServerMetadata) (result Throu
 		result.Error = "speedtest server URL is unavailable"
 		return result
 	}
-	server, err := showwinspeedtest.CustomServer(endpoint.String())
+	if network == NetworkAuto {
+		network = effectiveNetwork(metadata)
+	}
+	config := &showwinspeedtest.UserConfig{
+		UserAgent:      showwinspeedtest.DefaultUserAgent,
+		PingMode:       showwinspeedtest.TCP,
+		TestMode:       showwinspeedtest.HTTPTest,
+		MaxConnections: 8,
+	}
+	var serverClient *showwinspeedtest.Speedtest
+	if network == NetworkAuto {
+		serverClient = showwinspeedtest.New(showwinspeedtest.WithUserConfig(config))
+	} else {
+		// WithDoer follows WithUserConfig so the upstream library cannot replace
+		// the explicit-family transport. HTTP ping shares that transport.
+		config.PingMode = showwinspeedtest.HTTP
+		serverClient = showwinspeedtest.New(
+			showwinspeedtest.WithUserConfig(config),
+			showwinspeedtest.WithDoer(NewHTTPClient(network, 30*time.Second)),
+		)
+	}
+	server, err := serverClient.CustomServer(endpoint.String())
 	if err != nil || server == nil {
 		result.Error = formatThroughputError("create speedtest server", err)
 		return result
+	}
+	if network != NetworkAuto {
+		resolvedHost, resolveErr := ResolveServerAddress(ctx, server.Host, network)
+		if resolveErr != nil {
+			result.Error = formatThroughputError("resolve speedtest server", resolveErr)
+			return result
+		}
+		server.Host = resolvedHost
 	}
 	if err = server.PingTestContext(ctx, nil); err != nil {
 		return failedThroughputResult(result, ctx, "ping", err)
@@ -98,6 +138,28 @@ func ProbeThroughput(ctx context.Context, metadata ServerMetadata) (result Throu
 	}
 	result.Status = ThroughputAvailable
 	return result
+}
+
+func effectiveNetwork(metadata ServerMetadata) Network {
+	for _, value := range []string{metadata.Network} {
+		if strings.TrimSpace(value) == "" {
+			continue
+		}
+		if network, err := NormalizeNetwork(value); err == nil {
+			return network
+		}
+	}
+	host := strings.TrimSpace(metadata.Host)
+	if parsed, _, err := net.SplitHostPort(host); err == nil {
+		host = parsed
+	}
+	if ip := net.ParseIP(strings.Trim(host, "[]")); ip != nil {
+		if ip.To4() != nil {
+			return NetworkIPv4
+		}
+		return NetworkIPv6
+	}
+	return NetworkAuto
 }
 
 func failedThroughputResult(result ThroughputResult, ctx context.Context, stage string, err error) ThroughputResult {

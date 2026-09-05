@@ -32,6 +32,8 @@ type ServerMetadata struct {
 	Availability ServerAvailability `json:"availability"`
 	LatencyMS    int64              `json:"latency_ms,omitempty"`
 	Error        string             `json:"error,omitempty"`
+	Network      string             `json:"network,omitempty"`
+	ResolvedHost string             `json:"resolved_host,omitempty"`
 }
 
 type RegistryReport struct {
@@ -48,6 +50,12 @@ type RegistryReport struct {
 type ServerDialFunc func(context.Context, string, string) (net.Conn, error)
 
 func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Duration, concurrency int, dial ServerDialFunc) []ServerMetadata {
+	return ProbeServersWithNetwork(ctx, servers, timeout, concurrency, dial, NetworkAuto)
+}
+
+// ProbeServersWithNetwork applies an explicit address-family policy while
+// retaining a caller-supplied dial function for fixtures and custom routes.
+func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, timeout time.Duration, concurrency int, dial ServerDialFunc, network Network) []ServerMetadata {
 	if timeout <= 0 {
 		timeout = 3 * time.Second
 	}
@@ -56,7 +64,11 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 	}
 	customDial := dial != nil
 	if dial == nil {
-		dial = (&net.Dialer{}).DialContext
+		dial = DialContext(network)
+	}
+	var httpClient *http.Client
+	if !customDial {
+		httpClient = NewHTTPClient(network, timeout)
 	}
 	result := append([]ServerMetadata(nil), servers...)
 	jobs := make(chan int)
@@ -80,7 +92,20 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 				}
 				probeCtx, cancel := context.WithTimeout(ctx, timeout)
 				started := time.Now()
-				conn, err := dial(probeCtx, "tcp", server.Host)
+				address := server.Host
+				if network != NetworkAuto {
+					resolvedAddress, resolveErr := ResolveServerAddress(probeCtx, server.Host, network)
+					if resolveErr != nil {
+						server.LatencyMS = time.Since(started).Milliseconds()
+						cancel()
+						server.Availability, server.Error = ServerUnavailable, classifyServerError(resolveErr)
+						continue
+					}
+					address = resolvedAddress
+					server.Network = string(network)
+					server.ResolvedHost = address
+				}
+				conn, err := dial(probeCtx, "tcp", address)
 				server.LatencyMS = time.Since(started).Milliseconds()
 				cancel()
 				if err != nil {
@@ -94,7 +119,7 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 					probeCtx, probeCancel := context.WithTimeout(ctx, timeout)
 					req, requestErr := http.NewRequestWithContext(probeCtx, http.MethodHead, server.URL, nil)
 					if requestErr == nil {
-						response, httpErr := (&http.Client{Timeout: timeout}).Do(req)
+						response, httpErr := httpClient.Do(req)
 						if httpErr == nil {
 							_ = response.Body.Close()
 							if response.StatusCode >= 400 && response.StatusCode != http.StatusMethodNotAllowed {

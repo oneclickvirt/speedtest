@@ -89,11 +89,17 @@ func NormalizeServerRegistrySnapshot(data []byte, minimum int) ([]byte, error) {
 }
 
 func LoadServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum int) (RegistryLoadResult, error) {
+	return LoadServerRegistryWithNetwork(ctx, client, sources, minimum, NetworkAuto)
+}
+
+// LoadServerRegistryWithNetwork makes registry and manifest requests through
+// the requested family when the caller does not provide a custom client.
+func LoadServerRegistryWithNetwork(ctx context.Context, client *http.Client, sources []RegistrySource, minimum int, network Network) (RegistryLoadResult, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
 	if client == nil {
-		client = &http.Client{Timeout: 12 * time.Second}
+		client = NewHTTPClient(network, 12*time.Second)
 	}
 	if minimum < 1 {
 		minimum = 1
@@ -189,17 +195,27 @@ func serverRegistryMetadata(snapshot []byte, servers []ServerMetadata) RegistryM
 }
 
 func ResolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc) RegistryReport {
-	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, "")
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, "", NetworkAuto)
+}
+
+// ResolveServerRegistryWithNetwork is the family-aware variant used when a
+// caller explicitly requests IPv4 or IPv6.
+func ResolveServerRegistryWithNetwork(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, network Network) RegistryReport {
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, "", network)
 }
 
 // ResolveServerRegistryForLanguage preserves the existing registry behavior
 // for Chinese callers and applies the international selection policy for
 // English callers.
 func ResolveServerRegistryForLanguage(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string) RegistryReport {
-	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, language)
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, language, NetworkAuto)
 }
 
-func resolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string) RegistryReport {
+func ResolveServerRegistryForLanguageWithNetwork(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string, network Network) RegistryReport {
+	return resolveServerRegistry(ctx, client, sources, minimum, limit, timeout, concurrency, dial, language, network)
+}
+
+func resolveServerRegistry(ctx context.Context, client *http.Client, sources []RegistrySource, minimum, limit int, timeout time.Duration, concurrency int, dial ServerDialFunc, language string, network Network) RegistryReport {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -208,7 +224,7 @@ func resolveServerRegistry(ctx context.Context, client *http.Client, sources []R
 		Availability:  ServerUnavailable,
 		Servers:       []ServerMetadata{},
 	}
-	loaded, err := LoadServerRegistry(ctx, client, sources, minimum)
+	loaded, err := LoadServerRegistryWithNetwork(ctx, client, sources, minimum, network)
 	if err != nil {
 		report.Fallback = true
 		report.Error = err.Error()
@@ -222,7 +238,7 @@ func resolveServerRegistry(ctx context.Context, client *http.Client, sources []R
 		report.Error = "no eligible speedtest servers for language scope"
 		return report
 	}
-	report.Servers = ProbeServers(ctx, eligible, timeout, concurrency, dial)
+	report.Servers = ProbeServersWithNetwork(ctx, eligible, timeout, concurrency, dial, network)
 	var selected []ServerMetadata
 	if strings.EqualFold(strings.TrimSpace(language), "en") {
 		selected, err = SelectRepresentativeServers(report.Servers, limit)

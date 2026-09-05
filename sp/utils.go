@@ -2,10 +2,12 @@ package sp
 
 import (
 	"bufio"
+	"context"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"math"
+	"net"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -23,11 +25,87 @@ var speedtestClient = speedtest.New(speedtest.WithUserConfig(
 		MaxConnections: 8,
 	}))
 
+func speedtestClientForNetwork(value string) *speedtest.Speedtest {
+	network, err := model.NormalizeNetwork(value)
+	if err != nil || network == model.NetworkAuto {
+		return speedtestClient
+	}
+	config := &speedtest.UserConfig{
+		UserAgent:      speedtest.DefaultUserAgent,
+		PingMode:       speedtest.HTTP,
+		TestMode:       speedtest.HTTPTest,
+		MaxConnections: 8,
+	}
+	// WithDoer must be applied after WithUserConfig because the upstream
+	// constructor otherwise replaces the transport. HTTP ping and throughput
+	// then share one forced-family dialer.
+	return speedtest.New(
+		speedtest.WithUserConfig(config),
+		speedtest.WithDoer(model.NewHTTPClient(network, 30*time.Second)),
+	)
+}
+
+// pinSpeedtestServer resolves the host that speedtest-go uses for TCP and UDP
+// probes. Its HTTP transport is configured separately, so the URL hostname is
+// left untouched for TLS SNI and Host headers.
+func pinSpeedtestServer(server *speedtest.Server, network model.Network) error {
+	if server == nil || network == model.NetworkAuto {
+		return nil
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	defer cancel()
+	address, err := model.ResolveServerAddress(ctx, server.Host, network)
+	if err != nil {
+		return err
+	}
+	server.Host = address
+	return nil
+}
+
+func pinSpeedtestServers(servers speedtest.Servers, value string) speedtest.Servers {
+	network, err := model.NormalizeNetwork(value)
+	if err != nil || network == model.NetworkAuto {
+		return servers
+	}
+	pinned := make(speedtest.Servers, 0, len(servers))
+	for _, server := range servers {
+		if err := pinSpeedtestServer(server, network); err != nil {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("resolve speedtest host %q: %v", server.Host, err))
+			}
+			continue
+		}
+		pinned = append(pinned, server)
+	}
+	return pinned
+}
+
+func requestClientForNetwork(value string, timeout time.Duration) *req.Client {
+	network, err := model.NormalizeNetwork(value)
+	if err != nil {
+		network = model.NetworkAuto
+	}
+	client := req.C().SetTimeout(timeout)
+	if network != model.NetworkAuto {
+		// A proxy can satisfy the request through a different family, which
+		// invalidates an explicit IPv4/IPv6 speedtest selection.
+		client.SetProxy(nil)
+	}
+	dial := model.DialContext(network)
+	client.SetDial(func(ctx context.Context, networkName, address string) (net.Conn, error) {
+		return dial(ctx, networkName, address)
+	})
+	return client
+}
+
 // checkCDN checks if a CDN is available by testing with a known test file
 func checkCDN(baseUrl string) bool {
+	return checkCDNWithNetwork(baseUrl, "")
+}
+
+func checkCDNWithNetwork(baseUrl, network string) bool {
 	testUrl := baseUrl + "https://raw.githubusercontent.com/spiritLHLS/ecs/main/back/test"
-	client := req.C()
-	client.SetTimeout(6 * time.Second)
+	client := requestClientForNetwork(network, 6*time.Second)
 
 	resp, err := client.R().Get(testUrl)
 	if err != nil || resp == nil {
@@ -44,8 +122,11 @@ func checkCDN(baseUrl string) bool {
 }
 
 func getData(endpoint string) string {
-	client := req.C()
-	client.SetTimeout(10 * time.Second)
+	return getDataWithNetwork(endpoint, "")
+}
+
+func getDataWithNetwork(endpoint, network string) string {
+	client := requestClientForNetwork(network, 10*time.Second)
 	client.R().
 		SetRetryCount(2).
 		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
@@ -58,7 +139,7 @@ func getData(endpoint string) string {
 	// First, find an available CDN
 	var availableCdn string
 	for _, baseUrl := range model.CdnList {
-		if checkCDN(baseUrl) {
+		if checkCDNWithNetwork(baseUrl, network) {
 			availableCdn = baseUrl
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("CDN available: %s", baseUrl))
@@ -125,6 +206,10 @@ func detectSeparator(data string) rune {
 }
 
 func parseDataFromURL(data, url string) speedtest.Servers {
+	return parseDataFromURLWithClient(data, url, speedtestClient)
+}
+
+func parseDataFromURLWithClient(data, url string, client *speedtest.Speedtest) speedtest.Servers {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -167,7 +252,10 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 		}
 
 		customURL := record[5]
-		target, errFetch := speedtestClient.CustomServer(customURL)
+		if client == nil {
+			client = speedtestClient
+		}
+		target, errFetch := client.CustomServer(customURL)
 		if errFetch != nil {
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("Error fetching server from URL %s: %v", customURL, errFetch))
@@ -184,6 +272,10 @@ func parseDataFromURL(data, url string) speedtest.Servers {
 }
 
 func parseDataFromID(data, url string) speedtest.Servers {
+	return parseDataFromIDWithClient(data, url, speedtestClient)
+}
+
+func parseDataFromIDWithClient(data, url string, client *speedtest.Speedtest) speedtest.Servers {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -226,7 +318,10 @@ func parseDataFromID(data, url string) speedtest.Servers {
 		}
 
 		id := record[0]
-		serverPtr, errFetch := speedtestClient.FetchServerByID(id)
+		if client == nil {
+			client = speedtestClient
+		}
+		serverPtr, errFetch := client.FetchServerByID(id)
 		if errFetch != nil {
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("Error fetching server by ID %s: %v", id, errFetch))

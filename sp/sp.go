@@ -67,13 +67,21 @@ func OfficialAvailableTest() error {
 }
 
 func OfficialNearbySpeedTest() {
+	OfficialNearbySpeedTestWithNetwork("")
+}
+
+// OfficialNearbySpeedTestWithNetwork passes an explicit family to the Ookla
+// client when requested. Empty keeps the CLI's normal automatic behavior.
+func OfficialNearbySpeedTestWithNetwork(network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 	var UPStr, DLStr, Latency, PacketLoss string // serverID,
 	// speedtest --progress=no --accept-license --accept-gdpr
-	sptCheck := execCommand("speedtest", "--progress=no", "--accept-license", "--accept-gdpr")
+	args := []string{"--progress=no", "--accept-license", "--accept-gdpr"}
+	args = append(args, officialNetworkArgs(network)...)
+	sptCheck := execCommand("speedtest", args...)
 	temp, err := sptCheck.CombinedOutput()
 	if err == nil {
 		tempList := strings.Split(string(temp), "\n")
@@ -100,6 +108,10 @@ func OfficialNearbySpeedTest() {
 }
 
 func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
+	OfficialCustomSpeedTestWithNetwork(url, byWhat, num, language, "")
+}
+
+func OfficialCustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -108,30 +120,37 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 		fmt.Println("Official speedtest only use .net platform, can not use other platforms.")
 		return
 	}
-	data := getData(url)
+	data := getDataWithNetwork(url, network)
+	client := speedtestClientForNetwork(network)
 	var targets speedtest.Servers
 	if byWhat == "id" {
-		targets = parseDataFromID(data, url)
+		targets = parseDataFromIDWithClient(data, url, client)
 	} else if byWhat == "url" {
-		targets = parseDataFromURL(data, url)
+		targets = parseDataFromURLWithClient(data, url, client)
 	}
-	officialTargetsSpeedTest(targets, num, language)
+	targets = pinSpeedtestServers(targets, network)
+	officialTargetsSpeedTest(targets, num, language, network)
 }
 
 // OfficialRegistrySpeedTest runs the official client only against the
 // prefiltered registry selection supplied by the caller.
 func OfficialRegistrySpeedTest(servers []model.ServerMetadata, language string) {
+	OfficialRegistrySpeedTestWithNetwork(servers, language, "")
+}
+
+func OfficialRegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 	targets := make(speedtest.Servers, 0, len(servers))
+	client := speedtestClientForNetwork(network)
 	for _, metadata := range servers {
 		serverID := strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
 		if serverID == "" {
 			continue
 		}
-		server, err := speedtestClient.FetchServerByID(serverID)
+		server, err := client.FetchServerByID(serverID)
 		if err != nil || server == nil {
 			if model.EnableLoger && err != nil {
 				Logger.Info(err.Error())
@@ -140,12 +159,22 @@ func OfficialRegistrySpeedTest(servers []model.ServerMetadata, language string) 
 		}
 		server.ID = serverID
 		server.Name = registryServerLabel(metadata)
+		if metadata.ResolvedHost != "" {
+			server.Host = metadata.ResolvedHost
+		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
+			if err := pinSpeedtestServer(server, normalizedNetwork); err != nil {
+				if model.EnableLoger {
+					Logger.Info(err.Error())
+				}
+				continue
+			}
+		}
 		targets = append(targets, server)
 	}
-	officialTargetsSpeedTest(targets, len(targets), language)
+	officialTargetsSpeedTest(targets, len(targets), language, network)
 }
 
-func officialTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
+func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, network string) {
 	type pingedServer struct {
 		server *speedtest.Server
 	}
@@ -183,7 +212,9 @@ func officialTargetsSpeedTest(targets speedtest.Servers, num int, language strin
 		if i < num {
 			var serverName, UPStr, DLStr, Latency, PacketLoss string
 			// speedtest --progress=no --accept-license --accept-gdpr
-			sptCheck := execCommand("speedtest", "--progress=no", "--server-id="+server.ID, "--accept-license", "--accept-gdpr")
+			args := []string{"--progress=no", "--server-id=" + server.ID, "--accept-license", "--accept-gdpr"}
+			args = append(args, officialNetworkArgs(network)...)
+			sptCheck := execCommand("speedtest", args...)
 			temp, err := sptCheck.CombinedOutput()
 			if err == nil {
 				serverName = server.Name
@@ -222,6 +253,21 @@ func officialTargetsSpeedTest(targets speedtest.Servers, num int, language strin
 	}
 }
 
+func officialNetworkArgs(value string) []string {
+	network, err := model.NormalizeNetwork(value)
+	if err != nil {
+		return nil
+	}
+	switch network {
+	case model.NetworkIPv4:
+		return []string{"--ip-version=4"}
+	case model.NetworkIPv6:
+		return []string{"--ip-version=6"}
+	default:
+		return nil
+	}
+}
+
 func registryServerLabel(server model.ServerMetadata) string {
 	city := strings.TrimSpace(server.City)
 	country := strings.TrimSpace(server.Country)
@@ -238,11 +284,18 @@ func registryServerLabel(server model.ServerMetadata) string {
 }
 
 func NearbySpeedTest() {
+	NearbySpeedTestWithNetwork("")
+}
+
+// NearbySpeedTestWithNetwork runs the Go client with an optional explicit
+// family. It is the pure-Go path used when the official binary is absent.
+func NearbySpeedTestWithNetwork(network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
-	serverList, err := speedtestClient.FetchServers()
+	client := speedtestClientForNetwork(network)
+	serverList, err := client.FetchServers()
 	if err != nil || serverList == nil {
 		if model.EnableLoger && err != nil {
 			Logger.Info(err.Error())
@@ -256,7 +309,8 @@ func NearbySpeedTest() {
 		}
 		return
 	}
-	analyzer := speedtestClient.NewPacketLossAnalyzer()
+	targets = pinSpeedtestServers(targets, network)
+	analyzer := client.NewPacketLossAnalyzer()
 	var LowestLatency time.Duration
 	var NearbyServer *speedtest.Server
 	var PacketLoss string
@@ -320,33 +374,44 @@ func NearbySpeedTest() {
 }
 
 func CustomSpeedTest(url, byWhat string, num int, language string) {
+	CustomSpeedTestWithNetwork(url, byWhat, num, language, "")
+}
+
+func CustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
-	data := getData(url)
+	data := getDataWithNetwork(url, network)
+	client := speedtestClientForNetwork(network)
 	var targets speedtest.Servers
 	if byWhat == "id" {
-		targets = parseDataFromID(data, url)
+		targets = parseDataFromIDWithClient(data, url, client)
 	} else if byWhat == "url" {
-		targets = parseDataFromURL(data, url)
+		targets = parseDataFromURLWithClient(data, url, client)
 	}
-	customTargetsSpeedTest(targets, num, language)
+	targets = pinSpeedtestServers(targets, network)
+	customTargetsSpeedTestWithClient(targets, num, language, client)
 }
 
 // RegistrySpeedTest runs speedtest-go only against a caller-owned, prefiltered
 // registry selection.
 func RegistrySpeedTest(servers []model.ServerMetadata, language string) {
+	RegistrySpeedTestWithNetwork(servers, language, "")
+}
+
+func RegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 	targets := make(speedtest.Servers, 0, len(servers))
+	client := speedtestClientForNetwork(network)
 	for _, metadata := range servers {
 		if strings.TrimSpace(metadata.URL) == "" {
 			continue
 		}
-		server, err := speedtestClient.CustomServer(metadata.URL)
+		server, err := client.CustomServer(metadata.URL)
 		if err != nil || server == nil {
 			if model.EnableLoger && err != nil {
 				Logger.Info(err.Error())
@@ -355,12 +420,26 @@ func RegistrySpeedTest(servers []model.ServerMetadata, language string) {
 		}
 		server.ID = strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
 		server.Name = registryServerLabel(metadata)
+		if metadata.ResolvedHost != "" {
+			server.Host = metadata.ResolvedHost
+		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
+			if err := pinSpeedtestServer(server, normalizedNetwork); err != nil {
+				if model.EnableLoger {
+					Logger.Info(err.Error())
+				}
+				continue
+			}
+		}
 		targets = append(targets, server)
 	}
-	customTargetsSpeedTest(targets, len(targets), language)
+	customTargetsSpeedTestWithClient(targets, len(targets), language, client)
 }
 
 func customTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
+	customTargetsSpeedTestWithClient(targets, num, language, speedtestClient)
+}
+
+func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
 	type pingedServer struct {
 		server *speedtest.Server
 	}
@@ -385,7 +464,10 @@ func customTargetsSpeedTest(targets speedtest.Servers, num int, language string)
 		}
 		return pinged[i].server.Latency < pinged[j].server.Latency
 	})
-	analyzer := speedtestClient.NewPacketLossAnalyzer()
+	if client == nil {
+		client = speedtestClient
+	}
+	analyzer := client.NewPacketLossAnalyzer()
 	var PacketLoss string
 	if len(pinged) == 0 {
 		fmt.Println("No match servers")
