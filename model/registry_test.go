@@ -43,6 +43,30 @@ func TestProbeServersRejectsHTTP404(t *testing.T) {
 	}
 }
 
+func TestProbeServersUsesSpeedtestLatencyEndpoint(t *testing.T) {
+	requestedPath := ""
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		requestedPath = request.URL.Path
+		if request.Method != http.MethodGet || request.URL.Path != "/speedtest/latency.txt" {
+			http.NotFound(writer, request)
+			return
+		}
+		_, _ = writer.Write([]byte("test=test"))
+	}))
+	defer server.Close()
+	parsed, err := url.Parse(server.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	probed := ProbeServers(context.Background(), []ServerMetadata{{ID: "fixture", Host: parsed.Host, URL: server.URL + "/speedtest/upload.php"}}, time.Second, 1, nil)
+	if len(probed) != 1 || probed[0].Availability != ServerAvailable {
+		t.Fatalf("valid speedtest endpoint was rejected: %+v", probed)
+	}
+	if requestedPath != "/speedtest/latency.txt" {
+		t.Fatalf("requested %q, want latency endpoint", requestedPath)
+	}
+}
+
 func TestSelectAvailableServersReturnsUnavailable(t *testing.T) {
 	if _, err := SelectAvailableServers([]ServerMetadata{{Availability: ServerUnavailable}}, 1); err == nil {
 		t.Fatal("expected unavailable error")

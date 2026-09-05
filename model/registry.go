@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"net/url"
+	"path"
 	"sort"
 	"strings"
 	"sync"
@@ -117,7 +119,11 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 				}
 				if !customDial && strings.TrimSpace(server.URL) != "" {
 					probeCtx, probeCancel := context.WithTimeout(ctx, timeout)
-					req, requestErr := http.NewRequestWithContext(probeCtx, http.MethodHead, server.URL, nil)
+					probeURL, probeURLErr := serverLatencyURL(server.URL)
+					req, requestErr := http.NewRequestWithContext(probeCtx, http.MethodGet, probeURL, nil)
+					if probeURLErr != nil {
+						requestErr = probeURLErr
+					}
 					if requestErr == nil {
 						response, httpErr := httpClient.Do(req)
 						if httpErr == nil {
@@ -132,6 +138,10 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 							probeCancel()
 							continue
 						}
+					} else {
+						server.Availability, server.Error = ServerUnavailable, "invalid speedtest URL"
+						probeCancel()
+						continue
 					}
 					probeCancel()
 				}
@@ -152,6 +162,18 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 	close(jobs)
 	wg.Wait()
 	return result
+}
+
+func serverLatencyURL(endpoint string) (string, error) {
+	parsed, err := url.Parse(strings.TrimSpace(endpoint))
+	if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Hostname() == "" {
+		return "", errors.New("invalid speedtest URL")
+	}
+	parsed.Path = path.Join(path.Dir(parsed.Path), "latency.txt")
+	parsed.RawPath = ""
+	parsed.RawQuery = ""
+	parsed.Fragment = ""
+	return parsed.String(), nil
 }
 
 func markPendingServersUnavailable(servers []ServerMetadata, reason string) {
