@@ -2250,6 +2250,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-70618",
+    "name": "São Paulo",
+    "host": "ipscape.consultoriatechnet.online:8080",
+    "url": "http://ipscape.consultoriatechnet.online:8080/speedtest/upload.php",
+    "provider": "IPSCAPE",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-70828",
     "name": "Johor Bahru",
     "host": "kpg-ookla03.celcomdigi.com.prod.hosts.ooklaserver.net:8080",
@@ -2545,16 +2555,6 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-74986",
-    "name": "São Paulo",
-    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
-    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
