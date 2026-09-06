@@ -74,10 +74,27 @@ func TestProbeServersWithNetworkPassesPinnedAddressToLaterStages(t *testing.T) {
 	if len(probed) != 1 || probed[0].Availability != ServerAvailable {
 		t.Fatalf("unexpected probe result: %+v", probed)
 	}
-	if receivedNetwork != "tcp" || receivedAddress != "198.51.100.99:8443" {
-		t.Fatalf("dialled %s %s, want tcp 198.51.100.99:8443", receivedNetwork, receivedAddress)
+	if receivedNetwork != "tcp4" || receivedAddress != "198.51.100.99:8443" {
+		t.Fatalf("dialled %s %s, want tcp4 198.51.100.99:8443", receivedNetwork, receivedAddress)
 	}
 	if probed[0].Network != string(NetworkIPv4) || probed[0].ResolvedHost != "198.51.100.99:8443" {
 		t.Fatalf("pinned endpoint was not retained: %+v", probed[0])
+	}
+}
+
+func TestProbeServersWithNetworkAcceptsNilContextAndPinsIPv6Dial(t *testing.T) {
+	var receivedNetwork, receivedAddress string
+	probed := ProbeServersWithNetwork(nil, []ServerMetadata{{ID: "fixture", Host: "[2001:db8::99]:8443"}}, time.Second, 1,
+		func(_ context.Context, networkName, address string) (net.Conn, error) {
+			receivedNetwork, receivedAddress = networkName, address
+			client, peer := net.Pipe()
+			go peer.Close()
+			return client, nil
+		}, NetworkIPv6)
+	if len(probed) != 1 || probed[0].Availability != ServerAvailable {
+		t.Fatalf("unexpected IPv6 probe result: %+v", probed)
+	}
+	if receivedNetwork != "tcp6" || receivedAddress != "[2001:db8::99]:8443" {
+		t.Fatalf("dialled %s %s, want tcp6 [2001:db8::99]:8443", receivedNetwork, receivedAddress)
 	}
 }

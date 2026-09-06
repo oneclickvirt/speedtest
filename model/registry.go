@@ -58,6 +58,18 @@ func ProbeServers(ctx context.Context, servers []ServerMetadata, timeout time.Du
 // ProbeServersWithNetwork applies an explicit address-family policy while
 // retaining a caller-supplied dial function for fixtures and custom routes.
 func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, timeout time.Duration, concurrency int, dial ServerDialFunc, network Network) []ServerMetadata {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	normalizedNetwork, networkErr := NormalizeNetwork(string(network))
+	if networkErr == nil {
+		network = normalizedNetwork
+	}
+	result := append([]ServerMetadata(nil), servers...)
+	if networkErr != nil {
+		markPendingServersUnavailable(result, "invalid network")
+		return result
+	}
 	if timeout <= 0 {
 		timeout = 3 * time.Second
 	}
@@ -72,7 +84,6 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 	if !customDial {
 		httpClient = NewHTTPClient(network, timeout)
 	}
-	result := append([]ServerMetadata(nil), servers...)
 	jobs := make(chan int)
 	workers := min(concurrency, len(result))
 	var wg sync.WaitGroup
@@ -107,7 +118,11 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 					server.Network = string(network)
 					server.ResolvedHost = address
 				}
-				conn, err := dial(probeCtx, "tcp", address)
+				dialNetwork := string(network)
+				if dialNetwork == "" {
+					dialNetwork = "tcp"
+				}
+				conn, err := dial(probeCtx, dialNetwork, address)
 				server.LatencyMS = time.Since(started).Milliseconds()
 				cancel()
 				if err != nil {
