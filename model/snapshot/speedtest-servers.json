@@ -220,6 +220,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
     "id": "global-13623",
     "name": "Singapore",
     "host": "speedtest.singnet.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -297,6 +307,16 @@
     "provider": "Vocus Communications",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-18031",
+    "name": "Johor Bahru",
+    "host": "speedtest-jb.tm.com.my.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-jb.tm.com.my:8080/speedtest/upload.php",
+    "provider": "Telekom Malaysia Berhad",
+    "country": "Malaysia",
+    "city": "Johor Bahru",
     "availability": "candidate"
   },
   {
@@ -450,6 +470,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-24974",
+    "name": "Keelung",
+    "host": "kl-speedtest.homeplus.net.tw:8080",
+    "url": "http://kl-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
+    "provider": "Homeplus",
+    "country": "Taiwan",
+    "city": "Keelung",
+    "availability": "candidate"
+  },
+  {
     "id": "global-26375",
     "name": "São Paulo",
     "host": "speedtest.fastprovedor.net.br:8080",
@@ -507,16 +537,6 @@
     "provider": "DataMossa",
     "country": "Australia",
     "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-28910",
-    "name": "Tokyo",
-    "host": "speedtest.hnd.fdcservers.net:8080",
-    "url": "http://speedtest.hnd.fdcservers.net:8080/speedtest/upload.php",
-    "provider": "fdcservers.net",
-    "country": "Japan",
-    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -797,6 +817,16 @@
     "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1380,6 +1410,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-51518",
+    "name": "Batam",
+    "host": "speedtest.nomaden.tv.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.nomaden.tv:8080/speedtest/upload.php",
+    "provider": "VNT NETWORKS - BTM ID",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-51839",
     "name": "Singapore",
     "host": "speedtest.singapore.globalxtreme.net.prod.hosts.ooklaserver.net:8080",
@@ -1467,16 +1507,6 @@
     "provider": "Matrix NAP Info",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-54360",
-    "name": "Sydney",
-    "host": "syd.speedtest.contabo.net:8080",
-    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Australia",
-    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -1587,16 +1617,6 @@
     "provider": "GSL Networks",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -2707,16 +2727,6 @@
     "provider": "Nexthop",
     "country": "Australia",
     "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76154",
-    "name": "São Paulo",
-    "host": "speedtest.greenfibra.net:8080",
-    "url": "http://speedtest.greenfibra.net:8080/speedtest/upload.php",
-    "provider": "GREEN FIBRA TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
