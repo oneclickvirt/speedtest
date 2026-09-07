@@ -50,10 +50,17 @@ func speedtestClientForNetwork(value string) *speedtest.Speedtest {
 // probes. Its HTTP transport is configured separately, so the URL hostname is
 // left untouched for TLS SNI and Host headers.
 func pinSpeedtestServer(server *speedtest.Server, network model.Network) error {
+	return pinSpeedtestServerContext(context.Background(), server, network)
+}
+
+func pinSpeedtestServerContext(ctx context.Context, server *speedtest.Server, network model.Network) error {
 	if server == nil || network == model.NetworkAuto {
 		return nil
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
 	address, err := model.ResolveServerAddress(ctx, server.Host, network)
 	if err != nil {
@@ -64,13 +71,17 @@ func pinSpeedtestServer(server *speedtest.Server, network model.Network) error {
 }
 
 func pinSpeedtestServers(servers speedtest.Servers, value string) speedtest.Servers {
+	return pinSpeedtestServersContext(context.Background(), servers, value)
+}
+
+func pinSpeedtestServersContext(ctx context.Context, servers speedtest.Servers, value string) speedtest.Servers {
 	network, err := model.NormalizeNetwork(value)
 	if err != nil || network == model.NetworkAuto {
 		return servers
 	}
 	pinned := make(speedtest.Servers, 0, len(servers))
 	for _, server := range servers {
-		if err := pinSpeedtestServer(server, network); err != nil {
+		if err := pinSpeedtestServerContext(ctx, server, network); err != nil {
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("resolve speedtest host %q: %v", server.Host, err))
 			}
@@ -105,10 +116,20 @@ func checkCDN(baseUrl string) bool {
 }
 
 func checkCDNWithNetwork(baseUrl, network string) bool {
+	return checkCDNWithNetworkContext(context.Background(), baseUrl, network)
+}
+
+func checkCDNWithNetworkContext(ctx context.Context, baseUrl, network string) bool {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if err := ctx.Err(); err != nil {
+		return false
+	}
 	testUrl := baseUrl + "https://raw.githubusercontent.com/spiritLHLS/ecs/main/back/test"
 	client := requestClientForNetwork(network, 6*time.Second)
 
-	resp, err := client.R().Get(testUrl)
+	resp, err := client.R().SetContext(ctx).Get(testUrl)
 	if err != nil || resp == nil {
 		return false
 	}
@@ -123,15 +144,22 @@ func checkCDNWithNetwork(baseUrl, network string) bool {
 }
 
 func getData(endpoint string) string {
-	return getDataWithNetwork(endpoint, "")
+	return getDataWithNetworkContext(context.Background(), endpoint, "")
 }
 
 func getDataWithNetwork(endpoint, network string) string {
+	return getDataWithNetworkContext(context.Background(), endpoint, network)
+}
+
+// getDataWithNetworkContext loads a registry while honoring the caller's
+// cancellation. This matters on IPv6-only or partially connected hosts where
+// a CDN probe can otherwise consume every retry timeout before the benchmark
+// starts.
+func getDataWithNetworkContext(ctx context.Context, endpoint, network string) string {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	client := requestClientForNetwork(network, 10*time.Second)
-	client.R().
-		SetRetryCount(2).
-		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
-		SetRetryFixedInterval(2 * time.Second)
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -140,14 +168,21 @@ func getDataWithNetwork(endpoint, network string) string {
 	// First, find an available CDN
 	var availableCdn string
 	for _, baseUrl := range model.CdnList {
-		if checkCDNWithNetwork(baseUrl, network) {
+		if err := ctx.Err(); err != nil {
+			return ""
+		}
+		if checkCDNWithNetworkContext(ctx, baseUrl, network) {
 			availableCdn = baseUrl
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("CDN available: %s", baseUrl))
 			}
 			break
 		}
-		time.Sleep(500 * time.Millisecond)
+		select {
+		case <-ctx.Done():
+			return ""
+		case <-time.After(500 * time.Millisecond):
+		}
 	}
 
 	if availableCdn == "" {
@@ -155,7 +190,11 @@ func getDataWithNetwork(endpoint, network string) string {
 			Logger.Info("No CDN available, trying direct access")
 		}
 		// Try direct access without CDN
-		resp, err := client.R().Get(endpoint)
+		resp, err := client.R().SetContext(ctx).
+			SetRetryCount(2).
+			SetRetryBackoffInterval(1*time.Second, 5*time.Second).
+			SetRetryFixedInterval(2 * time.Second).
+			Get(endpoint)
 		if err == nil && resp != nil {
 			defer resp.Body.Close()
 			b, err := io.ReadAll(resp.Body)
@@ -174,7 +213,11 @@ func getDataWithNetwork(endpoint, network string) string {
 
 	// Use the available CDN
 	url := availableCdn + endpoint
-	resp, err := client.R().Get(url)
+	resp, err := client.R().SetContext(ctx).
+		SetRetryCount(2).
+		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
+		SetRetryFixedInterval(2 * time.Second).
+		Get(url)
 	if err == nil && resp != nil {
 		defer resp.Body.Close()
 		b, err := io.ReadAll(resp.Body)
@@ -273,10 +316,17 @@ func parseDataFromURLWithClient(data, url string, client *speedtest.Speedtest) s
 }
 
 func parseDataFromID(data, url string) speedtest.Servers {
-	return parseDataFromIDWithClient(data, url, speedtestClient)
+	return parseDataFromIDWithClientContext(context.Background(), data, url, speedtestClient)
 }
 
 func parseDataFromIDWithClient(data, url string, client *speedtest.Speedtest) speedtest.Servers {
+	return parseDataFromIDWithClientContext(context.Background(), data, url, client)
+}
+
+func parseDataFromIDWithClientContext(ctx context.Context, data, url string, client *speedtest.Speedtest) speedtest.Servers {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -308,6 +358,9 @@ func parseDataFromIDWithClient(data, url string, client *speedtest.Speedtest) sp
 	}
 
 	for _, record := range records {
+		if err := ctx.Err(); err != nil {
+			return targets
+		}
 		if len(record) == 0 {
 			continue // 跳过空行
 		}
@@ -322,7 +375,7 @@ func parseDataFromIDWithClient(data, url string, client *speedtest.Speedtest) sp
 		if client == nil {
 			client = speedtestClient
 		}
-		serverPtr, errFetch := client.FetchServerByID(id)
+		serverPtr, errFetch := client.FetchServerByIDContext(ctx, id)
 		if errFetch != nil {
 			if model.EnableLoger {
 				Logger.Info(fmt.Sprintf("Error fetching server by ID %s: %v", id, errFetch))

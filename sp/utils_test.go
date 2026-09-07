@@ -2,9 +2,11 @@ package sp
 
 import (
 	"bytes"
+	"context"
 	"math"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestFormatMbps(t *testing.T) {
@@ -38,4 +40,16 @@ func TestShowHeadToWritesToCallerWriter(t *testing.T) {
 
 func TestShowHeadToAcceptsNilWriter(t *testing.T) {
 	ShowHeadTo(nil, "en")
+}
+
+func TestGetDataWithNetworkContextStopsWhenCanceled(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	started := time.Now()
+	if got := getDataWithNetworkContext(ctx, "https://example.invalid/servers.csv", "tcp6"); got != "" {
+		t.Fatalf("canceled registry load returned %q", got)
+	}
+	if elapsed := time.Since(started); elapsed > 250*time.Millisecond {
+		t.Fatalf("canceled registry load took %s", elapsed)
+	}
 }

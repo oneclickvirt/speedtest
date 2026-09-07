@@ -1,6 +1,7 @@
 package sp
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -23,12 +24,19 @@ func isSudoAvailable() bool {
 
 // 如果sudo可用，则使用sudo执行命令
 func execCommand(name string, arg ...string) *exec.Cmd {
+	return execCommandContext(context.Background(), name, arg...)
+}
+
+func execCommandContext(ctx context.Context, name string, arg ...string) *exec.Cmd {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	if hasRootPermission() {
 		if isSudoAvailable() {
-			return exec.Command("sudo", append([]string{name}, arg...)...)
+			return exec.CommandContext(ctx, "sudo", append([]string{name}, arg...)...)
 		}
 	}
-	return exec.Command(name, arg...)
+	return exec.CommandContext(ctx, name, arg...)
 }
 
 func OfficialAvailableTest() error {
@@ -69,21 +77,41 @@ func OfficialAvailableTest() error {
 }
 
 func OfficialNearbySpeedTest() {
-	OfficialNearbySpeedTestWithNetwork("")
+	OfficialNearbySpeedTestContext(context.Background())
+}
+
+// OfficialNearbySpeedTestContext runs the Ookla client with cancellation.
+func OfficialNearbySpeedTestContext(ctx context.Context) {
+	OfficialNearbySpeedTestWithNetworkContextTo(ctx, os.Stdout, "")
 }
 
 // OfficialNearbySpeedTestWithNetwork passes an explicit family to the Ookla
 // client when requested. Empty keeps the CLI's normal automatic behavior.
 func OfficialNearbySpeedTestWithNetwork(network string) {
-	OfficialNearbySpeedTestWithNetworkTo(os.Stdout, network)
+	OfficialNearbySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, network)
+}
+
+// OfficialNearbySpeedTestWithNetworkContext keeps an explicit address family
+// while allowing callers to stop a stuck external speedtest process.
+func OfficialNearbySpeedTestWithNetworkContext(ctx context.Context, network string) {
+	OfficialNearbySpeedTestWithNetworkContextTo(ctx, os.Stdout, network)
 }
 
 // OfficialNearbySpeedTestWithNetworkTo is the writer-aware form of
 // OfficialNearbySpeedTestWithNetwork. The legacy entry point above remains
 // compatible for command-line callers.
 func OfficialNearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
+	OfficialNearbySpeedTestWithNetworkContextTo(context.Background(), writer, network)
+}
+
+// OfficialNearbySpeedTestWithNetworkContextTo is the cancellable, writer-aware
+// form used by orchestrators that run multiple diagnostics concurrently.
+func OfficialNearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
@@ -93,7 +121,7 @@ func OfficialNearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 	// speedtest --progress=no --accept-license --accept-gdpr
 	args := []string{"--progress=no", "--accept-license", "--accept-gdpr"}
 	args = append(args, officialNetworkArgs(network)...)
-	sptCheck := execCommand("speedtest", args...)
+	sptCheck := execCommandContext(ctx, "speedtest", args...)
 	temp, err := sptCheck.CombinedOutput()
 	if err == nil {
 		tempList := strings.Split(string(temp), "\n")
@@ -120,18 +148,33 @@ func OfficialNearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 }
 
 func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
-	OfficialCustomSpeedTestWithNetwork(url, byWhat, num, language, "")
+	OfficialCustomSpeedTestWithNetworkContextTo(context.Background(), os.Stdout, url, byWhat, num, language, "")
 }
 
 func OfficialCustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
-	OfficialCustomSpeedTestWithNetworkTo(os.Stdout, url, byWhat, num, language, network)
+	OfficialCustomSpeedTestWithNetworkContextTo(context.Background(), os.Stdout, url, byWhat, num, language, network)
+}
+
+// OfficialCustomSpeedTestWithNetworkContext runs an official test with a
+// caller-owned cancellation boundary.
+func OfficialCustomSpeedTestWithNetworkContext(ctx context.Context, url, byWhat string, num int, language, network string) {
+	OfficialCustomSpeedTestWithNetworkContextTo(ctx, os.Stdout, url, byWhat, num, language, network)
 }
 
 // OfficialCustomSpeedTestWithNetworkTo is the writer-aware form of
 // OfficialCustomSpeedTestWithNetwork.
 func OfficialCustomSpeedTestWithNetworkTo(writer io.Writer, url, byWhat string, num int, language, network string) {
+	OfficialCustomSpeedTestWithNetworkContextTo(context.Background(), writer, url, byWhat, num, language, network)
+}
+
+// OfficialCustomSpeedTestWithNetworkContextTo is the cancellable, isolated
+// output form used by GoECS.
+func OfficialCustomSpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, url, byWhat string, num int, language, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
@@ -141,33 +184,48 @@ func OfficialCustomSpeedTestWithNetworkTo(writer io.Writer, url, byWhat string, 
 		fmt.Fprintln(writer, "Official speedtest only use .net platform, can not use other platforms.")
 		return
 	}
-	data := getDataWithNetwork(url, network)
+	data := getDataWithNetworkContext(ctx, url, network)
 	client := speedtestClientForNetwork(network)
 	var targets speedtest.Servers
 	if byWhat == "id" {
-		targets = parseDataFromIDWithClient(data, url, client)
+		targets = parseDataFromIDWithClientContext(ctx, data, url, client)
 	} else if byWhat == "url" {
 		targets = parseDataFromURLWithClient(data, url, client)
 	}
-	targets = pinSpeedtestServers(targets, network)
-	officialTargetsSpeedTestTo(writer, targets, num, language, network)
+	targets = pinSpeedtestServersContext(ctx, targets, network)
+	officialTargetsSpeedTestContextTo(ctx, writer, targets, num, language, network)
 }
 
 // OfficialRegistrySpeedTest runs the official client only against the
 // prefiltered registry selection supplied by the caller.
 func OfficialRegistrySpeedTest(servers []model.ServerMetadata, language string) {
-	OfficialRegistrySpeedTestWithNetwork(servers, language, "")
+	OfficialRegistrySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, servers, language, "")
 }
 
 func OfficialRegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
-	OfficialRegistrySpeedTestWithNetworkTo(os.Stdout, servers, language, network)
+	OfficialRegistrySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, servers, language, network)
+}
+
+// OfficialRegistrySpeedTestWithNetworkContext runs selected official servers
+// under a caller-owned cancellation boundary.
+func OfficialRegistrySpeedTestWithNetworkContext(ctx context.Context, servers []model.ServerMetadata, language, network string) {
+	OfficialRegistrySpeedTestWithNetworkContextTo(ctx, os.Stdout, servers, language, network)
 }
 
 // OfficialRegistrySpeedTestWithNetworkTo runs the official client and writes
 // all human-readable rows to writer.
 func OfficialRegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMetadata, language, network string) {
+	OfficialRegistrySpeedTestWithNetworkContextTo(context.Background(), writer, servers, language, network)
+}
+
+// OfficialRegistrySpeedTestWithNetworkContextTo is the cancellable, isolated
+// output form used by the structured runner.
+func OfficialRegistrySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, servers []model.ServerMetadata, language, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
@@ -180,7 +238,7 @@ func OfficialRegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.Se
 		if serverID == "" {
 			continue
 		}
-		server, err := client.FetchServerByID(serverID)
+		server, err := client.FetchServerByIDContext(ctx, serverID)
 		if err != nil || server == nil {
 			if model.EnableLoger && err != nil {
 				Logger.Info(err.Error())
@@ -192,7 +250,7 @@ func OfficialRegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.Se
 		if metadata.ResolvedHost != "" {
 			server.Host = metadata.ResolvedHost
 		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
-			if err := pinSpeedtestServer(server, normalizedNetwork); err != nil {
+			if err := pinSpeedtestServerContext(ctx, server, normalizedNetwork); err != nil {
 				if model.EnableLoger {
 					Logger.Info(err.Error())
 				}
@@ -201,16 +259,23 @@ func OfficialRegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.Se
 		}
 		targets = append(targets, server)
 	}
-	officialTargetsSpeedTestTo(writer, targets, len(targets), language, network)
+	officialTargetsSpeedTestContextTo(ctx, writer, targets, len(targets), language, network)
 }
 
 func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, network string) {
-	officialTargetsSpeedTestTo(os.Stdout, targets, num, language, network)
+	officialTargetsSpeedTestContextTo(context.Background(), os.Stdout, targets, num, language, network)
 }
 
 func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num int, language, network string) {
+	officialTargetsSpeedTestContextTo(context.Background(), writer, targets, num, language, network)
+}
+
+func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	type pingedServer struct {
 		server *speedtest.Server
@@ -220,7 +285,7 @@ func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num
 		if server == nil {
 			continue
 		}
-		if err := server.PingTest(nil); err != nil {
+		if err := server.PingTestContext(ctx, nil); err != nil {
 			server.Latency = 1000 * time.Millisecond
 			if model.EnableLoger {
 				Logger.Info(err.Error())
@@ -251,7 +316,7 @@ func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num
 			// speedtest --progress=no --accept-license --accept-gdpr
 			args := []string{"--progress=no", "--server-id=" + server.ID, "--accept-license", "--accept-gdpr"}
 			args = append(args, officialNetworkArgs(network)...)
-			sptCheck := execCommand("speedtest", args...)
+			sptCheck := execCommandContext(ctx, "speedtest", args...)
 			temp, err := sptCheck.CombinedOutput()
 			if err == nil {
 				serverName = server.Name
@@ -321,27 +386,41 @@ func registryServerLabel(server model.ServerMetadata) string {
 }
 
 func NearbySpeedTest() {
-	NearbySpeedTestWithNetwork("")
+	NearbySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, "")
 }
 
 // NearbySpeedTestWithNetwork runs the Go client with an optional explicit
 // family. It is the pure-Go path used when the official binary is absent.
 func NearbySpeedTestWithNetwork(network string) {
-	NearbySpeedTestWithNetworkTo(os.Stdout, network)
+	NearbySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, network)
+}
+
+// NearbySpeedTestWithNetworkContext runs the pure-Go nearby test with
+// cancellation and an optional address-family pin.
+func NearbySpeedTestWithNetworkContext(ctx context.Context, network string) {
+	NearbySpeedTestWithNetworkContextTo(ctx, os.Stdout, network)
 }
 
 // NearbySpeedTestWithNetworkTo is the writer-aware form of
 // NearbySpeedTestWithNetwork.
 func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
+	NearbySpeedTestWithNetworkContextTo(context.Background(), writer, network)
+}
+
+// NearbySpeedTestWithNetworkContextTo is the cancellable, writer-aware form.
+func NearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 	client := speedtestClientForNetwork(network)
-	serverList, err := client.FetchServers()
+	serverList, err := client.FetchServerListContext(ctx)
 	if err != nil || serverList == nil {
 		if model.EnableLoger && err != nil {
 			Logger.Info(err.Error())
@@ -355,7 +434,7 @@ func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 		}
 		return
 	}
-	targets = pinSpeedtestServers(targets, network)
+	targets = pinSpeedtestServersContext(ctx, targets, network)
 	analyzer := client.NewPacketLossAnalyzer()
 	var LowestLatency time.Duration
 	var NearbyServer *speedtest.Server
@@ -364,7 +443,7 @@ func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 		if server == nil {
 			continue
 		}
-		if err := server.PingTest(nil); err != nil {
+		if err := server.PingTestContext(ctx, nil); err != nil {
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
@@ -382,21 +461,21 @@ func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 		}
 	}
 	if NearbyServer != nil {
-		err = NearbyServer.DownloadTest()
+		err = NearbyServer.DownloadTestContext(ctx)
 		if err != nil {
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
 			return
 		}
-		err = NearbyServer.UploadTest()
+		err = NearbyServer.UploadTestContext(ctx)
 		if err != nil {
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
 			return
 		}
-		err := analyzer.Run(NearbyServer.Host, func(packetLoss *transport.PLoss) {
+		err := analyzer.RunWithContext(ctx, NearbyServer.Host, func(packetLoss *transport.PLoss) {
 			if packetLoss == nil {
 				PacketLoss = "N/A"
 				return
@@ -420,50 +499,80 @@ func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 }
 
 func CustomSpeedTest(url, byWhat string, num int, language string) {
-	CustomSpeedTestWithNetwork(url, byWhat, num, language, "")
+	CustomSpeedTestWithNetworkContextTo(context.Background(), os.Stdout, url, byWhat, num, language, "")
 }
 
 func CustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
-	CustomSpeedTestWithNetworkTo(os.Stdout, url, byWhat, num, language, network)
+	CustomSpeedTestWithNetworkContextTo(context.Background(), os.Stdout, url, byWhat, num, language, network)
+}
+
+// CustomSpeedTestWithNetworkContext runs the pure-Go custom test with
+// cancellation while preserving the requested address family.
+func CustomSpeedTestWithNetworkContext(ctx context.Context, url, byWhat string, num int, language, network string) {
+	CustomSpeedTestWithNetworkContextTo(ctx, os.Stdout, url, byWhat, num, language, network)
 }
 
 // CustomSpeedTestWithNetworkTo is the writer-aware form of
 // CustomSpeedTestWithNetwork.
 func CustomSpeedTestWithNetworkTo(writer io.Writer, url, byWhat string, num int, language, network string) {
+	CustomSpeedTestWithNetworkContextTo(context.Background(), writer, url, byWhat, num, language, network)
+}
+
+// CustomSpeedTestWithNetworkContextTo is the cancellable, isolated output
+// form used by GoECS and other concurrent callers.
+func CustomSpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, url, byWhat string, num int, language, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
-	data := getDataWithNetwork(url, network)
+	data := getDataWithNetworkContext(ctx, url, network)
 	client := speedtestClientForNetwork(network)
 	var targets speedtest.Servers
 	if byWhat == "id" {
-		targets = parseDataFromIDWithClient(data, url, client)
+		targets = parseDataFromIDWithClientContext(ctx, data, url, client)
 	} else if byWhat == "url" {
 		targets = parseDataFromURLWithClient(data, url, client)
 	}
-	targets = pinSpeedtestServers(targets, network)
-	customTargetsSpeedTestWithClientTo(writer, targets, num, language, client)
+	targets = pinSpeedtestServersContext(ctx, targets, network)
+	customTargetsSpeedTestWithClientContextTo(ctx, writer, targets, num, language, client)
 }
 
 // RegistrySpeedTest runs speedtest-go only against a caller-owned, prefiltered
 // registry selection.
 func RegistrySpeedTest(servers []model.ServerMetadata, language string) {
-	RegistrySpeedTestWithNetwork(servers, language, "")
+	RegistrySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, servers, language, "")
 }
 
 func RegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
-	RegistrySpeedTestWithNetworkTo(os.Stdout, servers, language, network)
+	RegistrySpeedTestWithNetworkContextTo(context.Background(), os.Stdout, servers, language, network)
+}
+
+// RegistrySpeedTestWithNetworkContext runs a caller-selected registry with
+// cancellation.
+func RegistrySpeedTestWithNetworkContext(ctx context.Context, servers []model.ServerMetadata, language, network string) {
+	RegistrySpeedTestWithNetworkContextTo(ctx, os.Stdout, servers, language, network)
 }
 
 // RegistrySpeedTestWithNetworkTo runs speedtest-go against the supplied
 // registry and writes rows to writer.
 func RegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMetadata, language, network string) {
+	RegistrySpeedTestWithNetworkContextTo(context.Background(), writer, servers, language, network)
+}
+
+// RegistrySpeedTestWithNetworkContextTo is the cancellable, writer-aware
+// registry test entry point.
+func RegistrySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, servers []model.ServerMetadata, language, network string) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	if model.EnableLoger {
 		InitLogger()
@@ -487,7 +596,7 @@ func RegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMeta
 		if metadata.ResolvedHost != "" {
 			server.Host = metadata.ResolvedHost
 		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
-			if err := pinSpeedtestServer(server, normalizedNetwork); err != nil {
+			if err := pinSpeedtestServerContext(ctx, server, normalizedNetwork); err != nil {
 				if model.EnableLoger {
 					Logger.Info(err.Error())
 				}
@@ -496,20 +605,27 @@ func RegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMeta
 		}
 		targets = append(targets, server)
 	}
-	customTargetsSpeedTestWithClientTo(writer, targets, len(targets), language, client)
+	customTargetsSpeedTestWithClientContextTo(ctx, writer, targets, len(targets), language, client)
 }
 
 func customTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
-	customTargetsSpeedTestWithClientTo(os.Stdout, targets, num, language, speedtestClient)
+	customTargetsSpeedTestWithClientContextTo(context.Background(), os.Stdout, targets, num, language, speedtestClient)
 }
 
 func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
-	customTargetsSpeedTestWithClientTo(os.Stdout, targets, num, language, client)
+	customTargetsSpeedTestWithClientContextTo(context.Background(), os.Stdout, targets, num, language, client)
 }
 
 func customTargetsSpeedTestWithClientTo(writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
+	customTargetsSpeedTestWithClientContextTo(context.Background(), writer, targets, num, language, client)
+}
+
+func customTargetsSpeedTestWithClientContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
 	if writer == nil {
 		writer = io.Discard
+	}
+	if ctx == nil {
+		ctx = context.Background()
 	}
 	type pingedServer struct {
 		server *speedtest.Server
@@ -520,7 +636,7 @@ func customTargetsSpeedTestWithClientTo(writer io.Writer, targets speedtest.Serv
 		if server == nil {
 			continue
 		}
-		err = server.PingTest(nil)
+		err = server.PingTestContext(ctx, nil)
 		if err != nil {
 			server.Latency = 1000 * time.Millisecond
 			if model.EnableLoger {
@@ -551,11 +667,14 @@ func customTargetsSpeedTestWithClientTo(writer io.Writer, targets speedtest.Serv
 		num = len(pinged)
 	}
 	for i := 0; i < len(pinged); i++ {
+		if err := ctx.Err(); err != nil {
+			return
+		}
 		server := pinged[i].server
 		if i < num {
-			err1 = server.DownloadTest()
-			err2 = server.UploadTest()
-			err3 = analyzer.Run(server.Host, func(packetLoss *transport.PLoss) {
+			err1 = server.DownloadTestContext(ctx)
+			err2 = server.UploadTestContext(ctx)
+			err3 = analyzer.RunWithContext(ctx, server.Host, func(packetLoss *transport.PLoss) {
 				if packetLoss == nil {
 					PacketLoss = "N/A"
 					return
