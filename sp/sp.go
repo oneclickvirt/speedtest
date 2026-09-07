@@ -2,6 +2,8 @@ package sp
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
@@ -73,6 +75,16 @@ func OfficialNearbySpeedTest() {
 // OfficialNearbySpeedTestWithNetwork passes an explicit family to the Ookla
 // client when requested. Empty keeps the CLI's normal automatic behavior.
 func OfficialNearbySpeedTestWithNetwork(network string) {
+	OfficialNearbySpeedTestWithNetworkTo(os.Stdout, network)
+}
+
+// OfficialNearbySpeedTestWithNetworkTo is the writer-aware form of
+// OfficialNearbySpeedTestWithNetwork. The legacy entry point above remains
+// compatible for command-line callers.
+func OfficialNearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -97,12 +109,12 @@ func OfficialNearbySpeedTestWithNetwork(network string) {
 			}
 		}
 		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
-			fmt.Print(" " + formatString("Speedtest.net", 16))
-			fmt.Print(formatString(UPStr, 16))
-			fmt.Print(formatString(DLStr, 16))
-			fmt.Print(formatString(Latency, 16))
-			fmt.Print(formatString(PacketLoss, 16))
-			fmt.Println()
+			fmt.Fprint(writer, " "+formatString("Speedtest.net", 16))
+			fmt.Fprint(writer, formatString(UPStr, 16))
+			fmt.Fprint(writer, formatString(DLStr, 16))
+			fmt.Fprint(writer, formatString(Latency, 16))
+			fmt.Fprint(writer, formatString(PacketLoss, 16))
+			fmt.Fprintln(writer)
 		}
 	}
 }
@@ -112,12 +124,21 @@ func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
 }
 
 func OfficialCustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
+	OfficialCustomSpeedTestWithNetworkTo(os.Stdout, url, byWhat, num, language, network)
+}
+
+// OfficialCustomSpeedTestWithNetworkTo is the writer-aware form of
+// OfficialCustomSpeedTestWithNetwork.
+func OfficialCustomSpeedTestWithNetworkTo(writer io.Writer, url, byWhat string, num int, language, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 	if !strings.Contains(url, ".net") {
-		fmt.Println("Official speedtest only use .net platform, can not use other platforms.")
+		fmt.Fprintln(writer, "Official speedtest only use .net platform, can not use other platforms.")
 		return
 	}
 	data := getDataWithNetwork(url, network)
@@ -129,7 +150,7 @@ func OfficialCustomSpeedTestWithNetwork(url, byWhat string, num int, language, n
 		targets = parseDataFromURLWithClient(data, url, client)
 	}
 	targets = pinSpeedtestServers(targets, network)
-	officialTargetsSpeedTest(targets, num, language, network)
+	officialTargetsSpeedTestTo(writer, targets, num, language, network)
 }
 
 // OfficialRegistrySpeedTest runs the official client only against the
@@ -139,6 +160,15 @@ func OfficialRegistrySpeedTest(servers []model.ServerMetadata, language string) 
 }
 
 func OfficialRegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
+	OfficialRegistrySpeedTestWithNetworkTo(os.Stdout, servers, language, network)
+}
+
+// OfficialRegistrySpeedTestWithNetworkTo runs the official client and writes
+// all human-readable rows to writer.
+func OfficialRegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMetadata, language, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -171,10 +201,17 @@ func OfficialRegistrySpeedTestWithNetwork(servers []model.ServerMetadata, langua
 		}
 		targets = append(targets, server)
 	}
-	officialTargetsSpeedTest(targets, len(targets), language, network)
+	officialTargetsSpeedTestTo(writer, targets, len(targets), language, network)
 }
 
 func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, network string) {
+	officialTargetsSpeedTestTo(os.Stdout, targets, num, language, network)
+}
+
+func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num int, language, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	type pingedServer struct {
 		server *speedtest.Server
 	}
@@ -198,7 +235,7 @@ func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, netw
 		return pinged[i].server.Latency < pinged[j].server.Latency
 	})
 	if len(pinged) == 0 {
-		fmt.Println("No match servers")
+		fmt.Fprintln(writer, "No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
@@ -232,7 +269,7 @@ func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, netw
 				}
 				if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
 					if language == "zh" {
-						fmt.Print(" " + formatString(serverName, 16))
+						fmt.Fprint(writer, " "+formatString(serverName, 16))
 					} else if language == "en" {
 						name := serverName
 						name = strings.ReplaceAll(name, "中国香港", "HongKong")
@@ -240,13 +277,13 @@ func officialTargetsSpeedTest(targets speedtest.Servers, num int, language, netw
 						name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
 						name = strings.ReplaceAll(name, "新加坡", "Singapore")
 						name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-						fmt.Print(" " + formatString(name, 16))
+						fmt.Fprint(writer, " "+formatString(name, 16))
 					}
-					fmt.Print(formatString(UPStr, 16))
-					fmt.Print(formatString(DLStr, 16))
-					fmt.Print(formatString(Latency, 16))
-					fmt.Print(formatString(PacketLoss, 16))
-					fmt.Println()
+					fmt.Fprint(writer, formatString(UPStr, 16))
+					fmt.Fprint(writer, formatString(DLStr, 16))
+					fmt.Fprint(writer, formatString(Latency, 16))
+					fmt.Fprint(writer, formatString(PacketLoss, 16))
+					fmt.Fprintln(writer)
 				}
 			}
 		}
@@ -290,6 +327,15 @@ func NearbySpeedTest() {
 // NearbySpeedTestWithNetwork runs the Go client with an optional explicit
 // family. It is the pure-Go path used when the official binary is absent.
 func NearbySpeedTestWithNetwork(network string) {
+	NearbySpeedTestWithNetworkTo(os.Stdout, network)
+}
+
+// NearbySpeedTestWithNetworkTo is the writer-aware form of
+// NearbySpeedTestWithNetwork.
+func NearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -358,12 +404,12 @@ func NearbySpeedTestWithNetwork(network string) {
 			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
 		if err == nil {
-			fmt.Print(" " + formatString("Speedtest.net", 16))
-			fmt.Print(formatString(formatMbps(NearbyServer.ULSpeed.Mbps()), 16))
-			fmt.Print(formatString(formatMbps(NearbyServer.DLSpeed.Mbps()), 16))
-			fmt.Print(formatString(NearbyServer.Latency.String(), 16))
-			fmt.Print(formatString(PacketLoss, 16))
-			fmt.Println()
+			fmt.Fprint(writer, " "+formatString("Speedtest.net", 16))
+			fmt.Fprint(writer, formatString(formatMbps(NearbyServer.ULSpeed.Mbps()), 16))
+			fmt.Fprint(writer, formatString(formatMbps(NearbyServer.DLSpeed.Mbps()), 16))
+			fmt.Fprint(writer, formatString(NearbyServer.Latency.String(), 16))
+			fmt.Fprint(writer, formatString(PacketLoss, 16))
+			fmt.Fprintln(writer)
 			if NearbyServer.Context != nil {
 				NearbyServer.Context.Reset()
 			}
@@ -378,6 +424,15 @@ func CustomSpeedTest(url, byWhat string, num int, language string) {
 }
 
 func CustomSpeedTestWithNetwork(url, byWhat string, num int, language, network string) {
+	CustomSpeedTestWithNetworkTo(os.Stdout, url, byWhat, num, language, network)
+}
+
+// CustomSpeedTestWithNetworkTo is the writer-aware form of
+// CustomSpeedTestWithNetwork.
+func CustomSpeedTestWithNetworkTo(writer io.Writer, url, byWhat string, num int, language, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -391,7 +446,7 @@ func CustomSpeedTestWithNetwork(url, byWhat string, num int, language, network s
 		targets = parseDataFromURLWithClient(data, url, client)
 	}
 	targets = pinSpeedtestServers(targets, network)
-	customTargetsSpeedTestWithClient(targets, num, language, client)
+	customTargetsSpeedTestWithClientTo(writer, targets, num, language, client)
 }
 
 // RegistrySpeedTest runs speedtest-go only against a caller-owned, prefiltered
@@ -401,6 +456,15 @@ func RegistrySpeedTest(servers []model.ServerMetadata, language string) {
 }
 
 func RegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, network string) {
+	RegistrySpeedTestWithNetworkTo(os.Stdout, servers, language, network)
+}
+
+// RegistrySpeedTestWithNetworkTo runs speedtest-go against the supplied
+// registry and writes rows to writer.
+func RegistrySpeedTestWithNetworkTo(writer io.Writer, servers []model.ServerMetadata, language, network string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
@@ -432,14 +496,21 @@ func RegistrySpeedTestWithNetwork(servers []model.ServerMetadata, language, netw
 		}
 		targets = append(targets, server)
 	}
-	customTargetsSpeedTestWithClient(targets, len(targets), language, client)
+	customTargetsSpeedTestWithClientTo(writer, targets, len(targets), language, client)
 }
 
 func customTargetsSpeedTest(targets speedtest.Servers, num int, language string) {
-	customTargetsSpeedTestWithClient(targets, num, language, speedtestClient)
+	customTargetsSpeedTestWithClientTo(os.Stdout, targets, num, language, speedtestClient)
 }
 
 func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
+	customTargetsSpeedTestWithClientTo(os.Stdout, targets, num, language, client)
+}
+
+func customTargetsSpeedTestWithClientTo(writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	type pingedServer struct {
 		server *speedtest.Server
 	}
@@ -470,7 +541,7 @@ func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, langua
 	analyzer := client.NewPacketLossAnalyzer()
 	var PacketLoss string
 	if len(pinged) == 0 {
-		fmt.Println("No match servers")
+		fmt.Fprintln(writer, "No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
@@ -519,7 +590,7 @@ func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, langua
 				continue
 			}
 			if language == "zh" {
-				fmt.Print(" " + formatString(server.Name, 16))
+				fmt.Fprint(writer, " "+formatString(server.Name, 16))
 			} else if language == "en" {
 				name := server.Name
 				name = strings.ReplaceAll(name, "中国香港", "HongKong")
@@ -527,13 +598,13 @@ func customTargetsSpeedTestWithClient(targets speedtest.Servers, num int, langua
 				name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
 				name = strings.ReplaceAll(name, "新加坡", "Singapore")
 				name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-				fmt.Print(" " + formatString(name, 16))
+				fmt.Fprint(writer, " "+formatString(name, 16))
 			}
-			fmt.Print(formatString(formatMbps(server.ULSpeed.Mbps()), 16))
-			fmt.Print(formatString(formatMbps(server.DLSpeed.Mbps()), 16))
-			fmt.Print(formatString(server.Latency.String(), 16))
-			fmt.Print(formatString(PacketLoss, 16))
-			fmt.Println()
+			fmt.Fprint(writer, formatString(formatMbps(server.ULSpeed.Mbps()), 16))
+			fmt.Fprint(writer, formatString(formatMbps(server.DLSpeed.Mbps()), 16))
+			fmt.Fprint(writer, formatString(server.Latency.String(), 16))
+			fmt.Fprint(writer, formatString(PacketLoss, 16))
+			fmt.Fprintln(writer)
 		}
 		if server.Context != nil {
 			server.Context.Reset()

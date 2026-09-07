@@ -1,13 +1,15 @@
 package sp
 
 import (
+	"bytes"
 	"math"
+	"strings"
 	"testing"
 )
 
 func TestFormatMbps(t *testing.T) {
 	tests := []struct {
-		name string
+		name  string
 		value float64
 		want  string
 	}{
@@ -24,4 +26,16 @@ func TestFormatMbps(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestShowHeadToWritesToCallerWriter(t *testing.T) {
+	var output bytes.Buffer
+	ShowHeadTo(&output, "en")
+	if got := output.String(); got == "" || !strings.Contains(got, "Location") || !strings.Contains(got, "PacketLoss") {
+		t.Fatalf("ShowHeadTo output = %q, want the English table header", got)
+	}
+}
+
+func TestShowHeadToAcceptsNilWriter(t *testing.T) {
+	ShowHeadTo(nil, "en")
 }

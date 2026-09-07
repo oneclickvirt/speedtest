@@ -8,6 +8,7 @@ import (
 	"io"
 	"math"
 	"net"
+	"os"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -377,23 +378,33 @@ func formatMbps(value float64) string {
 }
 
 func ShowHead(language string) {
+	ShowHeadTo(io.Writer(os.Stdout), language)
+}
+
+// ShowHeadTo renders the speed-test table header to the caller's writer.
+// Keeping the writer explicit makes independent speed-test jobs safe to run
+// concurrently without redirecting process-wide stdout.
+func ShowHeadTo(writer io.Writer, language string) {
+	if writer == nil {
+		writer = io.Discard
+	}
 	headers1 := []string{"位置", "上传速度", "下载速度", "延迟", "丢包率"}
 	headers2 := []string{"Location", "Upload Speed", "Download Speed", "Latency", "PacketLoss"}
 	if language == "zh" {
 		for index, header := range headers1 {
 			if index == 0 {
-				fmt.Print(" ")
+				fmt.Fprint(writer, " ")
 			}
-			fmt.Print(formatString(header, 16))
+			fmt.Fprint(writer, formatString(header, 16))
 		}
-		fmt.Println()
+		fmt.Fprintln(writer)
 	} else if language == "en" {
 		for index, header := range headers2 {
 			if index == 0 {
-				fmt.Print(" ")
+				fmt.Fprint(writer, " ")
 			}
-			fmt.Print(formatString(header, 16))
+			fmt.Fprint(writer, formatString(header, 16))
 		}
-		fmt.Println()
+		fmt.Fprintln(writer)
 	}
 }
