@@ -220,6 +220,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
     "id": "global-13623",
     "name": "Singapore",
     "host": "speedtest.singnet.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -800,13 +810,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -900,6 +910,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-40272",
+    "name": "Batam",
+    "host": "speedtestbtm.sdi.net.id:8080",
+    "url": "http://speedtestbtm.sdi.net.id:8080/speedtest/upload.php",
+    "provider": "SDI",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-40465",
     "name": "São Paulo",
     "host": "speedtestsp.vtal.net.br.prod.hosts.ooklaserver.net:8080",
@@ -947,16 +967,6 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-41358",
-    "name": "Singapore",
-    "host": "sin.speedtest.contabo.net:8080",
-    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Singapore",
-    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -1490,6 +1500,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-54360",
+    "name": "Sydney",
+    "host": "syd.speedtest.contabo.net:8080",
+    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-54586",
     "name": "Basiildon",
     "host": "speedtest.ths.connectfibre.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -1950,6 +1970,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2090,26 +2120,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-67564",
-    "name": "Yongin-si",
-    "host": "speedtest.moack.co.kr.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.moack.co.kr:8080/speedtest/upload.php",
-    "provider": "MOACK Data Center",
-    "country": "South Korea",
-    "city": "Yongin-si",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-67827",
-    "name": "Singapore",
-    "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtestsgp.fpt.vn:8080/speedtest/upload.php",
-    "provider": "FPT Telecom",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-68083",
     "name": "São Paulo",
     "host": "smc-velocimetro.lv.network:8080",
@@ -2147,6 +2157,16 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-68467",
+    "name": "São Paulo",
+    "host": "velocidade1.eusouhub.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://velocidade1.eusouhub.com.br:8080/speedtest/upload.php",
+    "provider": "HubTelecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2245,6 +2265,16 @@
     "host": "speedtest.ipglobe.tel.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.ipglobe.tel:8080/speedtest/upload.php",
     "provider": "IPGLOBE - SP",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-70618",
+    "name": "São Paulo",
+    "host": "ipscape.consultoriatechnet.online:8080",
+    "url": "http://ipscape.consultoriatechnet.online:8080/speedtest/upload.php",
+    "provider": "IPSCAPE",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2670,16 +2700,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-75787",
-    "name": "São Paulo",
-    "host": "speed.creativetelecom.com.br:8080",
-    "url": "http://speed.creativetelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Creative Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-75893",
     "name": "Singapore",
     "host": "speedtest.whizcomms.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -2737,6 +2757,16 @@
     "provider": "AIXXYCODE.ID",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76155",
+    "name": "Singapore",
+    "host": "speedtest.sg.aixxycode.id:8080",
+    "url": "http://speedtest.sg.aixxycode.id:8080/speedtest/upload.php",
+    "provider": "AIXXYCODE.ID",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
