@@ -15,8 +15,8 @@ github.com/klauspost/compress v1.18.2 h1:iiPHWW0YrcFgpBYhsA6D1+fqHssJscY/Tm/y2Uq
 github.com/klauspost/compress v1.18.2/go.mod h1:R0h/fSBs8DE4ENlcrlib3PsXS61voFxhIs2DeRhCvJ4=
 github.com/miekg/dns v1.1.73 h1:uhT8nJxmTrPJYClxVxTCX+CVn6qnzSiybRk72Z6DgrE=
 github.com/miekg/dns v1.1.73/go.mod h1:RW2Obtfd5NZHvOFe3zYG0W8koWOQtAzyHaLo8vASBuQ=
-github.com/oneclickvirt/basics v0.0.36 h1:ofC2yRX0k8p3pmdSSo9FtH4wumdQd5LgWAFmmiXQcN8=
-github.com/oneclickvirt/basics v0.0.36/go.mod h1:AqnE9cDa4ThZRvTq7UlUmLYSZBY6CPBzbUhxGT3JWyU=
+github.com/oneclickvirt/basics v0.0.38 h1:pfLm3/PCmRbyyRTsKjvYFtWv4zjfTbbruecc8+38/mE=
+github.com/oneclickvirt/basics v0.0.38/go.mod h1:AqnE9cDa4ThZRvTq7UlUmLYSZBY6CPBzbUhxGT3JWyU=
 github.com/oneclickvirt/defaultset v0.0.2-20240624082446 h1:5Pg3mK/u/vQvSz7anu0nxzrNdELi/AcDAU1mMsmPzyc=
 github.com/oneclickvirt/defaultset v0.0.2-20240624082446/go.mod h1:e9Jt4tf2sbemCtc84/XgKcHy9EZ2jkc5x2sW1NiJS+E=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

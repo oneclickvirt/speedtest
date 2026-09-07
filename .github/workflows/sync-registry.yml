@@ -34,6 +34,8 @@ jobs:
         run: go run ./cmd/update-registry -output model/snapshot/speedtest-servers.json -manifest model/snapshot/manifest.json -allow-stale
       - name: Verify snapshot
         run: |
+          go mod verify
+          test "$(go list -m -f '{{.Version}}' github.com/oneclickvirt/basics)" = "v0.0.38"
           go test -race ./...
           go vet ./...
           git diff --check
