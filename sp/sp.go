@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/oneclickvirt/speedtest/model"
@@ -275,65 +276,176 @@ func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num
 	officialTargetsSpeedTestContextTo(context.Background(), writer, targets, num, language, network)
 }
 
+// rankSpeedtestTargetsByLatency preserves the historical sequential candidate
+// phase used by direct API calls. Preloaded callers use the bounded concurrent
+// variant below.
+func probeSpeedtestTarget(ctx context.Context, server *speedtest.Server, retryAlternates bool) error {
+	pingTimeout := time.Duration(0)
+	if retryAlternates {
+		pingTimeout = legacyIDFallbackPingTimeout
+	}
+	pingCtx, pingCancel := speedtestAttemptContext(ctx, pingTimeout)
+	err := server.PingTestContext(pingCtx, nil)
+	pingCancel()
+	return err
+}
+
+func recordSpeedtestTargetProbe(ctx context.Context, server *speedtest.Server, retryAlternates bool, probe func(context.Context, *speedtest.Server, bool) error) {
+	if err := probe(ctx, server, retryAlternates); err != nil {
+		server.Latency = 1000 * time.Millisecond
+		if model.EnableLoger {
+			Logger.Info(err.Error())
+		}
+	}
+}
+
+func rankSpeedtestTargetsByLatency(ctx context.Context, targets speedtest.Servers, retryAlternates bool) speedtest.Servers {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	ranked := make(speedtest.Servers, 0, len(targets))
+	for _, server := range targets {
+		if server == nil {
+			continue
+		}
+		if err := ctx.Err(); err != nil {
+			break
+		}
+		recordSpeedtestTargetProbe(ctx, server, retryAlternates, probeSpeedtestTarget)
+		ranked = append(ranked, server)
+	}
+	sort.SliceStable(ranked, func(i, j int) bool {
+		if ranked[i].Latency == ranked[j].Latency {
+			return ranked[i].ID < ranked[j].ID
+		}
+		return ranked[i].Latency < ranked[j].Latency
+	})
+	return ranked
+}
+
+// rankSpeedtestTargetsByLatencyConcurrent performs the same lightweight ping
+// ranking with a bounded worker pool for the front-loaded preload phase.
+func rankSpeedtestTargetsByLatencyConcurrent(ctx context.Context, targets speedtest.Servers, retryAlternates bool) speedtest.Servers {
+	return rankSpeedtestTargetsByLatencyConcurrentWithProbe(ctx, targets, retryAlternates, probeSpeedtestTarget)
+}
+
+const concurrentCandidateProbeWorkers = 8
+
+// rankSpeedtestTargetsByLatencyConcurrentWithProbe keeps worker scheduling
+// independently testable without opening real speedtest streams.
+func rankSpeedtestTargetsByLatencyConcurrentWithProbe(ctx context.Context, targets speedtest.Servers, retryAlternates bool, probe func(context.Context, *speedtest.Server, bool) error) speedtest.Servers {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if probe == nil {
+		probe = probeSpeedtestTarget
+	}
+	// Candidate probes are deliberately bounded. This short phase can overlap
+	// other diagnostics, but all workers are joined before any transfer starts.
+	ranked := make(speedtest.Servers, len(targets))
+	candidates := 0
+	for _, server := range targets {
+		if server != nil {
+			candidates++
+		}
+	}
+	if candidates == 0 {
+		return ranked[:0]
+	}
+	jobs := make(chan int)
+	workers := candidates
+	if workers > concurrentCandidateProbeWorkers {
+		workers = concurrentCandidateProbeWorkers
+	}
+	var wait sync.WaitGroup
+	wait.Add(workers)
+	for range workers {
+		go func() {
+			defer wait.Done()
+			for index := range jobs {
+				// A ready send can race cancellation. Do not turn queued work into
+				// another network probe once the enclosing run has stopped.
+				if ctx.Err() != nil {
+					continue
+				}
+				server := targets[index]
+				if server == nil {
+					continue
+				}
+				recordSpeedtestTargetProbe(ctx, server, retryAlternates, probe)
+				ranked[index] = server
+			}
+		}()
+	}
+sendJobs:
+	for index, server := range targets {
+		if server == nil {
+			continue
+		}
+		if ctx.Err() != nil {
+			break
+		}
+		select {
+		case jobs <- index:
+		case <-ctx.Done():
+			break sendJobs
+		}
+	}
+	close(jobs)
+	wait.Wait()
+	filtered := ranked[:0]
+	for _, server := range ranked {
+		if server != nil {
+			filtered = append(filtered, server)
+		}
+	}
+	ranked = filtered
+	sort.SliceStable(ranked, func(i, j int) bool {
+		if ranked[i].Latency == ranked[j].Latency {
+			return ranked[i].ID < ranked[j].ID
+		}
+		return ranked[i].Latency < ranked[j].Latency
+	})
+	return ranked
+}
+
 func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string) {
 	officialTargetsSpeedTestContextToWithFallback(ctx, writer, targets, num, language, network, false)
 }
 
 func officialTargetsSpeedTestContextToWithFallback(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string, retryAlternates bool) {
+	targets = rankSpeedtestTargetsByLatency(ctx, targets, retryAlternates)
+	officialTargetsSpeedTestContextToWithPreloadedTargets(ctx, writer, targets, num, language, network, retryAlternates)
+}
+
+// officialTargetsSpeedTestContextToWithPreloadedTargets runs the established
+// official-client transfer logic after candidate latency has already been
+// collected and sorted.
+func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string, retryAlternates bool) {
 	if writer == nil {
 		writer = io.Discard
 	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	type pingedServer struct {
-		server *speedtest.Server
-	}
-	pinged := make([]pingedServer, 0, len(targets))
-	for _, server := range targets {
-		if server == nil {
-			continue
-		}
-		pingTimeout := time.Duration(0)
-		if retryAlternates {
-			pingTimeout = legacyIDFallbackPingTimeout
-		}
-		pingCtx, pingCancel := speedtestAttemptContext(ctx, pingTimeout)
-		err := server.PingTestContext(pingCtx, nil)
-		pingCancel()
-		if err != nil {
-			server.Latency = 1000 * time.Millisecond
-			if model.EnableLoger {
-				Logger.Info(err.Error())
-			}
-		}
-		pinged = append(pinged, pingedServer{server: server})
-	}
-	sort.SliceStable(pinged, func(i, j int) bool {
-		if pinged[i].server.Latency == pinged[j].server.Latency {
-			return pinged[i].server.ID < pinged[j].server.ID
-		}
-		return pinged[i].server.Latency < pinged[j].server.Latency
-	})
-	if len(pinged) == 0 {
+	if len(targets) == 0 {
 		fmt.Fprintln(writer, "No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
-	if num == -1 || num >= len(pinged) {
-		num = len(pinged)
+	if num == -1 || num >= len(targets) {
+		num = len(targets)
 	}
 	completed, attempted := 0, 0
-	for _, pingedServer := range pinged {
+	for _, server := range targets {
 		if !retryAlternates && attempted >= num {
 			break
 		}
 		if retryAlternates && completed >= num {
 			break
 		}
-		server := pingedServer.server
 		attempted++
 		attemptTimeout := time.Duration(0)
 		if retryAlternates {
@@ -647,59 +759,37 @@ func customTargetsSpeedTestWithClientContextTo(ctx context.Context, writer io.Wr
 }
 
 func customTargetsSpeedTestWithClientContextToWithFallback(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest, retryAlternates bool) {
+	targets = rankSpeedtestTargetsByLatency(ctx, targets, retryAlternates)
+	customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx, writer, targets, num, language, client, retryAlternates)
+}
+
+// customTargetsSpeedTestWithClientContextToWithPreloadedTargets runs the
+// historical speedtest-go transfer path after the candidate phase has finished.
+func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest, retryAlternates bool) {
 	if writer == nil {
 		writer = io.Discard
 	}
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	type pingedServer struct {
-		server *speedtest.Server
-	}
-	pinged := make([]pingedServer, 0, len(targets))
-	var err, err1, err2, err3 error
-	for _, server := range targets {
-		if server == nil {
-			continue
-		}
-		pingTimeout := time.Duration(0)
-		if retryAlternates {
-			pingTimeout = legacyIDFallbackPingTimeout
-		}
-		pingCtx, pingCancel := speedtestAttemptContext(ctx, pingTimeout)
-		err = server.PingTestContext(pingCtx, nil)
-		pingCancel()
-		if err != nil {
-			server.Latency = 1000 * time.Millisecond
-			if model.EnableLoger {
-				Logger.Info(err.Error())
-			}
-		}
-		pinged = append(pinged, pingedServer{server: server})
-	}
-	sort.SliceStable(pinged, func(i, j int) bool {
-		if pinged[i].server.Latency == pinged[j].server.Latency {
-			return pinged[i].server.ID < pinged[j].server.ID
-		}
-		return pinged[i].server.Latency < pinged[j].server.Latency
-	})
+	var err1, err2, err3 error
 	if client == nil {
 		client = speedtestClient
 	}
 	analyzer := client.NewPacketLossAnalyzer()
 	var PacketLoss string
-	if len(pinged) == 0 {
+	if len(targets) == 0 {
 		fmt.Fprintln(writer, "No match servers")
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
 		return
 	}
-	if num == -1 || num >= len(pinged) {
-		num = len(pinged)
+	if num == -1 || num >= len(targets) {
+		num = len(targets)
 	}
 	completed, attempted := 0, 0
-	for _, pingedServer := range pinged {
+	for _, server := range targets {
 		if err := ctx.Err(); err != nil {
 			return
 		}
@@ -709,7 +799,6 @@ func customTargetsSpeedTestWithClientContextToWithFallback(ctx context.Context, 
 		if retryAlternates && completed >= num {
 			break
 		}
-		server := pingedServer.server
 		attempted++
 		attemptTimeout := time.Duration(0)
 		if retryAlternates {

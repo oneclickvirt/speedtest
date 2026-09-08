@@ -54,7 +54,7 @@ jobs:
         run: |
           set -euo pipefail
           go mod verify
-          test "$(go list -m -f '{{.Version}}' github.com/oneclickvirt/basics)" = "v0.0.38"
+          go mod tidy -diff
           test "$(go list -m -f '{{.Version}}' github.com/showwin/speedtest-go)" = "v1.8.3"
           go test -race -count=1 ./...
           go vet ./...

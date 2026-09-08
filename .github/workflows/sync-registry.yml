@@ -35,7 +35,7 @@ jobs:
       - name: Verify snapshot
         run: |
           go mod verify
-          test "$(go list -m -f '{{.Version}}' github.com/oneclickvirt/basics)" = "v0.0.38"
+          go mod tidy -diff
           go test -race ./...
           go vet ./...
           git diff --check
