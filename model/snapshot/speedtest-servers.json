@@ -270,6 +270,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-16322",
+    "name": "São Paulo",
+    "host": "velocimetro-spo.virtua.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://velocimetro-spo.virtua.com.br:8080/speedtest/upload.php",
+    "provider": "Claro Fibra - SPO",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-16606",
     "name": "São Paulo",
     "host": "teste10ge.pwfibraoptica.com.br:8080",
@@ -360,6 +370,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-2054",
+    "name": "Singapore",
+    "host": "speedtest10.vqbn.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest10.vqbn.com:8080/speedtest/upload.php",
+    "provider": "ViewQwest",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
     "id": "global-21118",
     "name": "Naha",
     "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
@@ -427,6 +447,16 @@
     "provider": "Rakuten Mobile, Inc",
     "country": "Japan",
     "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-24447",
+    "name": "Shanghai",
+    "host": "mobile.shunicomtest.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://mobile.shunicomtest.com:8080/speedtest/upload.php",
+    "provider": "China Unicom 5G",
+    "country": "China",
+    "city": "Shanghai",
     "availability": "candidate"
   },
   {
@@ -940,16 +970,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-41358",
-    "name": "Singapore",
-    "host": "sin.speedtest.contabo.net:8080",
-    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-41801",
     "name": "Singapore",
     "host": "speedtest-eqx-sg1.ixtelecom.net.prod.hosts.ooklaserver.net:8080",
@@ -1097,6 +1117,16 @@
     "provider": "Líder Fibra",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-46304",
+    "name": "Singapore",
+    "host": "sg.cloudhost.asia:8080",
+    "url": "http://sg.cloudhost.asia:8080/speedtest/upload.php",
+    "provider": "IDCloudHost",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -1597,16 +1627,6 @@
     "provider": "GSL Networks",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56935",
-    "name": "Tokyo",
-    "host": "tyo.speedtest.contabo.net:8080",
-    "url": "http://tyo.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Japan",
-    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -2420,16 +2440,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2677,16 +2687,6 @@
     "provider": "HostGrap",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-75787",
-    "name": "São Paulo",
-    "host": "speed.creativetelecom.com.br:8080",
-    "url": "http://speed.creativetelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Creative Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
