@@ -118,3 +118,13 @@ func TestLoadServerRegistryFallsBackToEmbeddedSnapshot(t *testing.T) {
 		}
 	}
 }
+
+func TestLoadEmbeddedServerRegistryAvoidsRemoteSources(t *testing.T) {
+	loaded, err := LoadEmbeddedServerRegistry(10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if loaded.Source != "embedded" || !loaded.Fallback || len(loaded.Servers) < 10 {
+		t.Fatalf("unexpected embedded registry: %#v", loaded)
+	}
+}

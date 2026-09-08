@@ -92,6 +92,27 @@ func LoadServerRegistry(ctx context.Context, client *http.Client, sources []Regi
 	return LoadServerRegistryWithNetwork(ctx, client, sources, minimum, NetworkAuto)
 }
 
+// LoadEmbeddedServerRegistry returns the versioned registry shipped with this
+// module without making a network request. Callers can use it as a bounded
+// fallback when an upstream discovery endpoint is incomplete.
+func LoadEmbeddedServerRegistry(minimum int) (RegistryLoadResult, error) {
+	if minimum < 1 {
+		minimum = 1
+	}
+	if len(embeddedServerRegistry) == 0 {
+		return RegistryLoadResult{}, errors.New("embedded registry is unavailable")
+	}
+	metadata, err := validateServerRegistryManifest(embeddedServerRegistryManifest, embeddedServerRegistry)
+	if err != nil {
+		return RegistryLoadResult{}, fmt.Errorf("validate embedded registry manifest: %w", err)
+	}
+	servers, err := decodeServerRegistry(embeddedServerRegistry, "embedded", minimum)
+	if err != nil {
+		return RegistryLoadResult{}, fmt.Errorf("validate embedded registry: %w", err)
+	}
+	return RegistryLoadResult{Servers: servers, Source: "embedded", Fallback: true, Metadata: metadata}, nil
+}
+
 // LoadServerRegistryWithNetwork makes registry and manifest requests through
 // the requested family when the caller does not provide a custom client.
 func LoadServerRegistryWithNetwork(ctx context.Context, client *http.Client, sources []RegistrySource, minimum int, network Network) (RegistryLoadResult, error) {
@@ -121,16 +142,10 @@ func LoadServerRegistryWithNetwork(ctx context.Context, client *http.Client, sou
 		}
 		return RegistryLoadResult{Servers: servers, Source: source.Name, Fallback: index > 0, Metadata: metadata}, nil
 	}
-	if len(embeddedServerRegistry) > 0 {
-		metadata, err := validateServerRegistryManifest(embeddedServerRegistryManifest, embeddedServerRegistry)
-		if err != nil {
-			return RegistryLoadResult{}, fmt.Errorf("validate embedded registry manifest: %w", err)
-		}
-		servers, err := decodeServerRegistry(embeddedServerRegistry, "embedded", minimum)
-		if err == nil {
-			return RegistryLoadResult{Servers: servers, Source: "embedded", Fallback: true, Metadata: metadata}, nil
-		}
-		lastErr = fmt.Errorf("validate embedded registry: %w", err)
+	if embedded, err := LoadEmbeddedServerRegistry(minimum); err == nil {
+		return embedded, nil
+	} else if lastErr == nil {
+		lastErr = err
 	}
 	if lastErr == nil {
 		lastErr = errors.New("no registry sources configured")

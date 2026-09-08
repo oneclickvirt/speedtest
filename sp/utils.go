@@ -9,6 +9,7 @@ import (
 	"math"
 	"net"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -25,6 +26,21 @@ var speedtestClient = speedtest.New(speedtest.WithUserConfig(
 		TestMode:       speedtest.HTTPTest,
 		MaxConnections: 8,
 	}))
+
+const (
+	legacyIDFallbackAttemptTimeout = 30 * time.Second
+	legacyIDFallbackPingTimeout    = 5 * time.Second
+)
+
+func speedtestAttemptContext(ctx context.Context, timeout time.Duration) (context.Context, context.CancelFunc) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if timeout <= 0 {
+		return ctx, func() {}
+	}
+	return context.WithTimeout(ctx, timeout)
+}
 
 func speedtestClientForNetwork(value string) *speedtest.Speedtest {
 	network, err := model.NormalizeNetwork(value)
@@ -315,6 +331,235 @@ func parseDataFromURLWithClient(data, url string, client *speedtest.Speedtest) s
 	return targets
 }
 
+type legacyIDRecord struct {
+	id   string
+	name string
+	host string
+	ip   string
+	port string
+}
+
+func parseLegacyIDRecords(data string) []legacyIDRecord {
+	if data == "" {
+		return nil
+	}
+	reader := csv.NewReader(strings.NewReader(data))
+	reader.Comma = detectSeparator(data)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil
+	}
+	if len(records) > 0 && len(records[0]) > 6 && (records[0][6] == "country_code" || records[0][1] == "country_code") {
+		records = records[1:]
+	}
+	parsed := make([]legacyIDRecord, 0, len(records))
+	for _, record := range records {
+		if len(record) < 4 {
+			continue
+		}
+		id := strings.TrimSpace(record[0])
+		if id == "" {
+			continue
+		}
+		parsed = append(parsed, legacyIDRecord{
+			id:   id,
+			name: strings.TrimSpace(record[3]),
+			ip:   strings.TrimSpace(record[4]),
+			host: strings.TrimSpace(record[5]),
+			port: strings.TrimSpace(record[6]),
+		})
+	}
+	return parsed
+}
+
+func legacyIDServerName(source, name string) string {
+	if strings.Contains(source, "Mobile") {
+		return "移动" + name
+	}
+	if strings.Contains(source, "Telecom") {
+		return "电信" + name
+	}
+	if strings.Contains(source, "Unicom") {
+		return "联通" + name
+	}
+	return name
+}
+
+func usableSpeedtestServer(server *speedtest.Server) bool {
+	return server != nil && strings.TrimSpace(server.Host) != "" && strings.TrimSpace(server.URL) != ""
+}
+
+func registrySpeedtestServer(client *speedtest.Speedtest, metadata model.ServerMetadata) (*speedtest.Server, error) {
+	if client == nil {
+		client = speedtestClient
+	}
+	endpoint := strings.TrimSpace(metadata.URL)
+	if endpoint == "" {
+		return nil, fmt.Errorf("registry server %q has no URL", metadata.ID)
+	}
+	server, err := client.CustomServer(endpoint)
+	if err != nil || server == nil {
+		if err == nil {
+			err = fmt.Errorf("registry server %q is unavailable", metadata.ID)
+		}
+		return nil, err
+	}
+	server.ID = strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
+	server.Name = registryServerLabel(metadata)
+	if host := strings.TrimSpace(metadata.Host); host != "" {
+		server.Host = host
+	}
+	return server, nil
+}
+
+func legacyIDServerEndpoint(record legacyIDRecord) string {
+	host := strings.Trim(strings.TrimSpace(record.host), "[]")
+	if host == "" {
+		host = strings.Trim(strings.TrimSpace(record.ip), "[]")
+	}
+	if host == "" || strings.ContainsAny(host, "/?#@") {
+		return ""
+	}
+	port, err := strconv.Atoi(strings.TrimSpace(record.port))
+	if err != nil || port < 1 || port > 65535 {
+		return ""
+	}
+	scheme := "http"
+	if port == 443 {
+		scheme = "https"
+	}
+	return scheme + "://" + net.JoinHostPort(host, strconv.Itoa(port))
+}
+
+func legacyIDFallbackTargetsFromRecords(ctx context.Context, data, source string, client *speedtest.Speedtest) speedtest.Servers {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if client == nil {
+		client = speedtestClient
+	}
+	targets := make(speedtest.Servers, 0)
+	for _, record := range parseLegacyIDRecords(data) {
+		if ctx.Err() != nil {
+			return targets
+		}
+		endpoint := legacyIDServerEndpoint(record)
+		if endpoint == "" {
+			continue
+		}
+		target, err := client.CustomServer(endpoint)
+		if err != nil || target == nil {
+			continue
+		}
+		target.ID = record.id
+		target.Name = legacyIDServerName(source, record.name)
+		targets = append(targets, target)
+	}
+	return targets
+}
+
+func legacyIDFallbackTargetsFromRegistry(ctx context.Context, data, source string, client *speedtest.Speedtest, servers []model.ServerMetadata) speedtest.Servers {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	byID := make(map[string]model.ServerMetadata, len(servers))
+	for _, server := range servers {
+		id := strings.TrimPrefix(strings.TrimSpace(server.ID), "global-")
+		if id != "" && strings.TrimSpace(server.URL) != "" {
+			byID[id] = server
+		}
+	}
+	targets := make(speedtest.Servers, 0)
+	for _, record := range parseLegacyIDRecords(data) {
+		if ctx.Err() != nil {
+			return targets
+		}
+		metadata, ok := byID[record.id]
+		if !ok {
+			continue
+		}
+		target, err := registrySpeedtestServer(client, metadata)
+		if err != nil {
+			continue
+		}
+		target.ID = record.id
+		target.Name = legacyIDServerName(source, record.name)
+		targets = append(targets, target)
+	}
+	return targets
+}
+
+func legacyIDFallbackTargets(ctx context.Context, data, source string, client *speedtest.Speedtest) speedtest.Servers {
+	// Legacy CSVs contain the exact endpoint hostname and port selected by the
+	// historical profile. Prefer that data over a current Ookla ID lookup: old
+	// IDs routinely disappear from ios-config before their endpoint stops
+	// serving the standard upload.php protocol.
+	if targets := legacyIDFallbackTargetsFromRecords(ctx, data, source, client); len(targets) > 0 {
+		return targets
+	}
+	loaded, err := model.LoadEmbeddedServerRegistry(1)
+	if err != nil {
+		if model.EnableLoger {
+			Logger.Info(fmt.Sprintf("load embedded speedtest registry: %v", err))
+		}
+		return nil
+	}
+	return legacyIDFallbackTargetsFromRegistry(ctx, data, source, client, loaded.Servers)
+}
+
+func fetchOrBuildRegistrySpeedtestServer(ctx context.Context, client *speedtest.Speedtest, metadata model.ServerMetadata) (*speedtest.Server, error) {
+	server, _, err := fetchOrBuildRegistrySpeedtestServerWithFallback(ctx, client, metadata)
+	return server, err
+}
+
+// fetchOrBuildRegistrySpeedtestServerWithFallback reports whether the caller
+// must use the reconstructed direct endpoint instead of an Ookla server ID.
+func fetchOrBuildRegistrySpeedtestServerWithFallback(ctx context.Context, client *speedtest.Speedtest, metadata model.ServerMetadata) (*speedtest.Server, bool, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	if client == nil {
+		client = speedtestClient
+	}
+	serverID := strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
+	if serverID != "" {
+		server, err := client.FetchServerByIDContext(ctx, serverID)
+		if err == nil && usableSpeedtestServer(server) {
+			server.ID = serverID
+			server.Name = registryServerLabel(metadata)
+			return server, false, nil
+		}
+	}
+	server, err := registrySpeedtestServer(client, metadata)
+	if err != nil {
+		return nil, false, err
+	}
+	return server, true, nil
+}
+
+func customSpeedtestTargetsFromData(ctx context.Context, data, source, byWhat string, client *speedtest.Speedtest, network string) (speedtest.Servers, bool) {
+	var targets speedtest.Servers
+	if byWhat == "id" {
+		targets = parseDataFromIDWithClientContext(ctx, data, source, client)
+	} else if byWhat == "url" {
+		targets = parseDataFromURLWithClient(data, source, client)
+	}
+	targets = pinSpeedtestServersContext(ctx, targets, network)
+	if len(targets) > 0 || byWhat != "id" {
+		return targets, false
+	}
+
+	// The legacy CSV is still the source of the selected IDs. Only when its
+	// central ID lookup produced no usable target do we reconstruct matching IDs
+	// from the registry embedded in this exact release.
+	fallback := legacyIDFallbackTargets(ctx, data, source, client)
+	fallback = pinSpeedtestServersContext(ctx, fallback, network)
+	if len(fallback) > 0 && model.EnableLoger {
+		Logger.Info("using embedded registry fallback for legacy speedtest IDs")
+	}
+	return fallback, len(fallback) > 0
+}
+
 func parseDataFromID(data, url string) speedtest.Servers {
 	return parseDataFromIDWithClientContext(context.Background(), data, url, speedtestClient)
 }
@@ -382,19 +627,14 @@ func parseDataFromIDWithClientContext(ctx context.Context, data, url string, cli
 			}
 			continue
 		}
-		if serverPtr == nil {
+		if !usableSpeedtestServer(serverPtr) {
+			if model.EnableLoger {
+				Logger.Info(fmt.Sprintf("Incomplete server data for ID %s", id))
+			}
 			continue
 		}
 
-		if strings.Contains(url, "Mobile") {
-			serverPtr.Name = "移动" + record[3]
-		} else if strings.Contains(url, "Telecom") {
-			serverPtr.Name = "电信" + record[3]
-		} else if strings.Contains(url, "Unicom") {
-			serverPtr.Name = "联通" + record[3]
-		} else {
-			serverPtr.Name = record[3]
-		}
+		serverPtr.Name = legacyIDServerName(url, record[3])
 		targets = append(targets, serverPtr)
 	}
 	return targets

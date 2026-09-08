@@ -186,14 +186,15 @@ func OfficialCustomSpeedTestWithNetworkContextTo(ctx context.Context, writer io.
 	}
 	data := getDataWithNetworkContext(ctx, url, network)
 	client := speedtestClientForNetwork(network)
-	var targets speedtest.Servers
-	if byWhat == "id" {
-		targets = parseDataFromIDWithClientContext(ctx, data, url, client)
-	} else if byWhat == "url" {
-		targets = parseDataFromURLWithClient(data, url, client)
+	targets, usedFallback := customSpeedtestTargetsFromData(ctx, data, url, byWhat, client, network)
+	if usedFallback {
+		// A legacy ID can disappear from the official catalog while its exact
+		// upload.php endpoint remains live. The Ookla CLI accepts only an ID,
+		// so use the reconstructed direct endpoint through speedtest-go.
+		customTargetsSpeedTestWithClientContextToWithFallback(ctx, writer, targets, num, language, client, true)
+		return
 	}
-	targets = pinSpeedtestServersContext(ctx, targets, network)
-	officialTargetsSpeedTestContextTo(ctx, writer, targets, num, language, network)
+	officialTargetsSpeedTestContextToWithFallback(ctx, writer, targets, num, language, network, usedFallback)
 }
 
 // OfficialRegistrySpeedTest runs the official client only against the
@@ -233,20 +234,20 @@ func OfficialRegistrySpeedTestWithNetworkContextTo(ctx context.Context, writer i
 	}
 	targets := make(speedtest.Servers, 0, len(servers))
 	client := speedtestClientForNetwork(network)
+	usedDirectEndpoint := false
 	for _, metadata := range servers {
 		serverID := strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
 		if serverID == "" {
 			continue
 		}
-		server, err := client.FetchServerByIDContext(ctx, serverID)
+		server, directEndpoint, err := fetchOrBuildRegistrySpeedtestServerWithFallback(ctx, client, metadata)
 		if err != nil || server == nil {
 			if model.EnableLoger && err != nil {
 				Logger.Info(err.Error())
 			}
 			continue
 		}
-		server.ID = serverID
-		server.Name = registryServerLabel(metadata)
+		usedDirectEndpoint = usedDirectEndpoint || directEndpoint
 		if metadata.ResolvedHost != "" {
 			server.Host = metadata.ResolvedHost
 		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
@@ -258,6 +259,10 @@ func OfficialRegistrySpeedTestWithNetworkContextTo(ctx context.Context, writer i
 			}
 		}
 		targets = append(targets, server)
+	}
+	if usedDirectEndpoint {
+		customTargetsSpeedTestWithClientContextToWithFallback(ctx, writer, targets, len(targets), language, client, true)
+		return
 	}
 	officialTargetsSpeedTestContextTo(ctx, writer, targets, len(targets), language, network)
 }
@@ -271,6 +276,10 @@ func officialTargetsSpeedTestTo(writer io.Writer, targets speedtest.Servers, num
 }
 
 func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string) {
+	officialTargetsSpeedTestContextToWithFallback(ctx, writer, targets, num, language, network, false)
+}
+
+func officialTargetsSpeedTestContextToWithFallback(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string, retryAlternates bool) {
 	if writer == nil {
 		writer = io.Discard
 	}
@@ -285,7 +294,14 @@ func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, ta
 		if server == nil {
 			continue
 		}
-		if err := server.PingTestContext(ctx, nil); err != nil {
+		pingTimeout := time.Duration(0)
+		if retryAlternates {
+			pingTimeout = legacyIDFallbackPingTimeout
+		}
+		pingCtx, pingCancel := speedtestAttemptContext(ctx, pingTimeout)
+		err := server.PingTestContext(pingCtx, nil)
+		pingCancel()
+		if err != nil {
 			server.Latency = 1000 * time.Millisecond
 			if model.EnableLoger {
 				Logger.Info(err.Error())
@@ -309,48 +325,62 @@ func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, ta
 	if num == -1 || num >= len(pinged) {
 		num = len(pinged)
 	}
-	for i := 0; i < len(pinged); i++ {
-		server := pinged[i].server
-		if i < num {
-			var serverName, UPStr, DLStr, Latency, PacketLoss string
-			// speedtest --progress=no --accept-license --accept-gdpr
-			args := []string{"--progress=no", "--server-id=" + server.ID, "--accept-license", "--accept-gdpr"}
-			args = append(args, officialNetworkArgs(network)...)
-			sptCheck := execCommandContext(ctx, "speedtest", args...)
-			temp, err := sptCheck.CombinedOutput()
-			if err == nil {
-				serverName = server.Name
-				tempList := strings.Split(string(temp), "\n")
-				for _, line := range tempList {
-					if strings.Contains(line, "Idle Latency") {
-						Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-					} else if strings.Contains(line, "Download") {
-						DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-					} else if strings.Contains(line, "Upload") {
-						UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-					} else if strings.Contains(line, "Packet Loss") {
-						PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
-					}
-				}
-				if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
-					if language == "zh" {
-						fmt.Fprint(writer, " "+formatString(serverName, 16))
-					} else if language == "en" {
-						name := serverName
-						name = strings.ReplaceAll(name, "中国香港", "HongKong")
-						name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
-						name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
-						name = strings.ReplaceAll(name, "新加坡", "Singapore")
-						name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-						fmt.Fprint(writer, " "+formatString(name, 16))
-					}
-					fmt.Fprint(writer, formatString(UPStr, 16))
-					fmt.Fprint(writer, formatString(DLStr, 16))
-					fmt.Fprint(writer, formatString(Latency, 16))
-					fmt.Fprint(writer, formatString(PacketLoss, 16))
-					fmt.Fprintln(writer)
-				}
+	completed, attempted := 0, 0
+	for _, pingedServer := range pinged {
+		if !retryAlternates && attempted >= num {
+			break
+		}
+		if retryAlternates && completed >= num {
+			break
+		}
+		server := pingedServer.server
+		attempted++
+		attemptTimeout := time.Duration(0)
+		if retryAlternates {
+			attemptTimeout = legacyIDFallbackAttemptTimeout
+		}
+		attemptCtx, attemptCancel := speedtestAttemptContext(ctx, attemptTimeout)
+		var serverName, UPStr, DLStr, Latency, PacketLoss string
+		// speedtest --progress=no --accept-license --accept-gdpr
+		args := []string{"--progress=no", "--server-id=" + server.ID, "--accept-license", "--accept-gdpr"}
+		args = append(args, officialNetworkArgs(network)...)
+		sptCheck := execCommandContext(attemptCtx, "speedtest", args...)
+		temp, err := sptCheck.CombinedOutput()
+		attemptCancel()
+		if err != nil {
+			continue
+		}
+		serverName = server.Name
+		tempList := strings.Split(string(temp), "\n")
+		for _, line := range tempList {
+			if strings.Contains(line, "Idle Latency") {
+				Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Download") {
+				DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Upload") {
+				UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
+			} else if strings.Contains(line, "Packet Loss") {
+				PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
 			}
+		}
+		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
+			if language == "zh" {
+				fmt.Fprint(writer, " "+formatString(serverName, 16))
+			} else if language == "en" {
+				name := serverName
+				name = strings.ReplaceAll(name, "中国香港", "HongKong")
+				name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
+				name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
+				name = strings.ReplaceAll(name, "新加坡", "Singapore")
+				name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
+				fmt.Fprint(writer, " "+formatString(name, 16))
+			}
+			fmt.Fprint(writer, formatString(UPStr, 16))
+			fmt.Fprint(writer, formatString(DLStr, 16))
+			fmt.Fprint(writer, formatString(Latency, 16))
+			fmt.Fprint(writer, formatString(PacketLoss, 16))
+			fmt.Fprintln(writer)
+			completed++
 		}
 	}
 }
@@ -533,14 +563,8 @@ func CustomSpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, 
 	}
 	data := getDataWithNetworkContext(ctx, url, network)
 	client := speedtestClientForNetwork(network)
-	var targets speedtest.Servers
-	if byWhat == "id" {
-		targets = parseDataFromIDWithClientContext(ctx, data, url, client)
-	} else if byWhat == "url" {
-		targets = parseDataFromURLWithClient(data, url, client)
-	}
-	targets = pinSpeedtestServersContext(ctx, targets, network)
-	customTargetsSpeedTestWithClientContextTo(ctx, writer, targets, num, language, client)
+	targets, usedFallback := customSpeedtestTargetsFromData(ctx, data, url, byWhat, client, network)
+	customTargetsSpeedTestWithClientContextToWithFallback(ctx, writer, targets, num, language, client, usedFallback)
 }
 
 // RegistrySpeedTest runs speedtest-go only against a caller-owned, prefiltered
@@ -584,15 +608,13 @@ func RegistrySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer
 		if strings.TrimSpace(metadata.URL) == "" {
 			continue
 		}
-		server, err := client.CustomServer(metadata.URL)
+		server, err := registrySpeedtestServer(client, metadata)
 		if err != nil || server == nil {
 			if model.EnableLoger && err != nil {
 				Logger.Info(err.Error())
 			}
 			continue
 		}
-		server.ID = strings.TrimPrefix(strings.TrimSpace(metadata.ID), "global-")
-		server.Name = registryServerLabel(metadata)
 		if metadata.ResolvedHost != "" {
 			server.Host = metadata.ResolvedHost
 		} else if normalizedNetwork, normalizeErr := model.NormalizeNetwork(network); normalizeErr == nil {
@@ -621,6 +643,10 @@ func customTargetsSpeedTestWithClientTo(writer io.Writer, targets speedtest.Serv
 }
 
 func customTargetsSpeedTestWithClientContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest) {
+	customTargetsSpeedTestWithClientContextToWithFallback(ctx, writer, targets, num, language, client, false)
+}
+
+func customTargetsSpeedTestWithClientContextToWithFallback(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest, retryAlternates bool) {
 	if writer == nil {
 		writer = io.Discard
 	}
@@ -636,7 +662,13 @@ func customTargetsSpeedTestWithClientContextTo(ctx context.Context, writer io.Wr
 		if server == nil {
 			continue
 		}
-		err = server.PingTestContext(ctx, nil)
+		pingTimeout := time.Duration(0)
+		if retryAlternates {
+			pingTimeout = legacyIDFallbackPingTimeout
+		}
+		pingCtx, pingCancel := speedtestAttemptContext(ctx, pingTimeout)
+		err = server.PingTestContext(pingCtx, nil)
+		pingCancel()
 		if err != nil {
 			server.Latency = 1000 * time.Millisecond
 			if model.EnableLoger {
@@ -666,65 +698,105 @@ func customTargetsSpeedTestWithClientContextTo(ctx context.Context, writer io.Wr
 	if num == -1 || num >= len(pinged) {
 		num = len(pinged)
 	}
-	for i := 0; i < len(pinged); i++ {
+	completed, attempted := 0, 0
+	for _, pingedServer := range pinged {
 		if err := ctx.Err(); err != nil {
 			return
 		}
-		server := pinged[i].server
-		if i < num {
-			err1 = server.DownloadTestContext(ctx)
-			err2 = server.UploadTestContext(ctx)
-			err3 = analyzer.RunWithContext(ctx, server.Host, func(packetLoss *transport.PLoss) {
-				if packetLoss == nil {
-					PacketLoss = "N/A"
-					return
-				}
-				PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
-			})
-			if err3 != nil {
-				if model.EnableLoger {
-					Logger.Info(server.ID)
-					Logger.Info(err3.Error())
-				}
-				PacketLoss = "N/A"
-			}
-			if err1 != nil {
-				if model.EnableLoger {
-					Logger.Info(server.ID)
-					Logger.Info(err1.Error())
-				}
-				if server.Context != nil {
-					server.Context.Reset()
-				}
-				continue
-			}
-			if err2 != nil {
-				if model.EnableLoger {
-					Logger.Info(server.ID)
-					Logger.Info(err2.Error())
-				}
-				if server.Context != nil {
-					server.Context.Reset()
-				}
-				continue
-			}
-			if language == "zh" {
-				fmt.Fprint(writer, " "+formatString(server.Name, 16))
-			} else if language == "en" {
-				name := server.Name
-				name = strings.ReplaceAll(name, "中国香港", "HongKong")
-				name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
-				name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
-				name = strings.ReplaceAll(name, "新加坡", "Singapore")
-				name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
-				fmt.Fprint(writer, " "+formatString(name, 16))
-			}
-			fmt.Fprint(writer, formatString(formatMbps(server.ULSpeed.Mbps()), 16))
-			fmt.Fprint(writer, formatString(formatMbps(server.DLSpeed.Mbps()), 16))
-			fmt.Fprint(writer, formatString(server.Latency.String(), 16))
-			fmt.Fprint(writer, formatString(PacketLoss, 16))
-			fmt.Fprintln(writer)
+		if !retryAlternates && attempted >= num {
+			break
 		}
+		if retryAlternates && completed >= num {
+			break
+		}
+		server := pingedServer.server
+		attempted++
+		attemptTimeout := time.Duration(0)
+		if retryAlternates {
+			attemptTimeout = legacyIDFallbackAttemptTimeout
+		}
+		attemptCtx, attemptCancel := speedtestAttemptContext(ctx, attemptTimeout)
+		PacketLoss = ""
+		err1 = server.DownloadTestContext(attemptCtx)
+		if err1 == nil && attemptCtx.Err() != nil {
+			err1 = attemptCtx.Err()
+		}
+		if retryAlternates && err1 != nil {
+			attemptCancel()
+			if server.Context != nil {
+				server.Context.Reset()
+			}
+			continue
+		}
+		err2 = server.UploadTestContext(attemptCtx)
+		if err2 == nil && attemptCtx.Err() != nil {
+			err2 = attemptCtx.Err()
+		}
+		if retryAlternates && err2 != nil {
+			attemptCancel()
+			if server.Context != nil {
+				server.Context.Reset()
+			}
+			continue
+		}
+		err3 = analyzer.RunWithContext(attemptCtx, server.Host, func(packetLoss *transport.PLoss) {
+			if packetLoss == nil {
+				PacketLoss = "N/A"
+				return
+			}
+			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
+		})
+		attemptCancel()
+		if err3 != nil {
+			if model.EnableLoger {
+				Logger.Info(server.ID)
+				Logger.Info(err3.Error())
+			}
+			PacketLoss = "N/A"
+		}
+		if err1 != nil {
+			if model.EnableLoger {
+				Logger.Info(server.ID)
+				Logger.Info(err1.Error())
+			}
+			if server.Context != nil {
+				server.Context.Reset()
+			}
+			continue
+		}
+		if err2 != nil {
+			if model.EnableLoger {
+				Logger.Info(server.ID)
+				Logger.Info(err2.Error())
+			}
+			if server.Context != nil {
+				server.Context.Reset()
+			}
+			continue
+		}
+		if retryAlternates && (server.ULSpeed.Mbps() <= 0 || server.DLSpeed.Mbps() <= 0) {
+			if server.Context != nil {
+				server.Context.Reset()
+			}
+			continue
+		}
+		if language == "zh" {
+			fmt.Fprint(writer, " "+formatString(server.Name, 16))
+		} else if language == "en" {
+			name := server.Name
+			name = strings.ReplaceAll(name, "中国香港", "HongKong")
+			name = strings.ReplaceAll(name, "洛杉矶", "LosAngeles")
+			name = strings.ReplaceAll(name, "日本东京", "Tokyo,Japan")
+			name = strings.ReplaceAll(name, "新加坡", "Singapore")
+			name = strings.ReplaceAll(name, "法兰克福", "Frankfurt")
+			fmt.Fprint(writer, " "+formatString(name, 16))
+		}
+		fmt.Fprint(writer, formatString(formatMbps(server.ULSpeed.Mbps()), 16))
+		fmt.Fprint(writer, formatString(formatMbps(server.DLSpeed.Mbps()), 16))
+		fmt.Fprint(writer, formatString(server.Latency.String(), 16))
+		fmt.Fprint(writer, formatString(PacketLoss, 16))
+		fmt.Fprintln(writer)
+		completed++
 		if server.Context != nil {
 			server.Context.Reset()
 		}
