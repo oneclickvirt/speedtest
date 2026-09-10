@@ -49,6 +49,10 @@ func BenchmarkServersWithNetwork(ctx context.Context, servers []ServerMetadata, 
 	if limit <= 0 || limit > len(servers) {
 		limit = len(servers)
 	}
+	attemptLimit := limit * 2
+	if attemptLimit > len(servers) {
+		attemptLimit = len(servers)
+	}
 	if probe == nil {
 		probe = func(ctx context.Context, server ServerMetadata) ThroughputResult {
 			return ProbeThroughputWithNetwork(ctx, server, network)
@@ -56,7 +60,7 @@ func BenchmarkServersWithNetwork(ctx context.Context, servers []ServerMetadata, 
 	}
 	results := make([]ThroughputResult, 0, min(len(servers), limit))
 	completed := 0
-	for _, server := range servers {
+	for _, server := range servers[:attemptLimit] {
 		if completed >= limit {
 			break
 		}

@@ -42,6 +42,18 @@ func TestBenchmarkServersContinuesUntilSuccessTarget(t *testing.T) {
 	}
 }
 
+func TestBenchmarkServersCapsAttemptsAtTwiceSuccessTarget(t *testing.T) {
+	servers := []ServerMetadata{{ID: "one"}, {ID: "two"}, {ID: "three"}, {ID: "four"}}
+	calls := 0
+	results := BenchmarkServers(context.Background(), servers, 1, func(_ context.Context, server ServerMetadata) ThroughputResult {
+		calls++
+		return ThroughputResult{ID: server.ID, Status: ThroughputUnavailable}
+	})
+	if calls != 2 || len(results) != 2 {
+		t.Fatalf("calls/results = %d/%d, want 2/2", calls, len(results))
+	}
+}
+
 func TestProbeThroughputRejectsMissingURLWithoutNetwork(t *testing.T) {
 	result := ProbeThroughput(context.Background(), ServerMetadata{ID: "fixture"})
 	if result.Status != ThroughputUnavailable || result.Error == "" {

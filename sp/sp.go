@@ -496,8 +496,9 @@ func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, 
 	if num == -1 || num >= len(targets) {
 		num = len(targets)
 	}
+	attemptLimit := speedtestAttemptLimit(num, len(targets))
 	completed := 0
-	for _, server := range targets {
+	for _, server := range targets[:attemptLimit] {
 		if completed >= num {
 			break
 		}
@@ -608,8 +609,6 @@ func NearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, 
 	nearbySpeedTestWithNetworkContextTo(ctx, writer, network)
 }
 
-const nearbySpeedtestFallbackAttempts = 8
-
 func nearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) bool {
 	client := speedtestClientForNetwork(network)
 	serverList, err := client.FetchServerListContext(ctx)
@@ -630,7 +629,7 @@ func nearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, 
 	targets = rankSpeedtestTargetsByLatencyConcurrent(ctx, targets, true)
 	analyzer := client.NewPacketLossAnalyzer()
 	for index, nearbyServer := range targets {
-		if index >= nearbySpeedtestFallbackAttempts || ctx.Err() != nil {
+		if index >= speedtestAttemptLimit(1, len(targets)) || ctx.Err() != nil {
 			break
 		}
 		if nearbyServer == nil {
@@ -835,8 +834,9 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 	if num == -1 || num >= len(targets) {
 		num = len(targets)
 	}
+	attemptLimit := speedtestAttemptLimit(num, len(targets))
 	completed := 0
-	for _, server := range targets {
+	for _, server := range targets[:attemptLimit] {
 		if err := ctx.Err(); err != nil {
 			return completed
 		}
@@ -934,4 +934,15 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 		}
 	}
 	return completed
+}
+
+func speedtestAttemptLimit(successTarget, candidates int) int {
+	if successTarget <= 0 || candidates <= 0 {
+		return 0
+	}
+	attempts := successTarget * 2
+	if attempts > candidates {
+		attempts = candidates
+	}
+	return attempts
 }
