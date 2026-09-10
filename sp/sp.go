@@ -40,6 +40,10 @@ func execCommandContext(ctx context.Context, name string, arg ...string) *exec.C
 	return exec.CommandContext(ctx, name, arg...)
 }
 
+var runOfficialSpeedtestCommand = func(ctx context.Context, args ...string) ([]byte, error) {
+	return execCommandContext(ctx, "speedtest", args...).CombinedOutput()
+}
+
 func OfficialAvailableTest() error {
 	if model.EnableLoger {
 		InitLogger()
@@ -106,7 +110,9 @@ func OfficialNearbySpeedTestWithNetworkTo(writer io.Writer, network string) {
 }
 
 // OfficialNearbySpeedTestWithNetworkContextTo is the cancellable, writer-aware
-// form used by orchestrators that run multiple diagnostics concurrently.
+// form used by orchestrators that run multiple diagnostics concurrently. If
+// the external client fails or returns an incomplete result, the same request
+// is retried through the pure-Go nearby implementation.
 func OfficialNearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) {
 	if writer == nil {
 		writer = io.Discard
@@ -118,34 +124,70 @@ func OfficialNearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.
 		InitLogger()
 		defer Logger.Sync()
 	}
-	var UPStr, DLStr, Latency, PacketLoss string // serverID,
+	if officialNearbySpeedTestWithNetworkContextTo(ctx, writer, network) {
+		return
+	}
+	nearbySpeedTestWithNetworkContextTo(ctx, writer, network)
+}
+
+type nearbyMeasurement struct {
+	Upload     string
+	Download   string
+	Latency    string
+	PacketLoss string
+}
+
+func officialNearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) bool {
 	// speedtest --progress=no --accept-license --accept-gdpr
 	args := []string{"--progress=no", "--accept-license", "--accept-gdpr"}
 	args = append(args, officialNetworkArgs(network)...)
-	sptCheck := execCommandContext(ctx, "speedtest", args...)
-	temp, err := sptCheck.CombinedOutput()
-	if err == nil {
-		tempList := strings.Split(string(temp), "\n")
-		for _, line := range tempList {
-			if strings.Contains(line, "Idle Latency") {
-				Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Download") {
-				DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Upload") {
-				UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Packet Loss") {
-				PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
-			}
+	temp, err := runOfficialSpeedtestCommand(ctx, args...)
+	if err != nil {
+		return false
+	}
+	measurement, ok := parseOfficialNearbyMeasurement(string(temp))
+	if !ok {
+		return false
+	}
+	writeNearbyMeasurement(writer, measurement)
+	return true
+}
+
+func parseOfficialNearbyMeasurement(output string) (nearbyMeasurement, bool) {
+	var measurement nearbyMeasurement
+	for _, line := range strings.Split(output, "\n") {
+		key, value, found := strings.Cut(line, ":")
+		if !found {
+			continue
 		}
-		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
-			fmt.Fprint(writer, " "+formatString("Speedtest.net", 16))
-			fmt.Fprint(writer, formatString(UPStr, 16))
-			fmt.Fprint(writer, formatString(DLStr, 16))
-			fmt.Fprint(writer, formatString(Latency, 16))
-			fmt.Fprint(writer, formatString(PacketLoss, 16))
-			fmt.Fprintln(writer)
+		value = strings.TrimSpace(strings.SplitN(value, "(", 2)[0])
+		switch {
+		case strings.Contains(key, "Idle Latency"):
+			measurement.Latency = value
+		case strings.Contains(key, "Download"):
+			measurement.Download = value
+		case strings.Contains(key, "Upload"):
+			measurement.Upload = value
+		case strings.Contains(key, "Packet Loss"):
+			measurement.PacketLoss = strings.TrimSpace(strings.SplitN(line, ":", 2)[1])
 		}
 	}
+	if measurement.Latency == "" || measurement.Download == "" || measurement.Upload == "" {
+		return nearbyMeasurement{}, false
+	}
+	if measurement.PacketLoss == "" {
+		measurement.PacketLoss = "N/A"
+	}
+	return measurement, true
+}
+
+func writeNearbyMeasurement(writer io.Writer, measurement nearbyMeasurement) {
+	fmt.Fprint(writer, " "+formatString("Speedtest.net", 16))
+	fmt.Fprint(writer, formatString(measurement.Upload, 16))
+	fmt.Fprint(writer, formatString(measurement.Download, 16))
+	fmt.Fprint(writer, formatString(measurement.Latency, 16))
+	fmt.Fprint(writer, formatString(measurement.PacketLoss, 16))
+	fmt.Fprintln(writer)
 }
 
 func OfficialCustomSpeedTest(url, byWhat string, num int, language string) {
@@ -342,15 +384,21 @@ func rankSpeedtestTargetsByLatencyConcurrentWithProbe(ctx context.Context, targe
 	}
 	// Candidate probes are deliberately bounded. This short phase can overlap
 	// other diagnostics, but all workers are joined before any transfer starts.
-	ranked := make(speedtest.Servers, len(targets))
+	type rankedCandidate struct {
+		server *speedtest.Server
+		index  int
+		probed bool
+	}
+	ranked := make([]rankedCandidate, len(targets))
 	candidates := 0
-	for _, server := range targets {
+	for index, server := range targets {
 		if server != nil {
+			ranked[index] = rankedCandidate{server: server, index: index}
 			candidates++
 		}
 	}
 	if candidates == 0 {
-		return ranked[:0]
+		return nil
 	}
 	jobs := make(chan int)
 	workers := candidates
@@ -373,7 +421,7 @@ func rankSpeedtestTargetsByLatencyConcurrentWithProbe(ctx context.Context, targe
 					continue
 				}
 				recordSpeedtestTargetProbe(ctx, server, retryAlternates, probe)
-				ranked[index] = server
+				ranked[index].probed = true
 			}
 		}()
 	}
@@ -394,19 +442,29 @@ sendJobs:
 	close(jobs)
 	wait.Wait()
 	filtered := ranked[:0]
-	for _, server := range ranked {
-		if server != nil {
-			filtered = append(filtered, server)
+	for _, candidate := range ranked {
+		if candidate.server != nil {
+			filtered = append(filtered, candidate)
 		}
 	}
 	ranked = filtered
 	sort.SliceStable(ranked, func(i, j int) bool {
-		if ranked[i].Latency == ranked[j].Latency {
-			return ranked[i].ID < ranked[j].ID
+		if ranked[i].probed != ranked[j].probed {
+			return ranked[i].probed
 		}
-		return ranked[i].Latency < ranked[j].Latency
+		if !ranked[i].probed {
+			return ranked[i].index < ranked[j].index
+		}
+		if ranked[i].server.Latency == ranked[j].server.Latency {
+			return ranked[i].server.ID < ranked[j].server.ID
+		}
+		return ranked[i].server.Latency < ranked[j].server.Latency
 	})
-	return ranked
+	servers := make(speedtest.Servers, 0, len(ranked))
+	for _, candidate := range ranked {
+		servers = append(servers, candidate.server)
+	}
+	return servers
 }
 
 func officialTargetsSpeedTestContextTo(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string) {
@@ -421,7 +479,7 @@ func officialTargetsSpeedTestContextToWithFallback(ctx context.Context, writer i
 // officialTargetsSpeedTestContextToWithPreloadedTargets runs the established
 // official-client transfer logic after candidate latency has already been
 // collected and sorted.
-func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string, retryAlternates bool) {
+func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language, network string, retryAlternates bool) int {
 	if writer == nil {
 		writer = io.Discard
 	}
@@ -433,21 +491,17 @@ func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, 
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
-		return
+		return 0
 	}
 	if num == -1 || num >= len(targets) {
 		num = len(targets)
 	}
-	completed, attempted := 0, 0
+	completed := 0
 	for _, server := range targets {
-		if !retryAlternates && attempted >= num {
+		if completed >= num {
 			break
 		}
-		if retryAlternates && completed >= num {
-			break
-		}
-		attempted++
-		attemptTimeout := time.Duration(0)
+		attemptTimeout := standardSpeedtestAttemptTimeout
 		if retryAlternates {
 			attemptTimeout = legacyIDFallbackAttemptTimeout
 		}
@@ -456,26 +510,15 @@ func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, 
 		// speedtest --progress=no --accept-license --accept-gdpr
 		args := []string{"--progress=no", "--server-id=" + server.ID, "--accept-license", "--accept-gdpr"}
 		args = append(args, officialNetworkArgs(network)...)
-		sptCheck := execCommandContext(attemptCtx, "speedtest", args...)
-		temp, err := sptCheck.CombinedOutput()
+		temp, err := runOfficialSpeedtestCommand(attemptCtx, args...)
 		attemptCancel()
 		if err != nil {
 			continue
 		}
 		serverName = server.Name
-		tempList := strings.Split(string(temp), "\n")
-		for _, line := range tempList {
-			if strings.Contains(line, "Idle Latency") {
-				Latency = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Download") {
-				DLStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Upload") {
-				UPStr = strings.TrimSpace(strings.Split(strings.Split(line, ":")[1], "(")[0])
-			} else if strings.Contains(line, "Packet Loss") {
-				PacketLoss = strings.TrimSpace(strings.Split(line, ":")[1])
-			}
-		}
-		if Latency != "" && DLStr != "" && UPStr != "" && PacketLoss != "" {
+		measurement, ok := parseOfficialNearbyMeasurement(string(temp))
+		if ok {
+			UPStr, DLStr, Latency, PacketLoss = measurement.Upload, measurement.Download, measurement.Latency, measurement.PacketLoss
 			if language == "zh" {
 				fmt.Fprint(writer, " "+formatString(serverName, 16))
 			} else if language == "en" {
@@ -495,6 +538,7 @@ func officialTargetsSpeedTestContextToWithPreloadedTargets(ctx context.Context, 
 			completed++
 		}
 	}
+	return completed
 }
 
 func officialNetworkArgs(value string) []string {
@@ -561,83 +605,86 @@ func NearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, 
 		InitLogger()
 		defer Logger.Sync()
 	}
+	nearbySpeedTestWithNetworkContextTo(ctx, writer, network)
+}
+
+const nearbySpeedtestFallbackAttempts = 8
+
+func nearbySpeedTestWithNetworkContextTo(ctx context.Context, writer io.Writer, network string) bool {
 	client := speedtestClientForNetwork(network)
 	serverList, err := client.FetchServerListContext(ctx)
 	if err != nil || serverList == nil {
 		if model.EnableLoger && err != nil {
 			Logger.Info(err.Error())
 		}
-		return
+		return false
 	}
 	targets, err := serverList.FindServer([]int{})
 	if err != nil {
 		if model.EnableLoger {
 			Logger.Info(err.Error())
 		}
-		return
+		return false
 	}
 	targets = pinSpeedtestServersContext(ctx, targets, network)
+	targets = rankSpeedtestTargetsByLatencyConcurrent(ctx, targets, true)
 	analyzer := client.NewPacketLossAnalyzer()
-	var LowestLatency time.Duration
-	var NearbyServer *speedtest.Server
-	var PacketLoss string
-	for _, server := range targets {
-		if server == nil {
+	for index, nearbyServer := range targets {
+		if index >= nearbySpeedtestFallbackAttempts || ctx.Err() != nil {
+			break
+		}
+		if nearbyServer == nil {
 			continue
 		}
-		if err := server.PingTestContext(ctx, nil); err != nil {
-			if model.EnableLoger {
-				Logger.Info(err.Error())
-			}
-			continue
+		if nearbyServer.Context != nil {
+			nearbyServer.Context.Reset()
 		}
-		if LowestLatency == 0 && NearbyServer == nil {
-			LowestLatency = server.Latency
-			NearbyServer = server
-		} else if server.Latency < LowestLatency && NearbyServer != nil {
-			LowestLatency = server.Latency
-			NearbyServer = server
-		}
-		if server.Context != nil {
-			server.Context.Reset()
-		}
-	}
-	if NearbyServer != nil {
-		err = NearbyServer.DownloadTestContext(ctx)
+		attemptCtx, attemptCancel := speedtestAttemptContext(ctx, standardSpeedtestAttemptTimeout)
+		err = nearbyServer.DownloadTestContext(attemptCtx)
 		if err != nil {
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
-			return
+			attemptCancel()
+			if nearbyServer.Context != nil {
+				nearbyServer.Context.Reset()
+			}
+			continue
 		}
-		err = NearbyServer.UploadTestContext(ctx)
+		err = nearbyServer.UploadTestContext(attemptCtx)
 		if err != nil {
 			if model.EnableLoger {
 				Logger.Info(err.Error())
 			}
-			return
+			attemptCancel()
+			if nearbyServer.Context != nil {
+				nearbyServer.Context.Reset()
+			}
+			continue
 		}
-		err := analyzer.RunWithContext(ctx, NearbyServer.Host, func(packetLoss *transport.PLoss) {
+		packetLossText := "N/A"
+		err := analyzer.RunWithContext(attemptCtx, nearbyServer.Host, func(packetLoss *transport.PLoss) {
 			if packetLoss == nil {
-				PacketLoss = "N/A"
 				return
 			}
-			PacketLoss = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
+			packetLossText = strings.ReplaceAll(packetLoss.String(), "Packet Loss: ", "")
 		})
-		if err == nil {
-			fmt.Fprint(writer, " "+formatString("Speedtest.net", 16))
-			fmt.Fprint(writer, formatString(formatMbps(NearbyServer.ULSpeed.Mbps()), 16))
-			fmt.Fprint(writer, formatString(formatMbps(NearbyServer.DLSpeed.Mbps()), 16))
-			fmt.Fprint(writer, formatString(NearbyServer.Latency.String(), 16))
-			fmt.Fprint(writer, formatString(PacketLoss, 16))
-			fmt.Fprintln(writer)
-			if NearbyServer.Context != nil {
-				NearbyServer.Context.Reset()
-			}
-		} else if model.EnableLoger {
+		attemptCancel()
+		if err != nil && model.EnableLoger {
 			Logger.Info(err.Error())
 		}
+		writeNearbyMeasurement(writer, nearbyMeasurement{
+			Upload:     formatMbps(nearbyServer.ULSpeed.Mbps()),
+			Download:   formatMbps(nearbyServer.DLSpeed.Mbps()),
+			Latency:    nearbyServer.Latency.String(),
+			PacketLoss: packetLossText,
+		})
+		if nearbyServer.Context != nil {
+			nearbyServer.Context.Reset()
+		}
+		return true
 	}
+	return false
 }
 
 func CustomSpeedTest(url, byWhat string, num int, language string) {
@@ -765,7 +812,7 @@ func customTargetsSpeedTestWithClientContextToWithFallback(ctx context.Context, 
 
 // customTargetsSpeedTestWithClientContextToWithPreloadedTargets runs the
 // historical speedtest-go transfer path after the candidate phase has finished.
-func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest, retryAlternates bool) {
+func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.Context, writer io.Writer, targets speedtest.Servers, num int, language string, client *speedtest.Speedtest, retryAlternates bool) int {
 	if writer == nil {
 		writer = io.Discard
 	}
@@ -783,24 +830,20 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 		if model.EnableLoger {
 			Logger.Info("No match servers")
 		}
-		return
+		return 0
 	}
 	if num == -1 || num >= len(targets) {
 		num = len(targets)
 	}
-	completed, attempted := 0, 0
+	completed := 0
 	for _, server := range targets {
 		if err := ctx.Err(); err != nil {
-			return
+			return completed
 		}
-		if !retryAlternates && attempted >= num {
+		if completed >= num {
 			break
 		}
-		if retryAlternates && completed >= num {
-			break
-		}
-		attempted++
-		attemptTimeout := time.Duration(0)
+		attemptTimeout := standardSpeedtestAttemptTimeout
 		if retryAlternates {
 			attemptTimeout = legacyIDFallbackAttemptTimeout
 		}
@@ -810,7 +853,7 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 		if err1 == nil && attemptCtx.Err() != nil {
 			err1 = attemptCtx.Err()
 		}
-		if retryAlternates && err1 != nil {
+		if err1 != nil {
 			attemptCancel()
 			if server.Context != nil {
 				server.Context.Reset()
@@ -821,7 +864,7 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 		if err2 == nil && attemptCtx.Err() != nil {
 			err2 = attemptCtx.Err()
 		}
-		if retryAlternates && err2 != nil {
+		if err2 != nil {
 			attemptCancel()
 			if server.Context != nil {
 				server.Context.Reset()
@@ -863,7 +906,7 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 			}
 			continue
 		}
-		if retryAlternates && (server.ULSpeed.Mbps() <= 0 || server.DLSpeed.Mbps() <= 0) {
+		if server.ULSpeed.Mbps() <= 0 || server.DLSpeed.Mbps() <= 0 {
 			if server.Context != nil {
 				server.Context.Reset()
 			}
@@ -890,4 +933,5 @@ func customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx context.C
 			server.Context.Reset()
 		}
 	}
+	return completed
 }

@@ -101,13 +101,17 @@ func TestConcurrentCandidateRankingStopsQueuedProbesOnCancellation(t *testing.T)
 		t.Fatal("candidate probe did not start")
 	}
 	cancel()
+	var ranked speedtest.Servers
 	select {
-	case <-result:
+	case ranked = <-result:
 	case <-time.After(time.Second):
 		t.Fatal("candidate ranking did not stop after cancellation")
 	}
 	if got := calls.Load(); got > concurrentCandidateProbeWorkers {
 		t.Fatalf("started %d probes after cancellation, limit is %d", got, concurrentCandidateProbeWorkers)
+	}
+	if len(ranked) != len(targets) {
+		t.Fatalf("cancellation discarded candidates: got %d, want %d", len(ranked), len(targets))
 	}
 }
 

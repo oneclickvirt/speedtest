@@ -30,8 +30,9 @@ var speedtestClient = speedtest.New(
 )
 
 const (
-	legacyIDFallbackAttemptTimeout = 30 * time.Second
-	legacyIDFallbackPingTimeout    = 5 * time.Second
+	legacyIDFallbackAttemptTimeout  = 30 * time.Second
+	legacyIDFallbackPingTimeout     = 5 * time.Second
+	standardSpeedtestAttemptTimeout = 45 * time.Second
 )
 
 func speedtestAttemptContext(ctx context.Context, timeout time.Duration) (context.Context, context.CancelFunc) {
@@ -177,80 +178,109 @@ func getDataWithNetworkContext(ctx context.Context, endpoint, network string) st
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	client := requestClientForNetwork(network, 10*time.Second)
 	if model.EnableLoger {
 		InitLogger()
 		defer Logger.Sync()
 	}
 
-	// First, find an available CDN
-	var availableCdn string
-	for _, baseUrl := range model.CdnList {
-		if err := ctx.Err(); err != nil {
-			return ""
-		}
-		if checkCDNWithNetworkContext(ctx, baseUrl, network) {
-			availableCdn = baseUrl
-			if model.EnableLoger {
-				Logger.Info(fmt.Sprintf("CDN available: %s", baseUrl))
-			}
-			break
-		}
+	// The old path checked every CDN serially before fetching the registry. On
+	// a partially reachable dual-stack host that could consume the complete
+	// preload deadline. Race the small metadata requests and use the first
+	// syntactically valid CSV; all requests share the selected address family.
+	urls := speedtestDataCandidateURLs(endpoint)
+	fetchCtx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	type fetchResult struct {
+		url  string
+		data string
+		err  error
+	}
+	results := make(chan fetchResult, len(urls))
+	for _, candidateURL := range urls {
+		candidateURL := candidateURL
+		go func() {
+			data, err := fetchSpeedtestData(fetchCtx, candidateURL, network)
+			results <- fetchResult{url: candidateURL, data: data, err: err}
+		}()
+	}
+	for range urls {
 		select {
+		case result := <-results:
+			if result.err == nil && looksLikeSpeedtestData(result.data) {
+				cancel()
+				if model.EnableLoger {
+					Logger.Info(fmt.Sprintf("Speedtest registry loaded from %s (%d bytes)", result.url, len(result.data)))
+				}
+				return result.data
+			}
 		case <-ctx.Done():
 			return ""
-		case <-time.After(500 * time.Millisecond):
 		}
 	}
-
-	if availableCdn == "" {
-		if model.EnableLoger {
-			Logger.Info("No CDN available, trying direct access")
-		}
-		// Try direct access without CDN
-		resp, err := client.R().SetContext(ctx).
-			SetRetryCount(2).
-			SetRetryBackoffInterval(1*time.Second, 5*time.Second).
-			SetRetryFixedInterval(2 * time.Second).
-			Get(endpoint)
-		if err == nil && resp != nil {
-			defer resp.Body.Close()
-			b, err := io.ReadAll(resp.Body)
-			if err == nil && !strings.Contains(string(b), "error") {
-				if model.EnableLoger {
-					Logger.Info(fmt.Sprintf("Direct access success, received data length: %d", len(b)))
-				}
-				return string(b)
-			}
-		}
-		if model.EnableLoger {
-			Logger.Info("Direct access failed")
-		}
-		return ""
-	}
-
-	// Use the available CDN
-	url := availableCdn + endpoint
-	resp, err := client.R().SetContext(ctx).
-		SetRetryCount(2).
-		SetRetryBackoffInterval(1*time.Second, 5*time.Second).
-		SetRetryFixedInterval(2 * time.Second).
-		Get(url)
-	if err == nil && resp != nil {
-		defer resp.Body.Close()
-		b, err := io.ReadAll(resp.Body)
-		if err == nil && !strings.Contains(string(b), "error") {
-			if model.EnableLoger {
-				Logger.Info(fmt.Sprintf("CDN access success, received data length: %d", len(b)))
-			}
-			return string(b)
-		}
-	}
-
 	if model.EnableLoger {
-		Logger.Info(fmt.Sprintf("CDN access failed: %v", err))
+		Logger.Info("No speedtest registry source returned valid CSV data")
 	}
 	return ""
+}
+
+func speedtestDataCandidateURLs(endpoint string) []string {
+	urls := make([]string, 0, len(model.CdnList)+1)
+	seen := make(map[string]struct{}, len(model.CdnList)+1)
+	for _, candidate := range append([]string{endpoint}, model.CdnList...) {
+		url := candidate
+		if candidate != endpoint {
+			url = candidate + endpoint
+		}
+		if strings.TrimSpace(url) == "" {
+			continue
+		}
+		if _, exists := seen[url]; exists {
+			continue
+		}
+		seen[url] = struct{}{}
+		urls = append(urls, url)
+	}
+	return urls
+}
+
+func fetchSpeedtestData(ctx context.Context, endpoint, network string) (string, error) {
+	client := requestClientForNetwork(network, 10*time.Second)
+	resp, err := client.R().SetContext(ctx).Get(endpoint)
+	if err != nil {
+		return "", err
+	}
+	if resp == nil {
+		return "", fmt.Errorf("empty response")
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return "", fmt.Errorf("HTTP %d", resp.StatusCode)
+	}
+	data, err := io.ReadAll(io.LimitReader(resp.Body, 8<<20))
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+func looksLikeSpeedtestData(data string) bool {
+	trimmed := strings.TrimSpace(data)
+	if trimmed == "" || strings.HasPrefix(trimmed, "{") || strings.HasPrefix(trimmed, "[") || strings.HasPrefix(strings.ToLower(trimmed), "<!doctype") || strings.HasPrefix(strings.ToLower(trimmed), "<html") {
+		return false
+	}
+	reader := csv.NewReader(strings.NewReader(trimmed))
+	reader.Comma = detectSeparator(trimmed)
+	reader.FieldsPerRecord = -1
+	for index := 0; index < 4; index++ {
+		record, err := reader.Read()
+		if err != nil {
+			return false
+		}
+		if len(record) >= 4 && strings.TrimSpace(record[0]) != "" {
+			return true
+		}
+	}
+	return false
 }
 
 // 自动检测 CSV 分隔符

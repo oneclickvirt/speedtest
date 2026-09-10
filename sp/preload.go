@@ -31,7 +31,8 @@ func StartCustomSpeedTestPreload(ctx context.Context, url, byWhat, network strin
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	preloadCtx, cancel := context.WithTimeout(ctx, customSpeedtestPreloadDeadline)
+	parentCtx := ctx
+	preloadCtx, cancel := context.WithTimeout(parentCtx, customSpeedtestPreloadDeadline)
 	preload := &CustomSpeedTestPreload{
 		done:    make(chan struct{}),
 		network: network,
@@ -39,13 +40,13 @@ func StartCustomSpeedTestPreload(ctx context.Context, url, byWhat, network strin
 	go func() {
 		defer close(preload.done)
 		defer cancel()
-		if err := preloadCtx.Err(); err != nil {
+		if err := parentCtx.Err(); err != nil {
 			preload.err = err
 			return
 		}
 		preload.client = speedtestClientForNetwork(network)
 		data := getDataWithNetworkContext(preloadCtx, url, network)
-		if err := preloadCtx.Err(); err != nil {
+		if err := parentCtx.Err(); err != nil {
 			preload.err = err
 			return
 		}
@@ -55,10 +56,13 @@ func StartCustomSpeedTestPreload(ctx context.Context, url, byWhat, network strin
 			return
 		}
 		preload.targets = rankSpeedtestTargetsByLatencyConcurrent(preloadCtx, preload.targets, preload.usedFallback)
-		if err := preloadCtx.Err(); err != nil {
+		if err := parentCtx.Err(); err != nil {
 			preload.err = err
 			return
 		}
+		// The internal deadline bounds only the optimization. Concurrent ranking
+		// retains unprobed targets, so a timeout with parsed candidates is still a
+		// usable preload and the real transfer can validate them later.
 	}()
 	return preload
 }
@@ -101,7 +105,9 @@ func (p *CustomSpeedTestPreload) RunCustomSpeedTestContextTo(ctx context.Context
 	if err != nil {
 		return err
 	}
-	customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx, writer, targets, num, language, client, usedFallback)
+	if completed := customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx, writer, targets, num, language, client, usedFallback); completed == 0 {
+		return fmt.Errorf("no preloaded speedtest candidate completed throughput")
+	}
 	return nil
 }
 
@@ -114,9 +120,13 @@ func (p *CustomSpeedTestPreload) RunOfficialCustomSpeedTestContextTo(ctx context
 		return err
 	}
 	if usedFallback {
-		customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx, writer, targets, num, language, client, true)
+		if completed := customTargetsSpeedTestWithClientContextToWithPreloadedTargets(ctx, writer, targets, num, language, client, true); completed == 0 {
+			return fmt.Errorf("no preloaded speedtest candidate completed throughput")
+		}
 		return nil
 	}
-	officialTargetsSpeedTestContextToWithPreloadedTargets(ctx, writer, targets, num, language, network, false)
+	if completed := officialTargetsSpeedTestContextToWithPreloadedTargets(ctx, writer, targets, num, language, network, false); completed == 0 {
+		return fmt.Errorf("no preloaded speedtest candidate completed throughput")
+	}
 	return nil
 }

@@ -59,6 +59,30 @@ func TestGetDataWithNetworkContextStopsWhenCanceled(t *testing.T) {
 	}
 }
 
+func TestLooksLikeSpeedtestDataRejectsProxyPayloads(t *testing.T) {
+	for _, payload := range []string{"", `{"message":"proxy payload"}`, "<!doctype html><title>error</title>"} {
+		if looksLikeSpeedtestData(payload) {
+			t.Fatalf("proxy payload accepted as speedtest CSV: %q", payload)
+		}
+	}
+	valid := "id,country_code,country,city,ip,host,port,supplier\n123,CN,China,Shanghai,192.0.2.1,speed.example,8080,fixture\n"
+	if !looksLikeSpeedtestData(valid) {
+		t.Fatal("valid speedtest CSV was rejected")
+	}
+}
+
+func TestSpeedtestDataCandidateURLsIncludeDirectAndCDNs(t *testing.T) {
+	original := append([]string(nil), model.CdnList...)
+	model.CdnList = []string{"https://cdn-a.example/", "https://cdn-b.example/"}
+	t.Cleanup(func() { model.CdnList = original })
+	endpoint := "https://raw.example/servers.csv"
+	got := speedtestDataCandidateURLs(endpoint)
+	want := []string{endpoint, "https://cdn-a.example/" + endpoint, "https://cdn-b.example/" + endpoint}
+	if strings.Join(got, "\n") != strings.Join(want, "\n") {
+		t.Fatalf("candidate URLs = %#v, want %#v", got, want)
+	}
+}
+
 func incompleteIDLookupClient() *showwinspeedtest.Speedtest {
 	return showwinspeedtest.New(
 		showwinspeedtest.WithUserConfig(&showwinspeedtest.UserConfig{MaxConnections: 1}),
