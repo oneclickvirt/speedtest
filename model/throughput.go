@@ -94,14 +94,17 @@ func ProbeThroughputWithNetwork(ctx context.Context, metadata ServerMetadata, ne
 	}
 	var serverClient *showwinspeedtest.Speedtest
 	if network == NetworkAuto {
-		serverClient = showwinspeedtest.New(showwinspeedtest.WithUserConfig(config))
+		serverClient = showwinspeedtest.New(
+			showwinspeedtest.WithUserConfig(config),
+			showwinspeedtest.WithDoer(NewThroughputHTTPClient(network, 30*time.Second)),
+		)
 	} else {
 		// WithDoer follows WithUserConfig so the upstream library cannot replace
 		// the explicit-family transport. HTTP ping shares that transport.
 		config.PingMode = showwinspeedtest.HTTP
 		serverClient = showwinspeedtest.New(
 			showwinspeedtest.WithUserConfig(config),
-			showwinspeedtest.WithDoer(NewHTTPClient(network, 30*time.Second)),
+			showwinspeedtest.WithDoer(NewThroughputHTTPClient(network, 30*time.Second)),
 		)
 	}
 	server, err := serverClient.CustomServer(endpoint.String())

@@ -19,13 +19,15 @@ import (
 	"github.com/showwin/speedtest-go/speedtest"
 )
 
-var speedtestClient = speedtest.New(speedtest.WithUserConfig(
-	&speedtest.UserConfig{
+var speedtestClient = speedtest.New(
+	speedtest.WithUserConfig(&speedtest.UserConfig{
 		UserAgent:      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36",
 		PingMode:       speedtest.TCP,
 		TestMode:       speedtest.HTTPTest,
 		MaxConnections: 8,
-	}))
+	}),
+	speedtest.WithDoer(model.NewThroughputHTTPClient(model.NetworkAuto, 30*time.Second)),
+)
 
 const (
 	legacyIDFallbackAttemptTimeout = 30 * time.Second
@@ -58,7 +60,7 @@ func speedtestClientForNetwork(value string) *speedtest.Speedtest {
 	// then share one forced-family dialer.
 	return speedtest.New(
 		speedtest.WithUserConfig(config),
-		speedtest.WithDoer(model.NewHTTPClient(network, 30*time.Second)),
+		speedtest.WithDoer(model.NewThroughputHTTPClient(network, 30*time.Second)),
 	)
 }
 

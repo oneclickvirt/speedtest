@@ -106,9 +106,22 @@ func networkLabel(network Network) string {
 	}
 }
 
-// NewHTTPClient creates the family-aware client used by registry probing and
-// OpenSpeedTest throughput. Auto retains ordinary dual-stack behavior.
+// NewHTTPClient creates the family-aware client used by registry and metadata
+// requests. Auto retains ordinary dual-stack behavior and connection reuse.
 func NewHTTPClient(network Network, timeout time.Duration) *http.Client {
+	return newHTTPClient(network, timeout, false)
+}
+
+// NewThroughputHTTPClient creates the family-aware client used for speedtest
+// transfer endpoints. Some Ookla-compatible servers send bytes after the
+// declared response body has ended. Reusing those connections makes net/http
+// print the trailing binary payload as an "Unsolicited response" diagnostic,
+// so transfer clients deliberately close each HTTP/1.x connection instead.
+func NewThroughputHTTPClient(network Network, timeout time.Duration) *http.Client {
+	return newHTTPClient(network, timeout, true)
+}
+
+func newHTTPClient(network Network, timeout time.Duration, disableKeepAlives bool) *http.Client {
 	if timeout <= 0 {
 		timeout = 12 * time.Second
 	}
@@ -121,6 +134,7 @@ func NewHTTPClient(network Network, timeout time.Duration) *http.Client {
 	transport := &http.Transport{
 		Proxy:                 proxy,
 		DialContext:           DialContext(network),
+		DisableKeepAlives:     disableKeepAlives,
 		ForceAttemptHTTP2:     true,
 		MaxIdleConns:          32,
 		MaxIdleConnsPerHost:   8,

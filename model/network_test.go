@@ -1,10 +1,15 @@
 package model
 
 import (
+	"bufio"
+	"bytes"
 	"context"
 	"errors"
+	"io"
+	"log"
 	"net"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 )
@@ -47,6 +52,82 @@ func TestNewHTTPClientBypassesProxyForExplicitFamily(t *testing.T) {
 	transport, ok := client.Transport.(*http.Transport)
 	if !ok || transport.Proxy == nil {
 		t.Fatal("automatic client unexpectedly stopped honoring environment proxy settings")
+	}
+}
+
+func TestNewThroughputHTTPClientDisablesIdleConnectionReuse(t *testing.T) {
+	client := NewThroughputHTTPClient(NetworkIPv4, time.Second)
+	transport, ok := client.Transport.(*http.Transport)
+	if !ok {
+		t.Fatalf("throughput transport type = %T, want *http.Transport", client.Transport)
+	}
+	if !transport.DisableKeepAlives {
+		t.Fatal("throughput client may reuse a malformed speedtest server connection")
+	}
+	if transport.Proxy != nil {
+		t.Fatal("explicit-family throughput client unexpectedly uses an environment proxy")
+	}
+}
+
+func TestNewThroughputHTTPClientDoesNotPublishTrailingServerBytes(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = listener.Close() })
+
+	requestClose := make(chan bool, 1)
+	serverDone := make(chan error, 1)
+	go func() {
+		connection, acceptErr := listener.Accept()
+		if acceptErr != nil {
+			serverDone <- acceptErr
+			return
+		}
+		defer connection.Close()
+		request, readErr := http.ReadRequest(bufio.NewReader(connection))
+		if readErr != nil {
+			serverDone <- readErr
+			return
+		}
+		requestClose <- request.Close
+		_ = request.Body.Close()
+		_, writeErr := io.WriteString(connection, "HTTP/1.1 200 OK\r\nContent-Length: 1\r\n\r\nxTRAILING-BINARY-PAYLOAD")
+		serverDone <- writeErr
+	}()
+
+	var logs bytes.Buffer
+	previousWriter, previousFlags, previousPrefix := log.Writer(), log.Flags(), log.Prefix()
+	log.SetOutput(&logs)
+	log.SetFlags(0)
+	log.SetPrefix("")
+	t.Cleanup(func() {
+		log.SetOutput(previousWriter)
+		log.SetFlags(previousFlags)
+		log.SetPrefix(previousPrefix)
+	})
+
+	client := NewThroughputHTTPClient(NetworkIPv4, time.Second)
+	response, err := client.Get("http://" + listener.Addr().String())
+	if err != nil {
+		t.Fatal(err)
+	}
+	body, err := io.ReadAll(response.Body)
+	_ = response.Body.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(body) != "x" {
+		t.Fatalf("response body = %q, want declared body only", body)
+	}
+	if closeRequested := <-requestClose; !closeRequested {
+		t.Fatal("throughput request did not ask the malformed endpoint to close")
+	}
+	if err := <-serverDone; err != nil {
+		t.Fatal(err)
+	}
+	if output := logs.String(); strings.Contains(output, "Unsolicited response received on idle HTTP channel") {
+		t.Fatalf("trailing speedtest payload leaked into process logs: %q", output)
 	}
 }
 
