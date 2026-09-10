@@ -25,7 +25,7 @@ func TestProbeAndSelectAvailableServers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(selected) != 1 || selected[0].ID != "good" || probed[0].Availability != ServerUnavailable {
+	if len(selected) != 1 || selected[0].ID != "good" || probed[0].Availability != ServerCandidate {
 		t.Fatalf("unexpected selection: probed=%+v selected=%+v", probed, selected)
 	}
 }
@@ -38,8 +38,34 @@ func TestProbeServersRejectsHTTP404(t *testing.T) {
 		t.Fatal(err)
 	}
 	probed := ProbeServers(context.Background(), []ServerMetadata{{ID: "bad-path", Host: parsed.Host, URL: server.URL + "/upload"}}, time.Second, 1, nil)
-	if len(probed) != 1 || probed[0].Availability != ServerUnavailable || probed[0].Error != "HTTP 404" {
-		t.Fatalf("404 endpoint was accepted: %+v", probed)
+	if len(probed) != 1 || probed[0].Availability != ServerCandidate || probed[0].Error != "HTTP 404" {
+		t.Fatalf("404 precheck did not retain the throughput candidate: %+v", probed)
+	}
+}
+
+func TestSelectAvailableServersRanksCandidatesAfterConfirmedServers(t *testing.T) {
+	selected, err := SelectAvailableServers([]ServerMetadata{
+		{ID: "candidate", Availability: ServerCandidate, LatencyMS: 1},
+		{ID: "confirmed", Availability: ServerAvailable, LatencyMS: 50},
+	}, 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(selected) != 2 || selected[0].ID != "confirmed" || selected[1].ID != "candidate" {
+		t.Fatalf("unexpected precheck ordering: %+v", selected)
+	}
+}
+
+func TestProbeServersRechecksStaticUnavailableNode(t *testing.T) {
+	probed := ProbeServers(context.Background(), []ServerMetadata{{
+		ID: "stale", Host: "stale.test:443", Availability: ServerUnavailable, Error: "static node unavailable",
+	}}, time.Second, 1, func(_ context.Context, _, _ string) (net.Conn, error) {
+		client, peer := net.Pipe()
+		go peer.Close()
+		return client, nil
+	})
+	if len(probed) != 1 || probed[0].Availability != ServerAvailable || probed[0].Error != "" {
+		t.Fatalf("stale registry status prevented recheck: %+v", probed)
 	}
 }
 

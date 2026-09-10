@@ -70,6 +70,14 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 		markPendingServersUnavailable(result, "invalid network")
 		return result
 	}
+	// Registry status and an earlier reachability result are ranking hints, not
+	// permanent exclusions. Every syntactically valid endpoint still reaches
+	// the throughput stage, which is the authoritative availability check.
+	for index := range result {
+		if result[index].Availability != ServerAvailable {
+			result[index].Availability = ServerCandidate
+		}
+	}
 	if timeout <= 0 {
 		timeout = 3 * time.Second
 	}
@@ -93,9 +101,6 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 			defer wg.Done()
 			for index := range jobs {
 				server := &result[index]
-				if server.Availability == ServerUnavailable {
-					continue
-				}
 				if server.Availability == "" {
 					server.Availability = ServerCandidate
 				}
@@ -111,7 +116,7 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 					if resolveErr != nil {
 						server.LatencyMS = time.Since(started).Milliseconds()
 						cancel()
-						server.Availability, server.Error = ServerUnavailable, classifyServerError(resolveErr)
+						server.Availability, server.Error = ServerCandidate, classifyServerError(resolveErr)
 						continue
 					}
 					address = resolvedAddress
@@ -126,7 +131,7 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 				server.LatencyMS = time.Since(started).Milliseconds()
 				cancel()
 				if err != nil {
-					server.Availability, server.Error = ServerUnavailable, classifyServerError(err)
+					server.Availability, server.Error = ServerCandidate, classifyServerError(err)
 					continue
 				}
 				if conn != nil {
@@ -144,12 +149,12 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 						if httpErr == nil {
 							_ = response.Body.Close()
 							if response.StatusCode >= 400 && response.StatusCode != http.StatusMethodNotAllowed {
-								server.Availability, server.Error = ServerUnavailable, fmt.Sprintf("HTTP %d", response.StatusCode)
+								server.Availability, server.Error = ServerCandidate, fmt.Sprintf("HTTP %d", response.StatusCode)
 								probeCancel()
 								continue
 							}
 						} else {
-							server.Availability, server.Error = ServerUnavailable, classifyServerError(httpErr)
+							server.Availability, server.Error = ServerCandidate, classifyServerError(httpErr)
 							probeCancel()
 							continue
 						}
@@ -170,13 +175,24 @@ func ProbeServersWithNetwork(ctx context.Context, servers []ServerMetadata, time
 		case <-ctx.Done():
 			close(jobs)
 			wg.Wait()
-			markPendingServersUnavailable(result, classifyServerError(ctx.Err()))
+			markPendingServersCandidate(result, classifyServerError(ctx.Err()))
 			return result
 		}
 	}
 	close(jobs)
 	wg.Wait()
 	return result
+}
+
+func markPendingServersCandidate(servers []ServerMetadata, reason string) {
+	for index := range servers {
+		if servers[index].Availability == ServerCandidate || servers[index].Availability == "" {
+			servers[index].Availability = ServerCandidate
+			if servers[index].Error == "" {
+				servers[index].Error = reason
+			}
+		}
+	}
 }
 
 func serverLatencyURL(endpoint string) (string, error) {
@@ -202,12 +218,16 @@ func markPendingServersUnavailable(servers []ServerMetadata, reason string) {
 
 func SelectAvailableServers(servers []ServerMetadata, limit int) ([]ServerMetadata, error) {
 	available := make([]ServerMetadata, 0, len(servers))
+	candidates := make([]ServerMetadata, 0, len(servers))
 	for _, server := range servers {
-		if server.Availability == ServerAvailable {
+		switch server.Availability {
+		case ServerAvailable:
 			available = append(available, server)
+		case ServerCandidate:
+			candidates = append(candidates, server)
 		}
 	}
-	if len(available) == 0 {
+	if len(available) == 0 && len(candidates) == 0 {
 		return nil, errors.New("no available speedtest servers")
 	}
 	sort.SliceStable(available, func(i, j int) bool {
@@ -216,10 +236,17 @@ func SelectAvailableServers(servers []ServerMetadata, limit int) ([]ServerMetada
 		}
 		return available[i].LatencyMS < available[j].LatencyMS
 	})
-	if limit > 0 && len(available) > limit {
-		available = available[:limit]
+	sort.SliceStable(candidates, func(i, j int) bool {
+		if candidates[i].LatencyMS == candidates[j].LatencyMS {
+			return candidates[i].ID < candidates[j].ID
+		}
+		return candidates[i].LatencyMS < candidates[j].LatencyMS
+	})
+	eligible := append(available, candidates...)
+	if limit > 0 && len(eligible) > limit {
+		eligible = eligible[:limit]
 	}
-	return available, nil
+	return eligible, nil
 }
 
 // IsMainlandChinaServer identifies mainland China without grouping Hong Kong,

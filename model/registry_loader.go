@@ -264,7 +264,13 @@ func resolveServerRegistry(ctx context.Context, client *http.Client, sources []R
 		report.Error = err.Error()
 		return report
 	}
-	report.Availability = ServerAvailable
+	report.Availability = ServerCandidate
+	for _, server := range selected {
+		if server.Availability == ServerAvailable {
+			report.Availability = ServerAvailable
+			break
+		}
+	}
 	report.Selected = selected
 	return report
 }

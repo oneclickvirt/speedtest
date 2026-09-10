@@ -82,20 +82,20 @@ func TestResolveServerRegistryFallsBackAndSelects(t *testing.T) {
 	if len(report.Selected) != 1 || report.Selected[0].ID != "good" || report.Selected[0].Source != "raw" {
 		t.Fatalf("unexpected selected servers: %+v", report.Selected)
 	}
-	if report.Servers[0].Availability != ServerUnavailable || report.Servers[0].Error != "connection_error" {
-		t.Fatalf("unavailable evidence missing: %+v", report.Servers)
+	if report.Servers[0].Availability != ServerCandidate || report.Servers[0].Error != "connection_error" {
+		t.Fatalf("failed precheck candidate evidence missing: %+v", report.Servers)
 	}
 }
 
-func TestResolveServerRegistryReportsAllUnavailable(t *testing.T) {
+func TestResolveServerRegistryRetainsAllPrecheckFailures(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte(`[{"id":"dead","name":"Dead","host":"dead.test:443"}]`))
 	}))
 	defer server.Close()
 	report := ResolveServerRegistry(context.Background(), server.Client(), []RegistrySource{{Name: "raw", URL: server.URL}}, 1, 1, time.Second, 1,
 		func(context.Context, string, string) (net.Conn, error) { return nil, errors.New("offline") })
-	if report.Availability != ServerUnavailable || len(report.Selected) != 0 || report.Error == "" {
-		t.Fatalf("expected explicit unavailable report: %+v", report)
+	if report.Availability != ServerCandidate || len(report.Selected) != 1 || report.Selected[0].ID != "dead" || report.Error != "" {
+		t.Fatalf("expected retained throughput candidate: %+v", report)
 	}
 }
 

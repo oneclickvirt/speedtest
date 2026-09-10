@@ -28,6 +28,20 @@ func TestBenchmarkServersMarksRemainingCanceledWithoutCallingProbe(t *testing.T)
 	}
 }
 
+func TestBenchmarkServersContinuesUntilSuccessTarget(t *testing.T) {
+	calls := 0
+	results := BenchmarkServers(context.Background(), []ServerMetadata{{ID: "first"}, {ID: "second"}}, 1, func(_ context.Context, server ServerMetadata) ThroughputResult {
+		calls++
+		if server.ID == "first" {
+			return ThroughputResult{ID: server.ID, Status: ThroughputUnavailable}
+		}
+		return ThroughputResult{ID: server.ID, Status: ThroughputAvailable}
+	})
+	if calls != 2 || len(results) != 2 || results[1].Status != ThroughputAvailable {
+		t.Fatalf("calls=%d results=%+v, want failed candidate followed by success", calls, results)
+	}
+}
+
 func TestProbeThroughputRejectsMissingURLWithoutNetwork(t *testing.T) {
 	result := ProbeThroughput(context.Background(), ServerMetadata{ID: "fixture"})
 	if result.Status != ThroughputUnavailable || result.Error == "" {

@@ -34,9 +34,10 @@ type ThroughputResult struct {
 
 type ThroughputProbe func(context.Context, ServerMetadata) ThroughputResult
 
-// BenchmarkServers runs selected servers sequentially so multiple throughput
-// probes do not compete for the same link. The caller's deadline bounds the
-// ping, download, and upload requests through speedtest-go's context APIs.
+// BenchmarkServers runs candidates sequentially so multiple throughput probes
+// do not compete for the same link. limit is a successful-result target, not
+// an attempt limit: failed transfers advance to the next candidate until the
+// target, candidate list, or caller deadline is exhausted.
 func BenchmarkServers(ctx context.Context, servers []ServerMetadata, limit int, probe ThroughputProbe) []ThroughputResult {
 	return BenchmarkServersWithNetwork(ctx, servers, limit, probe, NetworkAuto)
 }
@@ -53,15 +54,23 @@ func BenchmarkServersWithNetwork(ctx context.Context, servers []ServerMetadata, 
 			return ProbeThroughputWithNetwork(ctx, server, network)
 		}
 	}
-	results := make([]ThroughputResult, 0, limit)
-	for _, server := range servers[:limit] {
+	results := make([]ThroughputResult, 0, min(len(servers), limit))
+	completed := 0
+	for _, server := range servers {
+		if completed >= limit {
+			break
+		}
 		if err := ctx.Err(); err != nil {
 			results = append(results, ThroughputResult{
 				ID: server.ID, Name: server.Name, Status: throughputContextStatus(err), Error: err.Error(),
 			})
-			continue
+			break
 		}
-		results = append(results, probe(ctx, server))
+		result := probe(ctx, server)
+		results = append(results, result)
+		if result.Status == ThroughputAvailable {
+			completed++
+		}
 	}
 	return results
 }
