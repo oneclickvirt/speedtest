@@ -340,6 +340,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-18475",
+    "name": "Keelung",
+    "host": "klv3-1.speedtest.idv.tw:8080",
+    "url": "http://klv3-1.speedtest.idv.tw:8080/speedtest/upload.php",
+    "provider": "Chief Telecom",
+    "country": "Taiwan",
+    "city": "Keelung",
+    "availability": "candidate"
+  },
+  {
     "id": "global-18713",
     "name": "Chatswood",
     "host": "cha1.speedtest.telstra.net:8080",
@@ -387,6 +397,16 @@
     "provider": "GLBB Japan",
     "country": "Japan",
     "city": "Naha",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-22558",
+    "name": "London",
+    "host": "speedtestlondon.telecom.mu.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestlondon.telecom.mu:8080/speedtest/upload.php",
+    "provider": "Mauritius Telecom Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -960,16 +980,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-41358",
-    "name": "Singapore",
-    "host": "sin.speedtest.contabo.net:8080",
-    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-41801",
     "name": "Singapore",
     "host": "speedtest-eqx-sg1.ixtelecom.net.prod.hosts.ooklaserver.net:8080",
@@ -1015,16 +1025,6 @@
     "host": "speedtest.conectagold.com.br.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.conectagold.com.br:8080/speedtest/upload.php",
     "provider": "Conecta Gold",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-44256",
-    "name": "São Paulo",
-    "host": "ooklaspeed.reajnet.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://ooklaspeed.reajnet.com.br:8080/speedtest/upload.php",
-    "provider": "REAJNet Telecom",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -1237,16 +1237,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2130,6 +2120,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-67827",
+    "name": "Singapore",
+    "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestsgp.fpt.vn:8080/speedtest/upload.php",
+    "provider": "FPT Telecom",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
     "id": "global-68083",
     "name": "São Paulo",
     "host": "smc-velocimetro.lv.network:8080",
@@ -2167,16 +2167,6 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-68467",
-    "name": "São Paulo",
-    "host": "velocidade1.eusouhub.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://velocidade1.eusouhub.com.br:8080/speedtest/upload.php",
-    "provider": "HubTelecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2580,6 +2570,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-74986",
+    "name": "São Paulo",
+    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
+    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-75054",
     "name": "São Paulo",
     "host": "srv4.noova.net.br:8080",
@@ -2677,6 +2677,16 @@
     "provider": "HostGrap",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-75787",
+    "name": "São Paulo",
+    "host": "speed.creativetelecom.com.br:8080",
+    "url": "http://speed.creativetelecom.com.br:8080/speedtest/upload.php",
+    "provider": "Creative Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
