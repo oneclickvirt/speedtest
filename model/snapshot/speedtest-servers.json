@@ -990,16 +990,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-41240",
-    "name": "São Paulo",
-    "host": "speedtest.everestridge.com.br:8080",
-    "url": "http://speedtest.everestridge.com.br:8080/speedtest/upload.php",
-    "provider": "EverestRidge",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-41358",
     "name": "Singapore",
     "host": "sin.speedtest.contabo.net:8080",
@@ -2777,6 +2767,16 @@
     "provider": "QuickQc",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76227",
+    "name": "São Paulo",
+    "host": "stmc.fibra100.com.br:8080",
+    "url": "http://stmc.fibra100.com.br:8080/speedtest/upload.php",
+    "provider": "Fibra100 Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
