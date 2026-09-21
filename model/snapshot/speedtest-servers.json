@@ -220,16 +220,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-13506",
-    "name": "Taipei",
-    "host": "speedtest.taifo.com.tw:8080",
-    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
-    "provider": "TAIFO Taiwan",
-    "country": "Taiwan",
-    "city": "Taipei",
-    "availability": "candidate"
-  },
-  {
     "id": "global-13623",
     "name": "Singapore",
     "host": "speedtest.singnet.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -1047,6 +1037,16 @@
     "provider": "Conecta Gold",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-43752",
+    "name": "Beijing",
+    "host": "beijing.unicomtest.com:8080",
+    "url": "http://beijing.unicomtest.com:8080/speedtest/upload.php",
+    "provider": "BJ Unicom",
+    "country": "China",
+    "city": "Beijing",
     "availability": "candidate"
   },
   {
@@ -2417,16 +2417,6 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
