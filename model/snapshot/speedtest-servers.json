@@ -840,26 +840,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37721",
     "name": "London",
     "host": "speedtest.brightstar.cloud.prod.hosts.ooklaserver.net:8080",
@@ -1007,6 +987,26 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-41240",
+    "name": "São Paulo",
+    "host": "speedtest.everestridge.com.br:8080",
+    "url": "http://speedtest.everestridge.com.br:8080/speedtest/upload.php",
+    "provider": "EverestRidge",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-41358",
+    "name": "Singapore",
+    "host": "sin.speedtest.contabo.net:8080",
+    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -2700,16 +2700,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-75787",
-    "name": "São Paulo",
-    "host": "speed.creativetelecom.com.br:8080",
-    "url": "http://speed.creativetelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Creative Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-75893",
     "name": "Singapore",
     "host": "speedtest.whizcomms.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -2767,6 +2757,16 @@
     "provider": "AIXXYCODE.ID",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76154",
+    "name": "São Paulo",
+    "host": "speedtest.greenfibra.net:8080",
+    "url": "http://speedtest.greenfibra.net:8080/speedtest/upload.php",
+    "provider": "GREEN FIBRA TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
