@@ -240,6 +240,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-14067",
+    "name": "台北",
+    "host": "yms-speed.kbro.com.tw:8080",
+    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "陽明山",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -820,11 +830,31 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37328",
+    "name": "São Paulo",
+    "host": "ookla.thmtc.com.br:8080",
+    "url": "http://ookla.thmtc.com.br:8080/speedtest/upload.php",
+    "provider": "TH Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37536",
     "name": "London",
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -977,16 +1007,6 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-41240",
-    "name": "São Paulo",
-    "host": "speedtest.everestridge.com.br:8080",
-    "url": "http://speedtest.everestridge.com.br:8080/speedtest/upload.php",
-    "provider": "EverestRidge",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1400,6 +1420,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-52293",
+    "name": "Batam",
+    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
+    "provider": "PT Lintas Jaringan Nusantara",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-52551",
     "name": "São Paulo",
     "host": "test.wjinternet.com.br:8080",
@@ -1415,6 +1445,16 @@
     "host": "lkmaia.ravisystems.com.br:8080",
     "url": "http://lkmaia.ravisystems.com.br:8080/speedtest/upload.php",
     "provider": "LK MAIA",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-52773",
+    "name": "São Paulo",
+    "host": "speed1teste.netzon.com.br:8080",
+    "url": "http://speed1teste.netzon.com.br:8080/speedtest/upload.php",
+    "provider": "NetzOn",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -1490,6 +1530,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-54360",
+    "name": "Sydney",
+    "host": "syd.speedtest.contabo.net:8080",
+    "url": "http://syd.speedtest.contabo.net:8080/speedtest/upload.php",
+    "provider": "Contabo",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-54586",
     "name": "Basiildon",
     "host": "speedtest.ths.connectfibre.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -1527,6 +1577,16 @@
     "provider": "INOVAFIBRA NET TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-55137",
+    "name": "London",
+    "host": "speedtest-1.london.network.as212655.net:8080",
+    "url": "http://speedtest-1.london.network.as212655.net:8080/speedtest/upload.php",
+    "provider": "YouFibre",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -1787,6 +1847,16 @@
     "provider": "Burstfire Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-61629",
+    "name": "São Paulo",
+    "host": "speedtest.lffibra.com.br:8080",
+    "url": "http://speedtest.lffibra.com.br:8080/speedtest/upload.php",
+    "provider": "LF TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2194,7 +2264,7 @@
     "name": "Guildford",
     "host": "speedtest.networks.bt.com:8080",
     "url": "http://speedtest.networks.bt.com:8080/speedtest/upload.php",
-    "provider": "BT",
+    "provider": "BT PLC",
     "country": "United Kingdom",
     "city": "Guildford",
     "availability": "candidate"
@@ -2304,7 +2374,7 @@
     "name": "London",
     "host": "speedtest2.networks.bt.com:8080",
     "url": "http://speedtest2.networks.bt.com:8080/speedtest/upload.php",
-    "provider": "BT",
+    "provider": "BT PLC",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -2407,16 +2477,6 @@
     "provider": "Optinet U.K. Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73226",
-    "name": "Seoul",
-    "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://seoul.speedtest.gslnetworks.com:8080/speedtest/upload.php",
-    "provider": "GSL Networks",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2540,16 +2600,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-74986",
-    "name": "São Paulo",
-    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
-    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-75054",
     "name": "São Paulo",
     "host": "srv4.noova.net.br:8080",
@@ -2660,16 +2710,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-75787",
-    "name": "São Paulo",
-    "host": "speed.creativetelecom.com.br:8080",
-    "url": "http://speed.creativetelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Creative Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-75893",
     "name": "Singapore",
     "host": "speedtest.whizcomms.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -2760,16 +2800,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-76334",
-    "name": "Batam",
-    "host": "speedtest.proxinet.co.id:8080",
-    "url": "http://speedtest.proxinet.co.id:8080/speedtest/upload.php",
-    "provider": "PT. Proxi Jaringan Nusantara",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-76378",
     "name": "São Paulo",
     "host": "speedtest.athon-networks.com.br:8080",
@@ -2797,6 +2827,16 @@
     "provider": "Virgin Media O2",
     "country": "United Kingdom",
     "city": "Harlow",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76470",
+    "name": "Batam",
+    "host": "speedtest-bth.telnet.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-bth.telnet.net.id:8080/speedtest/upload.php",
+    "provider": "Telnet Indonesia",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
