@@ -220,6 +220,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-13506",
+    "name": "Taipei",
+    "host": "speedtest.taifo.com.tw:8080",
+    "url": "http://speedtest.taifo.com.tw:8080/speedtest/upload.php",
+    "provider": "TAIFO Taiwan",
+    "country": "Taiwan",
+    "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
     "id": "global-13623",
     "name": "Singapore",
     "host": "speedtest.singnet.com.sg.prod.hosts.ooklaserver.net:8080",
@@ -240,6 +250,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-14070",
+    "name": "台北",
+    "host": "kp-speed.kbro.com.tw:8080",
+    "url": "http://kp-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "金頻道",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -255,16 +275,6 @@
     "host": "tc-speed.kbro.com.tw:8080",
     "url": "http://tc-speed.kbro.com.tw:8080/speedtest/upload.php",
     "provider": "新唐城",
-    "country": "Taiwan",
-    "city": "新北",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-14652",
-    "name": "新北",
-    "host": "speed.cable-giant.com.tw:8080",
-    "url": "http://speed.cable-giant.com.tw:8080/speedtest/upload.php",
-    "provider": "大新店",
     "country": "Taiwan",
     "city": "新北",
     "availability": "candidate"
@@ -835,16 +845,6 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1910,6 +1910,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-62612",
+    "name": "São Paulo",
+    "host": "speedtest.conectiva.srv.br:8080",
+    "url": "http://speedtest.conectiva.srv.br:8080/speedtest/upload.php",
+    "provider": "Conectiva Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-62770",
     "name": "Batam",
     "host": "speedtest.iplus.net.id:8080",
@@ -2290,16 +2300,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-70886",
-    "name": "São Paulo",
-    "host": "speedtest.acessanet.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.acessanet.com.br:8080/speedtest/upload.php",
-    "provider": "Acessanet Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-71174",
     "name": "São Paulo",
     "host": "ookla3.e3telecom.com.br:8080",
@@ -2457,16 +2457,6 @@
     "provider": "Optinet U.K. Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73226",
-    "name": "Seoul",
-    "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://seoul.speedtest.gslnetworks.com:8080/speedtest/upload.php",
-    "provider": "GSL Networks",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2734,7 +2724,7 @@
     "name": "Batam",
     "host": "speedtest-bth1.snet.co.id.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest-bth1.snet.co.id:8080/speedtest/upload.php",
-    "provider": "SNet",
+    "provider": "SNeT",
     "country": "Indonesia",
     "city": "Batam",
     "availability": "candidate"
