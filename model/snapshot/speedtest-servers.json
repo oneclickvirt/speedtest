@@ -380,16 +380,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-19721",
-    "name": "São Paulo",
-    "host": "speedtest.sothis.com.br:8080",
-    "url": "http://speedtest.sothis.com.br:8080/speedtest/upload.php",
-    "provider": "Sothis Telecomunicações",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-20086",
     "name": "São Paulo",
     "host": "ooklaspeedtest.fiberbandalarga.net.br.prod.hosts.ooklaserver.net:8080",
@@ -1260,16 +1250,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
-    "availability": "candidate"
-  },
-  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1980,6 +1960,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2460,6 +2450,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-73226",
+    "name": "Seoul",
+    "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://seoul.speedtest.gslnetworks.com:8080/speedtest/upload.php",
+    "provider": "GSL Networks",
+    "country": "South Korea",
+    "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
     "id": "global-73315",
     "name": "London",
     "host": "speedtest-lon.krystal.uk.prod.hosts.ooklaserver.net:8080",
@@ -2575,6 +2575,16 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74986",
+    "name": "São Paulo",
+    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
+    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
