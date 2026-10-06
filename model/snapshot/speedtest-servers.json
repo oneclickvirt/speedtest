@@ -260,21 +260,21 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14623",
-    "name": "Bunkyo",
-    "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speed.coe.ad.jp:8080/speedtest/upload.php",
-    "provider": "IPA CyberLab",
-    "country": "Japan",
-    "city": "Bunkyo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14651",
     "name": "新北",
     "host": "tc-speed.kbro.com.tw:8080",
     "url": "http://tc-speed.kbro.com.tw:8080/speedtest/upload.php",
     "provider": "新唐城",
+    "country": "Taiwan",
+    "city": "新北",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-14652",
+    "name": "新北",
+    "host": "speed.cable-giant.com.tw:8080",
+    "url": "http://speed.cable-giant.com.tw:8080/speedtest/upload.php",
+    "provider": "大新店",
     "country": "Taiwan",
     "city": "新北",
     "availability": "candidate"
@@ -890,6 +890,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-38867",
+    "name": "London",
+    "host": "speedtest.cadence.net.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.cadence.net.uk:8080/speedtest/upload.php",
+    "provider": "Voneus Limited",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-39101",
     "name": "São Paulo",
     "host": "sp.restartytech.net.br:8080",
@@ -987,16 +997,6 @@
     "provider": "Zen Internet",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-41358",
-    "name": "Singapore",
-    "host": "sin.speedtest.contabo.net:8080",
-    "url": "http://sin.speedtest.contabo.net:8080/speedtest/upload.php",
-    "provider": "Contabo",
-    "country": "Singapore",
-    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -2130,6 +2130,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-67678",
+    "name": "São Paulo",
+    "host": "speedtest.inforbarra.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.inforbarra.com.br:8080/speedtest/upload.php",
+    "provider": "InforBarra Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-67827",
     "name": "Singapore",
     "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
@@ -2417,16 +2427,6 @@
     "provider": "M1 Limited",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73154",
-    "name": "São Paulo",
-    "host": "ookla.swaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://ookla.swaptelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Swap Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2827,6 +2827,16 @@
     "provider": "Virgin Media O2",
     "country": "United Kingdom",
     "city": "Harlow",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76437",
+    "name": "Burnham",
+    "host": "dab-func-speedtest.ref.dab.02.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://dab-func-speedtest.ref.dab.02.net:8080/speedtest/upload.php",
+    "provider": "Virgin Media O2",
+    "country": "United Kingdom",
+    "city": "Burnham",
     "availability": "candidate"
   },
   {
