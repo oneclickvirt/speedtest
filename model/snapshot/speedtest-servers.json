@@ -260,16 +260,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14652",
-    "name": "新北",
-    "host": "speed.cable-giant.com.tw:8080",
-    "url": "http://speed.cable-giant.com.tw:8080/speedtest/upload.php",
-    "provider": "大新店",
-    "country": "Taiwan",
-    "city": "新北",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14679",
     "name": "London",
     "host": "speedlon.hyperoptic.com:8080",
@@ -840,6 +830,26 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37721",
     "name": "London",
     "host": "speedtest.brightstar.cloud.prod.hosts.ooklaserver.net:8080",
@@ -1260,6 +1270,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1497,6 +1517,16 @@
     "provider": "GIGAFY",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-54208",
+    "name": "Slough",
+    "host": "stfw.sloeq01.uk.apfutura.net:8080",
+    "url": "http://stfw.sloeq01.uk.apfutura.net:8080/speedtest/upload.php",
+    "provider": "Hey! Broadband",
+    "country": "United Kingdom",
+    "city": "Slough",
     "availability": "candidate"
   },
   {
@@ -1970,16 +2000,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-63503",
-    "name": "London",
-    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
-    "provider": "Absolute Validation Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -1995,6 +2015,26 @@
     "host": "velocidade.aipeernovo.com.br:8080",
     "url": "http://velocidade.aipeernovo.com.br:8080/speedtest/upload.php",
     "provider": "AIPEER TECNOLOGIA",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-63831",
+    "name": "São Paulo",
+    "host": "stmc.acessopoint.com.br:8080",
+    "url": "http://stmc.acessopoint.com.br:8080/speedtest/upload.php",
+    "provider": "Acesso Point Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-63927",
+    "name": "São Paulo",
+    "host": "ookla.ndlconnect.com.br:8080",
+    "url": "http://ookla.ndlconnect.com.br:8080/speedtest/upload.php",
+    "provider": "NDL CONNECT",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2410,16 +2450,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-72910",
-    "name": "Kota Batam",
-    "host": "bth.speedtest.sapulidi.net.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://bth.speedtest.sapulidi.net.id:8080/speedtest/upload.php",
-    "provider": "SAPULIDI",
-    "country": "Indonesia",
-    "city": "Kota Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-72929",
     "name": "São Paulo",
     "host": "scontest.sconfibras.com.br:8080",
@@ -2570,16 +2600,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-74299",
-    "name": "São Paulo",
-    "host": "speedtest.fibervision.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.fibervision.com.br:8080/speedtest/upload.php",
-    "provider": "Fibervision",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-74493",
     "name": "London",
     "host": "st.thw.rocket-fibre.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -2595,16 +2615,6 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-75054",
-    "name": "São Paulo",
-    "host": "srv4.noova.net.br:8080",
-    "url": "http://srv4.noova.net.br:8080/speedtest/upload.php",
-    "provider": "Noova Telecom",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2847,16 +2857,6 @@
     "provider": "KAIT NWLAB 400G",
     "country": "Japan",
     "city": "Sagamihara",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-7690",
-    "name": "São Paulo",
-    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
-    "provider": "ASAP GLOBAL TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
