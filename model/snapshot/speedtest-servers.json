@@ -530,16 +530,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-26654",
-    "name": "Singapore",
-    "host": "speedtest.sg.fdcservers.net:8080",
-    "url": "http://speedtest.sg.fdcservers.net:8080/speedtest/upload.php",
-    "provider": "fdcservers.net",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-26799",
     "name": "São Paulo",
     "host": "teste.silvernetdns.net.br:8080",
@@ -2110,6 +2100,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-67678",
+    "name": "São Paulo",
+    "host": "speedtest.inforbarra.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.inforbarra.com.br:8080/speedtest/upload.php",
+    "provider": "InforBarra Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-67827",
     "name": "Singapore",
     "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
@@ -2157,6 +2157,16 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-68585",
+    "name": "Batam",
+    "host": "speedtest2.skynetwork.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
+    "provider": "PT Skynet Indonesia Madani",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2515,16 +2525,6 @@
     "host": "speedtest.ispfibra.com.br:8080",
     "url": "http://speedtest.ispfibra.com.br:8080/speedtest/upload.php",
     "provider": "ISP FIBRA Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-74299",
-    "name": "São Paulo",
-    "host": "speedtest.fibervision.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.fibervision.com.br:8080/speedtest/upload.php",
-    "provider": "Fibervision",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
