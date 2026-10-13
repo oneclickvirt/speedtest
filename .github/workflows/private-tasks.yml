@@ -3,6 +3,7 @@ name: Private openspeedtest tasks
   schedule:
   - cron: 39 * * * *
   - cron: 23 3 * * *
+  - cron: 44 * * * *
   workflow_dispatch:
     inputs:
       task:
@@ -15,6 +16,7 @@ name: Private openspeedtest tasks
         - build
         - release
         - prepare
+        - sync-release
         default: ci
       release_tag:
         description: Existing private semantic version tag for release
@@ -37,8 +39,8 @@ jobs:
       PRIVATE_CI_TOKEN: ${{ secrets.PRIVATE_CI_TOKEN }}
       CI_JOB_KEY: ${{ github.job }}
       GITHUB_TOKEN: ${{ github.token }}
-      CI_TASK: ${{ github.event.schedule == '39 * * * *' && 'ci' || github.event.schedule == '23 3 * * *' && 'refresh'
-        || inputs.task || 'ci' }}
+      CI_TASK: ${{ github.event.schedule == '44 * * * *' && 'sync-release' || github.event.schedule == '39 * * *
+        *' && 'ci' || github.event.schedule == '23 3 * * *' && 'refresh' || inputs.task || 'ci' }}
       CI_RELEASE_TAG: ${{ inputs.release_tag }}
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
