@@ -1,36 +1,36 @@
 name: CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: speedtest-ci-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version-file: go.mod
-          check-latest: true
-      - name: Verify module, upstream contract, and source
-        shell: bash
-        run: |
-          set -euo pipefail
-          go mod verify
-          go mod tidy -diff
-          test "$(go list -m -f '{{.Version}}' github.com/showwin/speedtest-go)" = "v1.8.3"
-          go test -race -count=1 ./...
-          go vet ./...
-          go build -o "$RUNNER_TEMP/speedtest" ./cmd
-          git diff --check
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      with:
+        go-version-file: go.mod
+        check-latest: true
+    - name: Verify module, upstream contract, and source
+      shell: bash
+      run: |
+        set -euo pipefail
+        go mod verify
+        go mod tidy -diff
+        test "$(go list -m -f '{{.Version}}' github.com/showwin/speedtest-go)" = "v1.8.3"
+        go test -race -count=1 ./...
+        go vet ./...
+        go build -o "$RUNNER_TEMP/speedtest" ./cmd
+        git diff --check
+    env:
+      GOPROXY: https://proxy.golang.org|direct
+'on':
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+  workflow_dispatch: null
