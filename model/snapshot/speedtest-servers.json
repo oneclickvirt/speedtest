@@ -240,6 +240,26 @@
     "availability": "candidate"
   },
   {
+    "id": "global-14067",
+    "name": "台北",
+    "host": "yms-speed.kbro.com.tw:8080",
+    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "陽明山",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-14070",
+    "name": "台北",
+    "host": "kp-speed.kbro.com.tw:8080",
+    "url": "http://kp-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "金頻道",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14651",
     "name": "新北",
     "host": "tc-speed.kbro.com.tw:8080",
@@ -780,16 +800,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-36157",
-    "name": "Sydney",
-    "host": "speed-syd.gigacomm.net.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speed-syd.gigacomm.net.au:8080/speedtest/upload.php",
-    "provider": "GigaComm Pty Ltd",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-36386",
     "name": "São Paulo",
     "host": "spetstspo03.timbrasil.com.br:8080",
@@ -840,6 +850,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37721",
     "name": "London",
     "host": "speedtest.brightstar.cloud.prod.hosts.ooklaserver.net:8080",
@@ -860,13 +880,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37994",
-    "name": "Fairlight",
-    "host": "speedtest.thryve.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thryve.com.au:8080/speedtest/upload.php",
-    "provider": "Thryve Group - Thryve Broadband",
-    "country": "Australia",
-    "city": "Fairlight",
+    "id": "global-38509",
+    "name": "Batam",
+    "host": "st-btm.kejora.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://st-btm.kejora.net.id:8080/speedtest/upload.php",
+    "provider": "kejoraNET",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -1220,16 +1240,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
-    "availability": "candidate"
-  },
-  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1460,6 +1470,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-54208",
+    "name": "Slough",
+    "host": "stfw.sloeq01.uk.apfutura.net:8080",
+    "url": "http://stfw.sloeq01.uk.apfutura.net:8080/speedtest/upload.php",
+    "provider": "Hey! Broadband",
+    "country": "United Kingdom",
+    "city": "Slough",
+    "availability": "candidate"
+  },
+  {
     "id": "global-54213",
     "name": "Sydney",
     "host": "speedtest-syd0.encoo.com.au.prod.hosts.ooklaserver.net:8080",
@@ -1677,16 +1697,6 @@
     "provider": "CBN",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-59120",
-    "name": "Batam",
-    "host": "batam2.speedtest.telkom.net.id:8080",
-    "url": "http://batam2.speedtest.telkom.net.id:8080/speedtest/upload.php",
-    "provider": "PT. Telekomunikasi Indonesia",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2147,16 +2157,6 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-68585",
-    "name": "Batam",
-    "host": "speedtest2.skynetwork.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
-    "provider": "PT Skynet Indonesia Madani",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2760,16 +2760,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-76378",
-    "name": "São Paulo",
-    "host": "speedtest.athon-networks.com.br:8080",
-    "url": "http://speedtest.athon-networks.com.br:8080/speedtest/upload.php",
-    "provider": "Athon Networks",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-76435",
     "name": "Slough",
     "host": "dab-bas1-speedtest.dab.02.net.prod.hosts.ooklaserver.net:8080",
@@ -2807,16 +2797,6 @@
     "provider": "Telnet Indonesia",
     "country": "Indonesia",
     "city": "Batam",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76556",
-    "name": "Sagamihara",
-    "host": "speedtest.nwlab.org:8080",
-    "url": "http://speedtest.nwlab.org:8080/speedtest/upload.php",
-    "provider": "KAIT NWLAB 400G",
-    "country": "Japan",
-    "city": "Sagamihara",
     "availability": "candidate"
   },
   {
