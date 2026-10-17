@@ -240,13 +240,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14067",
-    "name": "台北",
-    "host": "yms-speed.kbro.com.tw:8080",
-    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "陽明山",
-    "country": "Taiwan",
-    "city": "台北",
+    "id": "global-14623",
+    "name": "Bunkyo",
+    "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speed.coe.ad.jp:8080/speedtest/upload.php",
+    "provider": "IPA CyberLab",
+    "country": "Japan",
+    "city": "Bunkyo",
     "availability": "candidate"
   },
   {
@@ -847,6 +847,16 @@
     "provider": "Telekomunikasi Indonesia International Pte Ltd (Telin Singapore)",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37953",
+    "name": "São Paulo",
+    "host": "velocimetrort.universalnet.site:8080",
+    "url": "http://velocimetrort.universalnet.site:8080/speedtest/upload.php",
+    "provider": "UNIVERSAL NET - SERVIÇOS DE COMUNICAÇÃO MULTIMIDIA LTDA",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2040,16 +2050,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-63927",
-    "name": "São Paulo",
-    "host": "ookla.ndlconnect.com.br:8080",
-    "url": "http://ookla.ndlconnect.com.br:8080/speedtest/upload.php",
-    "provider": "NDL CONNECT",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-6405",
     "name": "Misawa",
     "host": "sp3.atcc-gns.net.prod.hosts.ooklaserver.net:8080",
@@ -2700,16 +2700,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-75622",
-    "name": "Singapore",
-    "host": "speedsg.genznet.id:8080",
-    "url": "http://speedsg.genznet.id:8080/speedtest/upload.php",
-    "provider": "GENZNET",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-75634",
     "name": "Singapore",
     "host": "speedtest.hostgrap.com:8080",
@@ -2767,6 +2757,16 @@
     "provider": "GREEN FIBRA TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76155",
+    "name": "Singapore",
+    "host": "speedtest.sg.aixxycode.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.sg.aixxycode.id:8080/speedtest/upload.php",
+    "provider": "AIXXYCODE.ID",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
