@@ -240,6 +240,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-14067",
+    "name": "台北",
+    "host": "yms-speed.kbro.com.tw:8080",
+    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "陽明山",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -697,16 +707,6 @@
     "provider": "Cerberus Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-34630",
-    "name": "São Paulo",
-    "host": "coa-1.speedtest.bbhost.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://coa-1.speedtest.bbhost.com.br:8080/speedtest/upload.php",
-    "provider": "BB Host",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1267,16 +1267,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2490,16 +2480,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2615,6 +2595,16 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74986",
+    "name": "São Paulo",
+    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
+    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -2817,6 +2807,16 @@
     "provider": "Telnet Indonesia",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76664",
+    "name": "Sydney",
+    "host": "syd.speedtest.pttnz.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://syd.speedtest.pttnz.net:8080/speedtest/upload.php",
+    "provider": "PTT NZ Limited",
+    "country": "Australia",
+    "city": "Sydney",
     "availability": "candidate"
   },
   {
