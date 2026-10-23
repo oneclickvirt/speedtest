@@ -1,7 +1,7 @@
 {
   "schema": "speedtest.servers/v1",
   "file": "speedtest-servers.json",
-  "count": 285,
-  "sha256": "e83f2ab896aaef96d700e27cb77c53a83db659d74a596c3923df0e109c183d53",
-  "generated_at": "2026-10-22T08:47:48Z"
+  "count": 286,
+  "sha256": "be6acf13ed97bf3648bb298950d951249f1956ed78eca8a910e4d4a376f58929",
+  "generated_at": "2026-10-23T08:43:47Z"
 }
