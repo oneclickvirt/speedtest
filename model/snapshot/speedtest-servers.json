@@ -250,6 +250,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-14070",
+    "name": "台北",
+    "host": "kp-speed.kbro.com.tw:8080",
+    "url": "http://kp-speed.kbro.com.tw:8080/speedtest/upload.php",
+    "provider": "金頻道",
+    "country": "Taiwan",
+    "city": "台北",
+    "availability": "candidate"
+  },
+  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -810,16 +820,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37663",
     "name": "São Paulo",
     "host": "teste.surubiminternet.com.br:8080",
@@ -1267,16 +1267,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2030,6 +2020,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-63927",
+    "name": "São Paulo",
+    "host": "ookla.ndlconnect.com.br:8080",
+    "url": "http://ookla.ndlconnect.com.br:8080/speedtest/upload.php",
+    "provider": "NDL CONNECT",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-64352",
     "name": "Sanda",
     "host": "ookla2.mbspeed.net:8080",
@@ -2550,6 +2550,26 @@
     "availability": "candidate"
   },
   {
+    "id": "global-74095",
+    "name": "Batam",
+    "host": "speedtest.hydra.co.id:8080",
+    "url": "http://speedtest.hydra.co.id:8080/speedtest/upload.php",
+    "provider": "PT HYDRA MEDIA INDONESIA",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74097",
+    "name": "Batam",
+    "host": "speedtest.binteks.online.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.binteks.online:8080/speedtest/upload.php",
+    "provider": "binteks.id",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-74299",
     "name": "São Paulo",
     "host": "speedtest.fibervision.com.br.prod.hosts.ooklaserver.net:8080",
@@ -2797,16 +2817,6 @@
     "provider": "Telnet Indonesia",
     "country": "Indonesia",
     "city": "Batam",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76486",
-    "name": "São Paulo",
-    "host": "velocidade.maxxinfinitytelecom.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://velocidade.maxxinfinitytelecom.com:8080/speedtest/upload.php",
-    "provider": "Maxx Infinity",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
