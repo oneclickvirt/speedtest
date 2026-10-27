@@ -210,16 +210,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-13279",
-    "name": "Sydney",
-    "host": "nsw.speedtest.exetel.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://nsw.speedtest.exetel.com.au:8080/speedtest/upload.php",
-    "provider": "Exetel",
-    "country": "Australia",
-    "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
     "id": "global-13506",
     "name": "Taipei",
     "host": "speedtest.taifo.com.tw:8080",
