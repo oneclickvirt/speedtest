@@ -480,16 +480,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-24333",
-    "name": "Tokyo",
-    "host": "ookla.mbspeed.net:8080",
-    "url": "http://ookla.mbspeed.net:8080/speedtest/upload.php",
-    "provider": "Rakuten Mobile, Inc",
-    "country": "Japan",
-    "city": "Tokyo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-24640",
     "name": "London",
     "host": "sp1.jump.net.uk.prod.hosts.ooklaserver.net:8080",
@@ -577,6 +567,16 @@
     "provider": "PhoenixNAP Global IT Services",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-29288",
+    "name": "Daan District",
+    "host": "wd-speedtest.homeplus.net.tw:8080",
+    "url": "http://wd-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
+    "provider": "Homeplus",
+    "country": "Taiwan",
+    "city": "Daan District",
     "availability": "candidate"
   },
   {
@@ -707,6 +707,16 @@
     "provider": "Cerberus Networks Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-34630",
+    "name": "São Paulo",
+    "host": "coa-1.speedtest.bbhost.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://coa-1.speedtest.bbhost.com.br:8080/speedtest/upload.php",
+    "provider": "BB Host",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1257,6 +1267,16 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2017,16 +2037,6 @@
     "provider": "NDL CONNECT",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-64352",
-    "name": "Sanda",
-    "host": "ookla2.mbspeed.net:8080",
-    "url": "http://ookla2.mbspeed.net:8080/speedtest/upload.php",
-    "provider": "Rakuten Mobile, Inc",
-    "country": "Japan",
-    "city": "Sanda",
     "availability": "candidate"
   },
   {
@@ -2827,16 +2837,6 @@
     "provider": "Managed Networks",
     "country": "Australia",
     "city": "Sydney",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-7690",
-    "name": "São Paulo",
-    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
-    "provider": "ASAP GLOBAL TELECOM",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
