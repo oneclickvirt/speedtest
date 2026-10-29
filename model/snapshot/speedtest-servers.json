@@ -150,6 +150,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-10384",
+    "name": "Tokyo",
+    "host": "tokyo.host.speedtest.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://tokyo.host.speedtest.net:8080/speedtest/upload.php",
+    "provider": "Vultr",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-11123",
     "name": "London",
     "host": "speed1.spitfireuk.net.prod.hosts.ooklaserver.net:8080",
@@ -227,26 +237,6 @@
     "provider": "Singtel",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-14067",
-    "name": "台北",
-    "host": "yms-speed.kbro.com.tw:8080",
-    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "陽明山",
-    "country": "Taiwan",
-    "city": "台北",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-14070",
-    "name": "台北",
-    "host": "kp-speed.kbro.com.tw:8080",
-    "url": "http://kp-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "金頻道",
-    "country": "Taiwan",
-    "city": "台北",
     "availability": "candidate"
   },
   {
@@ -480,6 +470,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-24333",
+    "name": "Tokyo",
+    "host": "ookla.mbspeed.net:8080",
+    "url": "http://ookla.mbspeed.net:8080/speedtest/upload.php",
+    "provider": "Rakuten Mobile, Inc",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-24640",
     "name": "London",
     "host": "sp1.jump.net.uk.prod.hosts.ooklaserver.net:8080",
@@ -567,16 +567,6 @@
     "provider": "PhoenixNAP Global IT Services",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-29288",
-    "name": "Daan District",
-    "host": "wd-speedtest.homeplus.net.tw:8080",
-    "url": "http://wd-speedtest.homeplus.net.tw:8080/speedtest/upload.php",
-    "provider": "Homeplus",
-    "country": "Taiwan",
-    "city": "Daan District",
     "availability": "candidate"
   },
   {
@@ -790,6 +780,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-36157",
+    "name": "Sydney",
+    "host": "speed-syd.gigacomm.net.au.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speed-syd.gigacomm.net.au:8080/speedtest/upload.php",
+    "provider": "GigaComm Pty Ltd",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-36834",
     "name": "São Paulo",
     "host": "ookla.fibrativainternet.com.br.prod.hosts.ooklaserver.net:8080",
@@ -935,16 +935,6 @@
     "host": "speedtest.permana.net.id.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.permana.net.id:8080/speedtest/upload.php",
     "provider": "PT.MEDIANUSA PERMANA",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-40272",
-    "name": "Batam",
-    "host": "speedtestbtm.sdi.net.id:8080",
-    "url": "http://speedtestbtm.sdi.net.id:8080/speedtest/upload.php",
-    "provider": "SDI",
     "country": "Indonesia",
     "city": "Batam",
     "availability": "candidate"
@@ -2040,6 +2030,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-64352",
+    "name": "Sanda",
+    "host": "ookla2.mbspeed.net:8080",
+    "url": "http://ookla2.mbspeed.net:8080/speedtest/upload.php",
+    "provider": "Rakuten Mobile, Inc",
+    "country": "Japan",
+    "city": "Sanda",
+    "availability": "candidate"
+  },
+  {
     "id": "global-64354",
     "name": "Stevenage",
     "host": "speedtest.opusbroadband.com.prod.hosts.ooklaserver.net:8080",
@@ -2477,6 +2477,16 @@
     "provider": "GSL Networks",
     "country": "South Korea",
     "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73264",
+    "name": "London",
+    "host": "ookla-london01.tropicalgames.net:8080",
+    "url": "http://ookla-london01.tropicalgames.net:8080/speedtest/upload.php",
+    "provider": "Tropical Hosting",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
