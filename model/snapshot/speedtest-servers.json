@@ -190,16 +190,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-12687",
-    "name": "Singapore",
-    "host": "speedtest-sg1.simba.sg:8080",
-    "url": "http://speedtest-sg1.simba.sg:8080/speedtest/upload.php",
-    "provider": "SIMBA Telecom",
-    "country": "Singapore",
-    "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
     "id": "global-13058",
     "name": "Singapore",
     "host": "speedtest1.indosatooredoo.com.prod.hosts.ooklaserver.net:8080",
@@ -790,6 +780,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-36157",
+    "name": "Sydney",
+    "host": "speed-syd.gigacomm.net.au.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speed-syd.gigacomm.net.au:8080/speedtest/upload.php",
+    "provider": "GigaComm Pty Ltd",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-36834",
     "name": "São Paulo",
     "host": "ookla.fibrativainternet.com.br.prod.hosts.ooklaserver.net:8080",
@@ -815,16 +815,6 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1580,16 +1570,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-55137",
-    "name": "London",
-    "host": "speedtest-1.london.network.as212655.net:8080",
-    "url": "http://speedtest-1.london.network.as212655.net:8080/speedtest/upload.php",
-    "provider": "YouFibre",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-55847",
     "name": "São Paulo",
     "host": "speed.fenixbrasil.com.br:8080",
@@ -2000,6 +1980,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2207,6 +2197,16 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-68585",
+    "name": "Batam",
+    "host": "speedtest2.skynetwork.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
+    "provider": "PT Skynet Indonesia Madani",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2447,6 +2447,16 @@
     "provider": "RETN",
     "country": "Taiwan",
     "city": "Taipei",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2787,16 +2797,6 @@
     "provider": "Virgin Media O2",
     "country": "United Kingdom",
     "city": "Harlow",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76437",
-    "name": "Burnham",
-    "host": "dab-func-speedtest.ref.dab.02.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://dab-func-speedtest.ref.dab.02.net:8080/speedtest/upload.php",
-    "provider": "Virgin Media O2",
-    "country": "United Kingdom",
-    "city": "Burnham",
     "availability": "candidate"
   },
   {
