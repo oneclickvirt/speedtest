@@ -150,6 +150,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-10384",
+    "name": "Tokyo",
+    "host": "tokyo.host.speedtest.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://tokyo.host.speedtest.net:8080/speedtest/upload.php",
+    "provider": "Vultr",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-11123",
     "name": "London",
     "host": "speed1.spitfireuk.net.prod.hosts.ooklaserver.net:8080",
@@ -220,26 +230,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14067",
-    "name": "台北",
-    "host": "yms-speed.kbro.com.tw:8080",
-    "url": "http://yms-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "陽明山",
-    "country": "Taiwan",
-    "city": "台北",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-14070",
-    "name": "台北",
-    "host": "kp-speed.kbro.com.tw:8080",
-    "url": "http://kp-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "金頻道",
-    "country": "Taiwan",
-    "city": "台北",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14623",
     "name": "Bunkyo",
     "host": "speed.coe.ad.jp.prod.hosts.ooklaserver.net:8080",
@@ -250,26 +240,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-14651",
-    "name": "新北",
-    "host": "tc-speed.kbro.com.tw:8080",
-    "url": "http://tc-speed.kbro.com.tw:8080/speedtest/upload.php",
-    "provider": "新唐城",
-    "country": "Taiwan",
-    "city": "新北",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-14652",
-    "name": "新北",
-    "host": "speed.cable-giant.com.tw:8080",
-    "url": "http://speed.cable-giant.com.tw:8080/speedtest/upload.php",
-    "provider": "大新店",
-    "country": "Taiwan",
-    "city": "新北",
-    "availability": "candidate"
-  },
-  {
     "id": "global-14679",
     "name": "London",
     "host": "speedlon.hyperoptic.com:8080",
@@ -277,6 +247,16 @@
     "provider": "Hyperoptic Limited",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-15047",
+    "name": "Tokyo",
+    "host": "speed.open.ad.jp.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speed.open.ad.jp:8080/speedtest/upload.php",
+    "provider": "OPEN Project (via 20G SINET)",
+    "country": "Japan",
+    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -560,6 +540,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-28910",
+    "name": "Tokyo",
+    "host": "speedtest.hnd.fdcservers.net:8080",
+    "url": "http://speedtest.hnd.fdcservers.net:8080/speedtest/upload.php",
+    "provider": "fdcservers.net",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-28921",
     "name": "Singapore",
     "host": "speedsin.phoenixnap.com.prod.hosts.ooklaserver.net:8080",
@@ -760,16 +750,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-35456",
-    "name": "São Paulo",
-    "host": "velocimetro.usbinternet.com.br:8080",
-    "url": "http://velocimetro.usbinternet.com.br:8080/speedtest/upload.php",
-    "provider": "USB Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-35666",
     "name": "London",
     "host": "speedtest.voip-unlimited.net:8080",
@@ -777,16 +757,6 @@
     "provider": "Voip-Unlimited",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-36157",
-    "name": "Sydney",
-    "host": "speed-syd.gigacomm.net.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speed-syd.gigacomm.net.au:8080/speedtest/upload.php",
-    "provider": "GigaComm Pty Ltd",
-    "country": "Australia",
-    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -1270,6 +1240,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48434",
     "name": "London",
     "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
@@ -1430,6 +1410,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-52293",
+    "name": "Batam",
+    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
+    "provider": "PT Lintas Jaringan Nusantara",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-52551",
     "name": "São Paulo",
     "host": "test.wjinternet.com.br:8080",
@@ -1567,6 +1557,16 @@
     "provider": "Wireline Group",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-55137",
+    "name": "London",
+    "host": "speedtest-1.london.network.as212655.net:8080",
+    "url": "http://speedtest-1.london.network.as212655.net:8080/speedtest/upload.php",
+    "provider": "YouFibre",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2240,6 +2240,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-69575",
+    "name": "Tokyo",
+    "host": "ty-bgp-speedtest.nearoute.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://ty-bgp-speedtest.nearoute.io:8080/speedtest/upload.php",
+    "provider": "Nearoute Limited",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-69765",
     "name": "Sydney",
     "host": "au.st.spacecore.pro.prod.hosts.ooklaserver.net:8080",
@@ -2437,26 +2447,6 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73181",
-    "name": "Taipei",
-    "host": "speedtest-tpe.retn.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-tpe.retn.net:8080/speedtest/upload.php",
-    "provider": "RETN",
-    "country": "Taiwan",
-    "city": "Taipei",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2800,6 +2790,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-76437",
+    "name": "Burnham",
+    "host": "dab-func-speedtest.ref.dab.02.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://dab-func-speedtest.ref.dab.02.net:8080/speedtest/upload.php",
+    "provider": "Virgin Media O2",
+    "country": "United Kingdom",
+    "city": "Burnham",
+    "availability": "candidate"
+  },
+  {
     "id": "global-76470",
     "name": "Batam",
     "host": "speedtest-bth.telnet.net.id.prod.hosts.ooklaserver.net:8080",
@@ -2820,6 +2820,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-76664",
+    "name": "Sydney",
+    "host": "syd.speedtest.pttnz.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://syd.speedtest.pttnz.net:8080/speedtest/upload.php",
+    "provider": "PTT NZ Limited",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-76669",
     "name": "Sydney",
     "host": "speedtest.syd.managednetworks.com.au.prod.hosts.ooklaserver.net:8080",
@@ -2827,6 +2837,16 @@
     "provider": "Managed Networks",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-7690",
+    "name": "São Paulo",
+    "host": "speedtest.asaptelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.asaptelecom.com.br:8080/speedtest/upload.php",
+    "provider": "ASAP GLOBAL TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
