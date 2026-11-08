@@ -360,6 +360,26 @@
     "availability": "candidate"
   },
   {
+    "id": "global-2054",
+    "name": "Singapore",
+    "host": "speedtest10.vqbn.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest10.vqbn.com:8080/speedtest/upload.php",
+    "provider": "ViewQwest",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-21118",
+    "name": "Naha",
+    "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-xg-oki.glbb.ne.jp:8080/speedtest/upload.php",
+    "provider": "GLBB Japan",
+    "country": "Japan",
+    "city": "Naha",
+    "availability": "candidate"
+  },
+  {
     "id": "global-22558",
     "name": "London",
     "host": "speedtestlondon.telecom.mu.prod.hosts.ooklaserver.net:8080",
@@ -380,16 +400,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-23389",
-    "name": "Bracknell",
-    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "Bracknell",
-    "availability": "candidate"
-  },
-  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -397,16 +407,6 @@
     "provider": "PT. Indonesia Comnets Plus",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-24281",
-    "name": "London",
-    "host": "speedtest-london-east.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-london-east.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
@@ -610,6 +610,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-32806",
+    "name": "London",
+    "host": "speedtestmera.vs.mythic-beasts.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestmera.vs.mythic-beasts.com:8080/speedtest/upload.php",
+    "provider": "Mythic Beasts Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-32944",
     "name": "London",
     "host": "speedtest.cerberusnetworks.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -747,16 +757,6 @@
     "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -925,6 +925,16 @@
     "host": "speedtest-eqx-sg1.ixtelecom.net.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest-eqx-sg1.ixtelecom.net:8080/speedtest/upload.php",
     "provider": "IX Telecom",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-42688",
+    "name": "Singapore",
+    "host": "speedtest-intl.xl.co.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-intl.xl.co.id:8080/speedtest/upload.php",
+    "provider": "PT XLSMART Telecom Sejahtera",
     "country": "Singapore",
     "city": "Singapore",
     "availability": "candidate"
@@ -1177,16 +1187,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -1677,16 +1677,6 @@
     "provider": "x99.cloud",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-58437",
-    "name": "Sydney",
-    "host": "speedtest01.syd1.spintel.net.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest01.syd1.spintel.net.au:8080/speedtest/upload.php",
-    "provider": "Spintel",
-    "country": "Australia",
-    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -2737,6 +2727,16 @@
     "provider": "PT. Proxi Jaringan Nusantara",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76378",
+    "name": "São Paulo",
+    "host": "speedtest.athon-networks.com.br:8080",
+    "url": "http://speedtest.athon-networks.com.br:8080/speedtest/upload.php",
+    "provider": "Athon Networks",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
