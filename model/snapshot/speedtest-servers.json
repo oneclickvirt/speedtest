@@ -570,6 +570,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-31171",
+    "name": "Watford",
+    "host": "speedtest-watford.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-watford.vodafone.co.uk:8080/speedtest/upload.php",
+    "provider": "Vodafone UK",
+    "country": "United Kingdom",
+    "city": "Watford",
+    "availability": "candidate"
+  },
+  {
     "id": "global-31180",
     "name": "Singapore",
     "host": "sp1.campanaworks.com.prod.hosts.ooklaserver.net:8080",
@@ -750,13 +760,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -960,6 +970,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-43255",
+    "name": "Batam",
+    "host": "speedtest.batam.telkomsel.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.batam.telkomsel.com:8080/speedtest/upload.php",
+    "provider": "Telkomsel",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-43277",
     "name": "São Paulo",
     "host": "speedtest.conectagold.com.br.prod.hosts.ooklaserver.net:8080",
@@ -1077,6 +1097,16 @@
     "provider": "NET 5G",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-46304",
+    "name": "Singapore",
+    "host": "sg.cloudhost.asia:8080",
+    "url": "http://sg.cloudhost.asia:8080/speedtest/upload.php",
+    "provider": "IDCloudHost",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -1497,16 +1527,6 @@
     "provider": "Trooli",
     "country": "United Kingdom",
     "city": "Slough",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-54817",
-    "name": "Sydney",
-    "host": "sydgs2speed4.wireline.com.au.prod.hosts.ooklaserver.net:8080",
-    "url": "http://sydgs2speed4.wireline.com.au:8080/speedtest/upload.php",
-    "provider": "Wireline Group",
-    "country": "Australia",
-    "city": "Sydney",
     "availability": "candidate"
   },
   {
@@ -1940,6 +1960,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2207,6 +2237,16 @@
     "provider": "SpaceCore.pro | Premium VPS Hosting",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-69840",
+    "name": "Singapore",
+    "host": "sg-bgp-speedtest.nearoute.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://sg-bgp-speedtest.nearoute.io:8080/speedtest/upload.php",
+    "provider": "Nearoute Limited",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -2727,16 +2767,6 @@
     "provider": "PT. Proxi Jaringan Nusantara",
     "country": "Indonesia",
     "city": "Batam",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76378",
-    "name": "São Paulo",
-    "host": "speedtest.athon-networks.com.br:8080",
-    "url": "http://speedtest.athon-networks.com.br:8080/speedtest/upload.php",
-    "provider": "Athon Networks",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
