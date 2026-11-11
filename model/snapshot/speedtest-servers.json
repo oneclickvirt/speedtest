@@ -380,6 +380,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-21118",
+    "name": "Naha",
+    "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-xg-oki.glbb.ne.jp:8080/speedtest/upload.php",
+    "provider": "GLBB Japan",
+    "country": "Japan",
+    "city": "Naha",
+    "availability": "candidate"
+  },
+  {
     "id": "global-22558",
     "name": "London",
     "host": "speedtestlondon.telecom.mu.prod.hosts.ooklaserver.net:8080",
@@ -490,16 +500,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-28910",
-    "name": "Tokyo",
-    "host": "speedtest.hnd.fdcservers.net:8080",
-    "url": "http://speedtest.hnd.fdcservers.net:8080/speedtest/upload.php",
-    "provider": "fdcservers.net",
-    "country": "Japan",
-    "city": "Tokyo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-28921",
     "name": "Singapore",
     "host": "speedsin.phoenixnap.com.prod.hosts.ooklaserver.net:8080",
@@ -570,13 +570,13 @@
     "availability": "candidate"
   },
   {
-    "id": "global-31171",
-    "name": "Watford",
-    "host": "speedtest-watford.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-watford.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "Watford",
+    "id": "global-30852",
+    "name": "Kunshan",
+    "host": "speedtest.dukekunshan.edu.cn:8080",
+    "url": "http://speedtest.dukekunshan.edu.cn:8080/speedtest/upload.php",
+    "provider": "Duke Kunshan University",
+    "country": "China",
+    "city": "Kunshan",
     "availability": "candidate"
   },
   {
@@ -1227,16 +1227,6 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-48402",
-    "name": "Seoul",
-    "host": "speedtest.kdatacenter.com:8080",
-    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
-    "provider": "kdatacenter.com",
-    "country": "South Korea",
-    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -2010,6 +2000,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-6355",
+    "name": "Sydney",
+    "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
+    "url": "http://nsw-brwy-st1.speedtest.aarnet.net.au:8080/speedtest/upload.php",
+    "provider": "AARNet",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-63696",
     "name": "São Paulo",
     "host": "velocidade.aipeernovo.com.br:8080",
@@ -2140,6 +2140,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-67827",
+    "name": "Singapore",
+    "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestsgp.fpt.vn:8080/speedtest/upload.php",
+    "provider": "FPT Telecom",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
     "id": "global-67978",
     "name": "São Paulo",
     "host": "velocidade1.irantec.com.br.prod.hosts.ooklaserver.net:8080",
@@ -2197,16 +2207,6 @@
     "provider": "Edgeuno",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-68585",
-    "name": "Batam",
-    "host": "speedtest2.skynetwork.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest2.skynetwork.id:8080/speedtest/upload.php",
-    "provider": "PT Skynet Indonesia Madani",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -2342,7 +2342,7 @@
   {
     "id": "global-71174",
     "name": "São Paulo",
-    "host": "ookla3.e3telecom.com.br:8080",
+    "host": "ookla3.e3telecom.com.br.prod.hosts.ooklaserver.net:8080",
     "url": "http://ookla3.e3telecom.com.br:8080/speedtest/upload.php",
     "provider": "E3 Telecom",
     "country": "Brazil",
@@ -2467,16 +2467,6 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
