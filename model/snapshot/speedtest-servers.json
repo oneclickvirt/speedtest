@@ -410,6 +410,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-23389",
+    "name": "Bracknell",
+    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
+    "provider": "Vodafone UK",
+    "country": "United Kingdom",
+    "city": "Bracknell",
+    "availability": "candidate"
+  },
+  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -417,6 +427,16 @@
     "provider": "PT. Indonesia Comnets Plus",
     "country": "Singapore",
     "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-24281",
+    "name": "London",
+    "host": "speedtest-london-east.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-london-east.vodafone.co.uk:8080/speedtest/upload.php",
+    "provider": "Vodafone UK",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -577,6 +597,16 @@
     "provider": "Duke Kunshan University",
     "country": "China",
     "city": "Kunshan",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-31171",
+    "name": "Watford",
+    "host": "speedtest-watford.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-watford.vodafone.co.uk:8080/speedtest/upload.php",
+    "provider": "Vodafone UK",
+    "country": "United Kingdom",
+    "city": "Watford",
     "availability": "candidate"
   },
   {
@@ -827,16 +857,6 @@
     "provider": "Voneus Limited",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-39101",
-    "name": "São Paulo",
-    "host": "sp.restartytech.net.br:8080",
-    "url": "http://sp.restartytech.net.br:8080/speedtest/upload.php",
-    "provider": "Restarty Tech Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2607,6 +2627,16 @@
     "provider": "Vultr JP",
     "country": "Japan",
     "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-75054",
+    "name": "São Paulo",
+    "host": "srv4.noova.net.br:8080",
+    "url": "http://srv4.noova.net.br:8080/speedtest/upload.php",
+    "provider": "Noova Telecom",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
