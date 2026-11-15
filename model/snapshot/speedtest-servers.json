@@ -390,16 +390,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-23389",
-    "name": "Bracknell",
-    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "Bracknell",
-    "availability": "candidate"
-  },
-  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -765,16 +755,6 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1230,6 +1210,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48434",
+    "name": "London",
+    "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
+    "url": "http://londres.speedtest.angolacables.co.ao:8080/speedtest/upload.php",
+    "provider": "Angola Cables",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48463",
     "name": "Tokyo",
     "host": "speed.udx.icscoe.jp:8080",
@@ -1567,6 +1557,16 @@
     "provider": "FÊNIX BRASIL TELECOMUNICAÇÕES EIRELI",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-56066",
+    "name": "Singapore",
+    "host": "speedtest.herza.cloud:8080",
+    "url": "http://speedtest.herza.cloud:8080/speedtest/upload.php",
+    "provider": "PT Herza Digital Indonesia",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
@@ -2127,6 +2127,16 @@
     "provider": "MOACK Data Center",
     "country": "South Korea",
     "city": "Yongin-si",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-67827",
+    "name": "Singapore",
+    "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestsgp.fpt.vn:8080/speedtest/upload.php",
+    "provider": "FPT Telecom",
+    "country": "Singapore",
+    "city": "Singapore",
     "availability": "candidate"
   },
   {
