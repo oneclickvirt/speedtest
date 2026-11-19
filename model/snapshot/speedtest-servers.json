@@ -400,16 +400,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-23389",
-    "name": "Bracknell",
-    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "Bracknell",
-    "availability": "candidate"
-  },
-  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -587,6 +577,16 @@
     "provider": "Community Fibre Limited",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-30852",
+    "name": "Kunshan",
+    "host": "speedtest.dukekunshan.edu.cn:8080",
+    "url": "http://speedtest.dukekunshan.edu.cn:8080/speedtest/upload.php",
+    "provider": "Duke Kunshan University",
+    "country": "China",
+    "city": "Kunshan",
     "availability": "candidate"
   },
   {
@@ -787,16 +787,6 @@
     "provider": "VeloxServ Communications",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1280,16 +1270,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-48996",
-    "name": "São Paulo",
-    "host": "test.gamtelecom.com.br:8080",
-    "url": "http://test.gamtelecom.com.br:8080/speedtest/upload.php",
-    "provider": "GAM Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-49183",
     "name": "São Paulo",
     "host": "speedtest.eletronet.com.prod.hosts.ooklaserver.net:8080",
@@ -1297,16 +1277,6 @@
     "provider": "Eletronet SA",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-49517",
-    "name": "Tokyo",
-    "host": "tok2.host.speedtest.net.prod.hosts.ooklaserver.net:8080",
-    "url": "http://tok2.host.speedtest.net:8080/speedtest/upload.php",
-    "provider": "OneProvider",
-    "country": "Japan",
-    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -2490,6 +2460,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2780,6 +2760,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-76154",
+    "name": "São Paulo",
+    "host": "speedtest.greenfibra.net:8080",
+    "url": "http://speedtest.greenfibra.net:8080/speedtest/upload.php",
+    "provider": "GREEN FIBRA TELECOM",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-76155",
     "name": "Singapore",
     "host": "speedtest.sg.aixxycode.id:8080",
@@ -2797,6 +2787,16 @@
     "provider": "PT. Proxi Jaringan Nusantara",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76378",
+    "name": "São Paulo",
+    "host": "speedtest.athon-networks.com.br:8080",
+    "url": "http://speedtest.athon-networks.com.br:8080/speedtest/upload.php",
+    "provider": "Athon Networks",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
