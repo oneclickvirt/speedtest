@@ -400,6 +400,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-23389",
+    "name": "Bracknell",
+    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
+    "provider": "Vodafone UK",
+    "country": "United Kingdom",
+    "city": "Bracknell",
+    "availability": "candidate"
+  },
+  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -580,16 +590,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-30852",
-    "name": "Kunshan",
-    "host": "speedtest.dukekunshan.edu.cn:8080",
-    "url": "http://speedtest.dukekunshan.edu.cn:8080/speedtest/upload.php",
-    "provider": "Duke Kunshan University",
-    "country": "China",
-    "city": "Kunshan",
-    "availability": "candidate"
-  },
-  {
     "id": "global-31171",
     "name": "Watford",
     "host": "speedtest-watford.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -740,16 +740,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-35456",
-    "name": "São Paulo",
-    "host": "velocimetro.usbinternet.com.br:8080",
-    "url": "http://velocimetro.usbinternet.com.br:8080/speedtest/upload.php",
-    "provider": "USB Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-35666",
     "name": "London",
     "host": "speedtest.voip-unlimited.net:8080",
@@ -787,6 +777,16 @@
     "provider": "VeloxServ Communications",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37663",
+    "name": "São Paulo",
+    "host": "teste.surubiminternet.com.br:8080",
+    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
+    "provider": "Surubim Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -885,16 +885,6 @@
     "host": "speedtest.permana.net.id.prod.hosts.ooklaserver.net:8080",
     "url": "http://speedtest.permana.net.id:8080/speedtest/upload.php",
     "provider": "PT.MEDIANUSA PERMANA",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-40272",
-    "name": "Batam",
-    "host": "speedtestbtm.sdi.net.id:8080",
-    "url": "http://speedtestbtm.sdi.net.id:8080/speedtest/upload.php",
-    "provider": "SDI",
     "country": "Indonesia",
     "city": "Batam",
     "availability": "candidate"
@@ -1770,6 +1760,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-60324",
+    "name": "Tokyo",
+    "host": "speedtest.ddps.jp.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.ddps.jp:8080/speedtest/upload.php",
+    "provider": "サーバーならDDPS.jp",
+    "country": "Japan",
+    "city": "Tokyo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-60826",
     "name": "São Paulo",
     "host": "fast.starfiber.com.br:8080",
@@ -2560,16 +2560,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-74097",
-    "name": "Batam",
-    "host": "speedtest.binteks.online.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.binteks.online:8080/speedtest/upload.php",
-    "provider": "binteks.id",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-74299",
     "name": "São Paulo",
     "host": "speedtest.fibervision.com.br.prod.hosts.ooklaserver.net:8080",
@@ -2877,6 +2867,16 @@
     "provider": "Coreix Ltd",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-8777",
+    "name": "Blacktown",
+    "host": "speedtest-blacktown.optusnet.com.au:8080",
+    "url": "http://speedtest-blacktown.optusnet.com.au:8080/speedtest/upload.php",
+    "provider": "Optus",
+    "country": "Australia",
+    "city": "Blacktown",
     "availability": "candidate"
   }
 ]
