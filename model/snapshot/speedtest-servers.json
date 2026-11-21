@@ -370,16 +370,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-21118",
-    "name": "Naha",
-    "host": "speedtest-xg-oki.glbb.ne.jp.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-xg-oki.glbb.ne.jp:8080/speedtest/upload.php",
-    "provider": "GLBB Japan",
-    "country": "Japan",
-    "city": "Naha",
-    "availability": "candidate"
-  },
-  {
     "id": "global-22558",
     "name": "London",
     "host": "speedtestlondon.telecom.mu.prod.hosts.ooklaserver.net:8080",
@@ -775,6 +765,16 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1267,6 +1267,16 @@
     "provider": "Eletronet SA",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-49517",
+    "name": "Tokyo",
+    "host": "tok2.host.speedtest.net.prod.hosts.ooklaserver.net:8080",
+    "url": "http://tok2.host.speedtest.net:8080/speedtest/upload.php",
+    "provider": "OneProvider",
+    "country": "Japan",
+    "city": "Tokyo",
     "availability": "candidate"
   },
   {
@@ -1950,16 +1960,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-63503",
-    "name": "London",
-    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
-    "provider": "Absolute Validation Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-6355",
     "name": "Sydney",
     "host": "nsw-brwy-st1.speedtest.aarnet.net.au:8080",
@@ -2197,16 +2197,6 @@
     "provider": "Wildanet",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-69121",
-    "name": "São Paulo",
-    "host": "speed.inetk.com.br:8080",
-    "url": "http://speed.inetk.com.br:8080/speedtest/upload.php",
-    "provider": "INETX",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2460,16 +2450,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2585,6 +2565,16 @@
     "host": "speedtest.dilife.net.br:8080",
     "url": "http://speedtest.dilife.net.br:8080/speedtest/upload.php",
     "provider": "DiLife Fibra",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74986",
+    "name": "São Paulo",
+    "host": "speedtest.eaitelecom.com.br.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.eaitelecom.com.br:8080/speedtest/upload.php",
+    "provider": "EAÍ TELECOMUNICAÇÕES LTDA",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
