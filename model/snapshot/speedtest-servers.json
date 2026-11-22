@@ -390,16 +390,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-23389",
-    "name": "Bracknell",
-    "host": "speedtest-bracknell.vodafone.co.uk.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest-bracknell.vodafone.co.uk:8080/speedtest/upload.php",
-    "provider": "Vodafone UK",
-    "country": "United Kingdom",
-    "city": "Bracknell",
-    "availability": "candidate"
-  },
-  {
     "id": "global-23467",
     "name": "Singapore",
     "host": "speedtest-sg.iconpln.net.id.prod.hosts.ooklaserver.net:8080",
@@ -765,16 +755,6 @@
     "host": "speedtest-lon.veloxserv.net:8080",
     "url": "http://speedtest-lon.veloxserv.net:8080/speedtest/upload.php",
     "provider": "VeloxServ Communications",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
     "country": "United Kingdom",
     "city": "London",
     "availability": "candidate"
@@ -1370,16 +1350,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-52293",
-    "name": "Batam",
-    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
-    "provider": "PT Lintas Jaringan Nusantara",
-    "country": "Indonesia",
-    "city": "Batam",
-    "availability": "candidate"
-  },
-  {
     "id": "global-52551",
     "name": "São Paulo",
     "host": "test.wjinternet.com.br:8080",
@@ -1837,16 +1807,6 @@
     "provider": "LF TELECOM",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-61693",
-    "name": "Batam",
-    "host": "speedtest.bth.palapa.net.id.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.bth.palapa.net.id:8080/speedtest/upload.php",
-    "provider": "PalapaNET",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
