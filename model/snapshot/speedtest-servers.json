@@ -190,6 +190,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-1267",
+    "name": "Sydney",
+    "host": "speedtest-sydney.optusnet.com.au:8080",
+    "url": "http://speedtest-sydney.optusnet.com.au:8080/speedtest/upload.php",
+    "provider": "Optus",
+    "country": "Australia",
+    "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
     "id": "global-13058",
     "name": "Singapore",
     "host": "speedtest1.indosatooredoo.com.prod.hosts.ooklaserver.net:8080",
@@ -720,6 +730,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-35456",
+    "name": "São Paulo",
+    "host": "velocimetro.usbinternet.com.br:8080",
+    "url": "http://velocimetro.usbinternet.com.br:8080/speedtest/upload.php",
+    "provider": "USB Internet",
+    "country": "Brazil",
+    "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
     "id": "global-35666",
     "name": "London",
     "host": "speedtest.voip-unlimited.net:8080",
@@ -757,16 +777,6 @@
     "provider": "VeloxServ Communications",
     "country": "United Kingdom",
     "city": "London",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-37663",
-    "name": "São Paulo",
-    "host": "teste.surubiminternet.com.br:8080",
-    "url": "http://teste.surubiminternet.com.br:8080/speedtest/upload.php",
-    "provider": "Surubim Internet",
-    "country": "Brazil",
-    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -1130,16 +1140,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-46700",
-    "name": "Khabarovsk",
-    "host": "speedtest.khv.fdcservers.net:8080",
-    "url": "http://speedtest.khv.fdcservers.net:8080/speedtest/upload.php",
-    "provider": "fdcservers.net",
-    "country": "Russia",
-    "city": "Khabarovsk",
-    "availability": "candidate"
-  },
-  {
     "id": "global-46737",
     "name": "London",
     "host": "st2.octopustelecom.co.uk.prod.hosts.ooklaserver.net:8080",
@@ -1207,6 +1207,16 @@
     "provider": "Orbital Net",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-48402",
+    "name": "Seoul",
+    "host": "speedtest.kdatacenter.com:8080",
+    "url": "http://speedtest.kdatacenter.com:8080/speedtest/upload.php",
+    "provider": "kdatacenter.com",
+    "country": "South Korea",
+    "city": "Seoul",
     "availability": "candidate"
   },
   {
@@ -1347,6 +1357,16 @@
     "provider": "KF Telecom",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-52293",
+    "name": "Batam",
+    "host": "speedtest15.lintas.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest15.lintas.net.id:8080/speedtest/upload.php",
+    "provider": "PT Lintas Jaringan Nusantara",
+    "country": "Indonesia",
+    "city": "Batam",
     "availability": "candidate"
   },
   {
@@ -1505,16 +1525,6 @@
     "host": "speedtest.avivtelecom.com.br:8080",
     "url": "http://speedtest.avivtelecom.com.br:8080/speedtest/upload.php",
     "provider": "Aviv Telecom",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-55847",
-    "name": "São Paulo",
-    "host": "speed.fenixbrasil.com.br:8080",
-    "url": "http://speed.fenixbrasil.com.br:8080/speedtest/upload.php",
-    "provider": "FÊNIX BRASIL TELECOMUNICAÇÕES EIRELI",
     "country": "Brazil",
     "city": "São Paulo",
     "availability": "candidate"
@@ -1810,6 +1820,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-61693",
+    "name": "Batam",
+    "host": "speedtest.bth.palapa.net.id.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.bth.palapa.net.id:8080/speedtest/upload.php",
+    "provider": "PalapaNET",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
     "id": "global-61743",
     "name": "Sydney",
     "host": "speedtest.syd01.launtel.net.au.prod.hosts.ooklaserver.net:8080",
@@ -1917,6 +1937,16 @@
     "provider": "Real World",
     "country": "Australia",
     "city": "Sydney",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-63503",
+    "name": "London",
+    "host": "speedtest.absolutevalidation.com.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.absolutevalidation.com:8080/speedtest/upload.php",
+    "provider": "Absolute Validation Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2157,6 +2187,16 @@
     "provider": "Wildanet",
     "country": "United Kingdom",
     "city": "London",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-69121",
+    "name": "São Paulo",
+    "host": "speed.inetk.com.br:8080",
+    "url": "http://speed.inetk.com.br:8080/speedtest/upload.php",
+    "provider": "INETX",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
@@ -2410,6 +2450,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2495,6 +2545,16 @@
     "host": "speedtest.hydra.co.id:8080",
     "url": "http://speedtest.hydra.co.id:8080/speedtest/upload.php",
     "provider": "PT HYDRA MEDIA INDONESIA",
+    "country": "Indonesia",
+    "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-74097",
+    "name": "Batam",
+    "host": "speedtest.binteks.online.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.binteks.online:8080/speedtest/upload.php",
+    "provider": "binteks.id",
     "country": "Indonesia",
     "city": "Batam",
     "availability": "candidate"
@@ -2717,16 +2777,6 @@
     "provider": "AIXXYCODE.ID",
     "country": "Singapore",
     "city": "Singapore",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-76334",
-    "name": "Batam",
-    "host": "speedtest.proxinet.co.id:8080",
-    "url": "http://speedtest.proxinet.co.id:8080/speedtest/upload.php",
-    "provider": "PT. Proxi Jaringan Nusantara",
-    "country": "Indonesia",
-    "city": "Batam",
     "availability": "candidate"
   },
   {
