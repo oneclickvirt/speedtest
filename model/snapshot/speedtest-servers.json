@@ -780,16 +780,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-37540",
-    "name": "London",
-    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
-    "provider": "Syntura Group Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-37663",
     "name": "São Paulo",
     "host": "teste.surubiminternet.com.br:8080",
@@ -1317,16 +1307,6 @@
     "provider": "Verizon",
     "country": "Japan",
     "city": "Tokyo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-50606",
-    "name": "London",
-    "host": "speedtest.octaplus.uk:8080",
-    "url": "http://speedtest.octaplus.uk:8080/speedtest/upload.php",
-    "provider": "OCTAPLUS BROADBAND",
-    "country": "United Kingdom",
-    "city": "London",
     "availability": "candidate"
   },
   {
@@ -2110,6 +2090,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-67827",
+    "name": "Singapore",
+    "host": "speedtestsgp.fpt.vn.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtestsgp.fpt.vn:8080/speedtest/upload.php",
+    "provider": "FPT Telecom",
+    "country": "Singapore",
+    "city": "Singapore",
+    "availability": "candidate"
+  },
+  {
     "id": "global-67978",
     "name": "São Paulo",
     "host": "velocidade1.irantec.com.br.prod.hosts.ooklaserver.net:8080",
@@ -2460,16 +2450,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-73182",
-    "name": "London",
-    "host": "speedtestvol.optinet.co.uk:8080",
-    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
-    "provider": "Optinet U.K. Ltd",
-    "country": "United Kingdom",
-    "city": "London",
-    "availability": "candidate"
-  },
-  {
     "id": "global-73226",
     "name": "Seoul",
     "host": "seoul.speedtest.gslnetworks.com.prod.hosts.ooklaserver.net:8080",
@@ -2670,16 +2650,6 @@
     "availability": "candidate"
   },
   {
-    "id": "global-75515",
-    "name": "São Paulo",
-    "host": "speedtest.jato3fibratelecom.com.br.prod.hosts.ooklaserver.net:8080",
-    "url": "http://speedtest.jato3fibratelecom.com.br:8080/speedtest/upload.php",
-    "provider": "Jato3 Fibra",
-    "country": "Brazil",
-    "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
     "id": "global-7556",
     "name": "Singapore",
     "host": "sg-speedtest.fast.net.id.prod.hosts.ooklaserver.net:8080",
@@ -2797,6 +2767,16 @@
     "provider": "PT. Proxi Jaringan Nusantara",
     "country": "Indonesia",
     "city": "Batam",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-76378",
+    "name": "São Paulo",
+    "host": "speedtest.athon-networks.com.br:8080",
+    "url": "http://speedtest.athon-networks.com.br:8080/speedtest/upload.php",
+    "provider": "Athon Networks",
+    "country": "Brazil",
+    "city": "São Paulo",
     "availability": "candidate"
   },
   {
