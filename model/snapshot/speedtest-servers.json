@@ -1220,6 +1220,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-48434",
+    "name": "London",
+    "host": "londres.speedtest.angolacables.co.ao.prod.hosts.ooklaserver.net:8080",
+    "url": "http://londres.speedtest.angolacables.co.ao:8080/speedtest/upload.php",
+    "provider": "Angola Cables",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-48463",
     "name": "Tokyo",
     "host": "speed.udx.icscoe.jp:8080",
@@ -1567,16 +1577,6 @@
     "provider": "HyperFilter DDoS Protection Solutions",
     "country": "Brazil",
     "city": "São Paulo",
-    "availability": "candidate"
-  },
-  {
-    "id": "global-56684",
-    "name": "Johor Bahru",
-    "host": "speedtestjhr.u.net.my:8080",
-    "url": "http://speedtestjhr.u.net.my:8080/speedtest/upload.php",
-    "provider": "U Mobile Sdn Bhd",
-    "country": "Malaysia",
-    "city": "Johor Bahru",
     "availability": "candidate"
   },
   {
@@ -2447,6 +2447,16 @@
     "provider": "Swap Telecom",
     "country": "Brazil",
     "city": "São Paulo",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73182",
+    "name": "London",
+    "host": "speedtestvol.optinet.co.uk:8080",
+    "url": "http://speedtestvol.optinet.co.uk:8080/speedtest/upload.php",
+    "provider": "Optinet U.K. Ltd",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
