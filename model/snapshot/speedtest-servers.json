@@ -780,6 +780,16 @@
     "availability": "candidate"
   },
   {
+    "id": "global-37540",
+    "name": "London",
+    "host": "speedtest.thn.uk.syntura.io.prod.hosts.ooklaserver.net:8080",
+    "url": "http://speedtest.thn.uk.syntura.io:8080/speedtest/upload.php",
+    "provider": "Syntura Group Ltd",
+    "country": "United Kingdom",
+    "city": "London",
+    "availability": "candidate"
+  },
+  {
     "id": "global-37663",
     "name": "São Paulo",
     "host": "teste.surubiminternet.com.br:8080",
@@ -2467,6 +2477,16 @@
     "provider": "GSL Networks",
     "country": "South Korea",
     "city": "Seoul",
+    "availability": "candidate"
+  },
+  {
+    "id": "global-73264",
+    "name": "London",
+    "host": "ookla-london3.tropicalhosting.net:8080",
+    "url": "http://ookla-london3.tropicalhosting.net:8080/speedtest/upload.php",
+    "provider": "Tropical Hosting",
+    "country": "United Kingdom",
+    "city": "London",
     "availability": "candidate"
   },
   {
